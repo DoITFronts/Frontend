@@ -8,10 +8,10 @@ interface MeetingLayoutProps {
 
 export default function MeetingLayout({ children, reviews, description }: MeetingLayoutProps) {
   return (
-    <div className="mx-auto max-w-5xl p-4">
+    <div className="mx-auto flex max-w-5xl flex-col gap-14 p-4">
       <div className="flex">{children}</div>
-      <div className="mt-14">{description}</div>
-      <div className="mb-24 mt-6">{reviews}</div>
+      <div>{description}</div>
+      <div className="mb-24">{reviews}</div>
     </div>
   );
 }

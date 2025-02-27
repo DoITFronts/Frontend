@@ -59,7 +59,7 @@ export default function Pagination({
   };
 
   return (
-    <div className="relative flex w-[516px] justify-center gap-2 overflow-hidden rounded-[5px] p-5">
+    <div className="relative flex w-full justify-center gap-2 overflow-hidden rounded-[5px] p-5">
       <button
         type="button"
         aria-label="Previous page"
