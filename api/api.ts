@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -6,59 +6,60 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+const requestTimes = new Map<string, number>();
+
 axiosInstance.interceptors.request.use(
-  (config) => {
+  (config: InternalAxiosRequestConfig) => {
     const token = localStorage.getItem('accessToken');
 
     if (token && !config.url?.includes('/api/v1/login')) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = token.startsWith('Bearer') ? token : `Bearer ${token}`;
     }
+
+    requestTimes.set(config.url!, Date.now());
 
     return config;
   },
-  (error) => {
-    console.error('Request error:', error);
-    return Promise.reject(error);
-  },
+  (error) => Promise.reject(error),
 );
 
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error: unknown) => {
-    if (error instanceof AxiosError) {
-      console.error('Axios error:', error.message);
+  (response) => {
+    const startTime = requestTimes.get(response.config.url!);
+    if (startTime) {
+      console.log(`[${response.config.url}] 응답 시간: ${Date.now() - startTime}ms`);
+      requestTimes.delete(response.config.url);
+    }
+    return response;
+  },
+  async (error: AxiosError) => {
+    if (!error.response) {
+      console.error('No response from server');
+      return Promise.reject(error);
+    }
 
-      if (error.response) {
-        const { status, data } = error.response;
+    const { status, config } = error.response;
 
-        switch (status) {
-          case 400:
-            console.error('Bad Request:', data);
-            break;
-          case 401:
-            console.error('Unauthorized: Token expired or invalid');
-            localStorage.removeItem('accessToken');
-            window.location.href = '/login';
-            break;
-          case 403:
-            console.error('Forbidden: Access denied');
-            break;
-          case 404:
-            console.error('Not Found:', data);
-            break;
-          case 500:
-            console.error('Server Error:', data);
-            break;
-          default:
-            console.error(`Unknown Error (${status}):`, data);
-        }
-      } else if (error.request) {
-        console.error('No response received from server');
-      } else {
-        console.error('Request setup error:', error.message);
-      }
-    } else {
-      console.error('Unexpected error:', error);
+    switch (status) {
+      case 401:
+        localStorage.removeItem('accessToken');
+        window.location.href = '/login';
+        break;
+
+      case 403:
+        alert('접근 권한이 없습니다.');
+        break;
+
+      case 429:
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        return axiosInstance(config);
+
+      case 500:
+        alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        break;
+
+      default:
+        console.error(`Error (${status}):`, error.response.data);
     }
 
     return Promise.reject(error);

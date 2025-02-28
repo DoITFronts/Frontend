@@ -1,8 +1,8 @@
 import axiosInstance from '@/api/api';
 
-const joinLightning = async () => {
+const joinLightning = async (id: string) => {
   try {
-    const response = await axiosInstance.post(`/api/v1/lightenings/2/join`);
+    const response = await axiosInstance.post(`/api/v1/lightenings/${Number(id)}/join`);
     console.log('Joined successfully:', response.data);
     return response.data;
   } catch (error) {
