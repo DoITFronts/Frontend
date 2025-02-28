@@ -6,23 +6,30 @@ import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+import { useSignin } from '@/hooks/useAuth';
 
 export default function Signin() {
+  const { mutate } = useSignin();
+
+  const handleSignin = (data: SignInRequestData) => {
+    mutate(data);
+  };
+
   return (
-    <div className="bg-white py-52 flex justify-center items-center">
+    <div className="min-h-screen bg-white flex justify-center items-center">
       <div className="w-[402px]">
         <div className="flex justify-center items-center mb-[50px]">
-          <Image src={Logo} alt="번개팅 로고" width={147.6} height={32.4} />
+          <Link href="/">
+            <Image src={Logo} alt="번개팅 로고" width={147.6} height={32.4} />
+          </Link>
         </div>
-        <Form
-          onSubmit={() => {
-            console.log('로그인 폼 제출');
-          }}
-        >
-          <Form.Label className="pb-3">
+        <Form onSubmit={handleSignin}>
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">이메일</Form.LabelHeader>
             <Form.Input
-              name="email"
+              name="username"
               placeholder="이메일을 입력해 주세요"
               autoComplete="email"
               required

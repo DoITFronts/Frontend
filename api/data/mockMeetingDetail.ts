@@ -1,162 +1,254 @@
 import { MeetingDetail } from '@/types/meeting';
 
-const mockMeetings: MeetingDetail[] = [
+const mockMeetings: {
+  code: number;
+  isSuccess: boolean;
+  message: string;
+  result: { success: boolean; code: number; message: string; data: MeetingDetail };
+}[] = [
   {
-    info: {
-      id: '1',
-      title: '📖 카공 or 작업 같이 해요!',
-      imageUrl: 'https://coen.store/event1.jpg',
-      location: 'Seoul',
-      datetime: '2025-02-14T18:00:00',
-      summary:
-        '혼자 하면 집중 안 되고 자꾸 딴짓하게 되는데, 같이 하면 의욕도 생기고 덜 지루하지 않나요?',
-      isLiked: false,
-      maxParticipants: 10,
-      currentParticipants: 6,
-    },
-    participants: [
-      { id: '1', name: '최승은', profileImage: 'https://randomuser.me/api/portraits/women/1.jpg' },
-      { id: '2', name: '김철수', profileImage: 'https://randomuser.me/api/portraits/men/2.jpg' },
-    ],
-    details: {
-      title: '번개에 대해 자세히 알아보세요!',
-      description: `
-## 📖 카공 or 작업 같이 해요!
-혼자 하면 집중 안 되고 자꾸 딴짓하게 되는데, 같이 하면 의욕도 생기고 덜 지루하지 않나요?  
-공부든, 작업이든, 독서든 다 좋아요!  
-💡 **이런 분들에게 추천해요!**  
-- ✅ 혼자서 공부하면 쉽게 지치는 분  
-- ✅ 조용한 분위기에서 집중하고 싶은 분  
-- ✅ 같이 작업할 동료가 필요한 분  
-☕ **모임 장소는 카페에서 진행됩니다.**  
-      `,
-    },
-    reviews: [
-      {
+    code: 200,
+    isSuccess: true,
+    message: '모임 상세 조회 성공',
+    result: {
+      success: true,
+      code: 4010,
+      message: '모임 상세 조회에 성공했습니다.',
+      data: {
         id: '1',
-        writer: '활기찬 여우',
-        profileImage: 'https://randomuser.me/api/portraits/men/4.jpg',
-        content: '정말 유익한 시간이었어요. 다음에도 참여하고 싶어요!',
-        date: '2025-02-10',
-        count: 5,
+        title: '📖 번개 1 - 함께하는 독서',
+        category: '카페',
+        imageUrl: 'https://coen.store/event1.jpg',
+        location: { region_1depth_name: '서울', region_2depth_name: '강남구' },
+        datetime: '2025-02-10T18:00:00',
+        summary: '이 번개은 책을 좋아하는 사람들을 위한 번개입니다!',
+        isLiked: true,
+        maxParticipants: 12,
+        currentParticipants: 5,
+        host: {
+          id: '101',
+          name: '책덕후 호스트',
+          profileImage: '/assets/fallback/img.png',
+          email: 'qqq@qqq.com',
+          userBio: '책을 좋아하는 호스트입니다.',
+        },
+        participants: [
+          {
+            id: '1',
+            name: '조용한 나무늘보',
+            profileImage: 'https://coen.store/api/portraits/women/1.jpg',
+          },
+          {
+            id: '2',
+            name: '깊은 생각하는 너구리',
+            profileImage: 'https://coen.store/api/portraits/women/2.jpg',
+          },
+        ],
+        details: {
+          title: '번개 1 - 상세 정보',
+          description: `
+## 함께하는 독서 번개!
+같은 책을 읽고 이야기를 나누는 독서 번개입니다. 📚  
+각자 추천하는 책을 가져와서 공유하는 시간도 있어요!
+
+### 📍 추천 대상
+- ✅ 책 읽는 걸 좋아하는 분
+- ✅ 조용한 분위기에서 대화하는 걸 선호하는 분
+
+☕ **번개 장소: 강남 북카페**  
+따뜻한 커피 한 잔과 함께 책 속으로 떠나요! 🚀
+          `,
+        },
+        reviews: [
+          {
+            id: '1',
+            writer: '귀여운 사슴',
+            profileImage: 'https://coen.store/api/portraits/men/3.jpg',
+            content: '너무 좋은 번개이었어요! 다시 참여하고 싶어요.',
+            date: '2025-02-11',
+            count: 4,
+          },
+          {
+            id: '2',
+            writer: '씩씩한 고양이',
+            profileImage: 'https://coen.store/api/portraits/men/5.jpg',
+            content: '책을 읽으면서 대화하는 시간이 너무 좋았어요.',
+            date: '2025-02-11',
+            count: 3,
+          },
+          {
+            id: '3',
+            writer: '느긋한 거북이',
+            profileImage: 'https://coen.store/api/portraits/men/7.jpg',
+            content: '다들 너무 친절하고 좋은 분들이었어요.',
+            date: '2025-02-11',
+            count: 5,
+          },
+          {
+            id: '4',
+            writer: '고민 많은 판다',
+            profileImage: 'https://coen.store/api/portraits/w/4.jpg',
+            content: '책을 읽으면서 대화하는 시간이 너무 좋았어요.',
+            date: '2025-02-11',
+            count: 3,
+          },
+          {
+            id: '5',
+            writer: '장난꾸러기 다람쥐',
+            profileImage: 'https://coen.store/api/portraits/w/5.jpg',
+            content: '다들 너무 친절하고 좋은 분들이었어요.',
+            date: '2025-02-11',
+            count: 5,
+          },
+          {
+            id: '6',
+            writer: '생각 깊은 올빼미',
+            profileImage: 'https://coen.store/api/portraits/w/6.jpg',
+            content: '책을 읽으면서 대화하는 시간이 너무 좋았어요.',
+            date: '2025-02-11',
+            count: 3,
+          },
+          {
+            id: '7',
+            writer: '조용한 나무늘보',
+            profileImage: 'https://coen.store/api/portraits/w/1.jpg',
+            content: '다들 너무 친절하고 좋은 분들이었어요.',
+            date: '2025-02-11',
+            count: 5,
+          },
+        ],
       },
-    ],
+    },
   },
   {
-    info: {
-      id: '2',
-      title: '🎨 디자인 스터디 모임',
-      imageUrl: 'https://coen.store/event2.jpg',
-      location: 'Busan',
-      datetime: '2025-02-20T19:00:00',
-      summary: '디자인 작업을 함께 하면서 서로 영감을 나눠봐요!',
-      isLiked: true,
-      maxParticipants: 8,
-      currentParticipants: 5,
-    },
-    participants: [
-      { id: '3', name: '이영희', profileImage: 'https://randomuser.me/api/portraits/women/6.jpg' },
-      { id: '4', name: '박민수', profileImage: 'https://randomuser.me/api/portraits/men/7.jpg' },
-    ],
-    details: {
-      title: '디자인 스터디 모임',
-      description: `
-## 🎨 디자인 스터디 모임
-디자인 작업을 함께 하면서 서로 영감을 주고받는 시간!  
-🎨 **추천 대상**  
-- ✅ UI/UX 디자인을 공부하는 분  
-- ✅ 디자인 관련 프로젝트를 진행 중인 분  
-- ✅ 서로의 포트폴리오를 공유하고 피드백을 주고 싶은 분  
-      `,
-    },
-    reviews: [
-      {
-        id: '1',
-        writer: '디자인 좋아하는 곰',
-        profileImage: 'https://randomuser.me/api/portraits/men/8.jpg',
-        content: '정말 유익한 시간이었어요! 다음에도 참여하고 싶어요!',
-        date: '2025-02-15',
-        count: 3,
+    code: 200,
+    isSuccess: true,
+    message: '모임 상세 조회 성공',
+    result: {
+      success: true,
+      code: 4010,
+      message: '번개 상세 조회에 성공했습니다.',
+      data: {
+        id: '2',
+        title: '🍺 번개 2 - 소맥의 밤',
+        category: '술',
+        imageUrl: 'https://coen.store/event2.jpg',
+        location: { region_1depth_name: '부산', region_2depth_name: '해운대구' },
+        datetime: '2025-02-15T19:30:00',
+        summary: '소맥을 사랑하는 사람들과 함께하는 즐거운 술자리!',
+        isLiked: false,
+        maxParticipants: 8,
+        currentParticipants: 6,
+        host: {
+          id: '102',
+          name: '맥주 매니아',
+          profileImage: 'https://coen.store/api/portraits/men/4.jpg',
+          email: 'www@www.com',
+          userBio: '맥주를 좋아하는 호스트입니다',
+        },
+        participants: [
+          {
+            id: '3',
+            name: '신나는 강아지',
+            profileImage: 'https://coen.store/api/portraits/women/3.jpg',
+          },
+          {
+            id: '4',
+            name: '고민 많은 판다',
+            profileImage: 'https://coen.store/api/portraits/women/4.jpg',
+          },
+        ],
+        details: {
+          title: '소맥의 밤 - 상세 정보',
+          description: `
+## 함께하는 소맥의 밤!
+소맥을 만들고 맛있게 마시면서 친해지는 술자리 번개입니다! 🍻
+
+### 📍 추천 대상
+- ✅ 술을 좋아하는 분
+- ✅ 새로운 사람들과 친목을 쌓고 싶은 분
+
+🍺 **번개 장소: 해운대 유명 펍**  
+시원한 맥주와 함께하는 소셜 네트워킹 타임! 🚀
+          `,
+        },
+        reviews: [
+          {
+            id: '2',
+            writer: '씩씩한 고양이',
+            profileImage: 'https://coen.store/api/portraits/men/5.jpg',
+            content: '술도 좋고, 사람들도 너무 좋았어요!',
+            date: '2025-02-16',
+            count: 3,
+          },
+        ],
       },
-    ],
+    },
   },
   {
-    info: {
-      id: '3',
-      title: '💻 프론트엔드 개발 스터디',
-      imageUrl: 'https://coen.store/event3.jpg',
-      location: 'Online',
-      datetime: '2025-03-01T10:00:00',
-      summary: 'React, Vue, Next.js 등 프론트엔드 기술을 함께 공부해요!',
-      isLiked: false,
-      maxParticipants: 12,
-      currentParticipants: 7,
+    code: 200,
+    isSuccess: true,
+    message: '모임 상세 조회 성공',
+    result: {
+      success: true,
+      code: 4010,
+      message: '번개 상세 조회에 성공했습니다.',
+      data: {
+        id: '3',
+        title: '🎲 번개 3 - 보드게임의 밤',
+        category: '보드게임',
+        imageUrl: 'https://coen.store/event3.jpg',
+        location: { region_1depth_name: '대전', region_2depth_name: '서구' },
+        datetime: '2025-02-18T17:00:00',
+        summary: '전략부터 파티 게임까지! 보드게임을 좋아하는 사람들을 위한 번개입니다.',
+        isLiked: true,
+        maxParticipants: 10,
+        currentParticipants: 7,
+        host: {
+          id: '103',
+          name: '보드게임 마스터',
+          profileImage: 'https://coen.store/api/portraits/men/6.jpg',
+          email: 'eee@eee.eee',
+          userBio: '보드게임을 좋아하는 호스트입니다.',
+        },
+        participants: [
+          {
+            id: '5',
+            name: '장난꾸러기 다람쥐',
+            profileImage: 'https://coen.store/api/portraits/women/5.jpg',
+          },
+          {
+            id: '6',
+            name: '생각 깊은 올빼미',
+            profileImage: 'https://coen.store/api/portraits/women/6.jpg',
+          },
+        ],
+        details: {
+          title: '보드게임의 밤 - 상세 정보',
+          description: `
+## 보드게임과 함께하는 즐거운 시간! 🎲
+전략적인 게임부터 가벼운 파티 게임까지! 다양한 보드게임을 즐겨요.
+
+### 📍 추천 대상
+- ✅ 보드게임을 좋아하는 분
+- ✅ 다양한 게임을 배우고 싶은 분
+
+🎮 **번개 장소: 대전 보드게임 카페**  
+승패를 떠나 다 같이 즐거운 시간이 될 거예요! 🚀
+          `,
+        },
+        reviews: [
+          {
+            id: '3',
+            writer: '느긋한 거북이',
+            profileImage: 'https://coen.store/api/portraits/men/7.jpg',
+            content: '게임 종류가 다양해서 너무 좋았어요!',
+            date: '2025-02-19',
+            count: 5,
+          },
+        ],
+      },
     },
-    participants: [],
-    details: {
-      title: '프론트엔드 개발 스터디',
-      description: `
-## 💻 프론트엔드 개발 스터디  
-함께 최신 프론트엔드 기술을 공부하는 시간!  
-🛠 **공부 내용**  
-- ✅ React, Vue, Next.js 등 최신 기술  
-- ✅ TypeScript, GraphQL, Zustand 등 활용  
-- ✅ 실제 프로젝트를 만들며 실무 감각 익히기  
-💻 **Zoom으로 진행됩니다.**  
-      `,
-    },
-    reviews: [],
-  },
-  {
-    info: {
-      id: '4',
-      title: '🏋🏻‍♂️ 아침 헬스 번개',
-      imageUrl: 'https://coen.store/event4.jpg',
-      location: 'Seoul',
-      datetime: '2025-02-25T06:30:00',
-      summary: '운동도 같이 하면 더 재밌고 꾸준히 할 수 있어요!',
-      isLiked: true,
-      maxParticipants: 15,
-      currentParticipants: 10,
-    },
-    participants: [],
-    details: {
-      title: '아침 헬스 번개',
-      description: `
-## 🏋🏻‍♂️ 아침 헬스 번개
-새벽에 같이 운동하며 하루를 상쾌하게 시작해봐요!  
-💪 **운동 루틴**  
-- ✅ 웨이트 + 유산소 1시간  
-- ✅ 운동 후 함께 스트레칭  
-      `,
-    },
-    reviews: [],
-  },
-  {
-    info: {
-      id: '5',
-      title: '🍳 요리 스터디 - 이탈리안 파스타 만들기',
-      imageUrl: 'https://coen.store/event5.jpg',
-      location: 'Incheon',
-      datetime: '2025-03-05T14:00:00',
-      summary: '함께 맛있는 파스타를 만들어봐요!',
-      isLiked: false,
-      maxParticipants: 6,
-      currentParticipants: 4,
-    },
-    participants: [],
-    details: {
-      title: '요리 스터디',
-      description: `
-## 🍳 요리 스터디 - 이탈리안 파스타 만들기  
-함께 요리하면서 실력을 키우는 시간!  
-🍝 **메뉴**  
-- ✅ 까르보나라  
-- ✅ 알리오 올리오  
-- ✅ 봉골레 파스타  
-      `,
-    },
-    reviews: [],
   },
 ];
 

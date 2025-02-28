@@ -14,7 +14,7 @@ import Icon from '../shared/Icon';
 import Button from '../ui/Button';
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
-  onSubmit: () => void;
+  onSubmit: (data: any) => void;
 }
 interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {}
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -28,9 +28,8 @@ interface BaseProps {
 export default function Form({ onSubmit, id, className, children }: FormProps) {
   const methods = useForm();
 
-  //[Test] 폼데이터 출력 테스트용
   const handleFormSubmit = (data: any) => {
-    console.log('📌 Form Data:', data);
+    onSubmit(data);
   };
 
   return (
@@ -60,7 +59,7 @@ function LabelHeader({ children, className }: BaseProps) {
 
 //인풋 기본 스타일
 const baseInputStyle =
-  "h-11 px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden w-full text-base font-medium font-['Pretendard'] leading-normal";
+  "h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
 
 const baseInputErrorStyle = 'outline outline-2 outline-red-500 focus:outline-gray-500';
 
@@ -159,14 +158,14 @@ function Submit({ className, children }: BaseProps) {
   const { formState } = useFormContext();
 
   return (
-    <Button type="button" className={className} color="filled" disabled={!formState.isValid}>
+    <Button type="submit" className={className} color="filled" disabled={!formState.isValid}>
       {children}
     </Button>
   );
 }
 function ErrorMessage({ className, children }: BaseProps) {
   const errorClass = cn(
-    "text-red-6 text-sm font-semibold font-['Pretendard'] leading-tight",
+    "inline-block mt-2 text-red-6 text-sm font-semibold font-['Pretendard'] leading-tight",
     className,
   );
 

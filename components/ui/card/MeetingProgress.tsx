@@ -5,7 +5,7 @@ import Card from '@/app/meeting/list/components/Card';
 import Button from '../Button';
 
 interface MeetingProgressProps {
-  id: number;
+  id: string;
   participantCount: number;
   capacity: number;
   isConfirmed: boolean;
@@ -39,13 +39,6 @@ export default function MeetingProgress({
           isCompleted={isCompleted}
         />
       </div>
-
-      {/* 번개 참여 버튼 */}
-      <Link href={`/meeting/detail/${id}`}>
-        <Button className="ml-6" disabled={isCompleted}>
-          {isCompleted ? '마감' : '번개 참여'}
-        </Button>
-      </Link>
     </div>
   );
 }

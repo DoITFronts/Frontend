@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { ToastContainer } from 'react-toastify';
 
 import '@/styles/global.css';
 import RootLayout from '@/components/layout/RootLayout';
@@ -11,8 +12,13 @@ export const metadata: Metadata = {
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        <title>번개팅</title>
+      </head>
       <body>
+        <link rel="preconnect" href="/" />
         <RootLayout>{children}</RootLayout>
+        <ToastContainer />
       </body>
     </html>
   );

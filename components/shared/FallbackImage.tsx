@@ -8,6 +8,7 @@ export default function FallbackImage() {
       className="size-full bg-indigo-500 object-contain"
       width="518"
       height="270"
+      priority
     />
   );
 }

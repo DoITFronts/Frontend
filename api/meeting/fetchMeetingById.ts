@@ -1,4 +1,4 @@
-const fetchMeetingById = async (id: string) => {
+const fetchMeetingById = async (id: string | undefined) => {
   if (!id) {
     throw new Error('Invalid event ID');
   }
@@ -9,16 +9,21 @@ const fetchMeetingById = async (id: string) => {
   try {
     const response = await fetch(apiUrl);
 
-    if (response.status === 404) {
-      console.warn(`⚠️ Meeting ID ${id} not found.`);
-      return null;
-    }
-
     if (!response.ok) {
       throw new Error(`API Error: ${response.status}`);
     }
 
-    return await response.json();
+    const jsonData = await response.json();
+    // console.log('Fetched Data:', jsonData);
+    // console.log(' jsonData[0]?.result:', jsonData[0]?.result);
+    // console.log('jsonData[0]?.result?.data:', jsonData[0]?.result?.data);
+    const meetingData = jsonData[0]?.result?.data || jsonData?.result?.data;
+    if (!meetingData) {
+      console.error('Invalid response structure:', jsonData);
+      throw new Error('Invalid response format');
+    }
+
+    return meetingData;
   } catch (error) {
     console.error('Error fetching meeting details:', error);
     throw error;

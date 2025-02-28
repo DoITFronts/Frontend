@@ -2,10 +2,11 @@ import { Meeting } from '@/types/meeting.types';
 
 const mockMeetings: Meeting[] = [
   {
-    id: 0,
+    id: '0',
     category: '술',
     name: '경기 성남시에서 진행하는 어쩌구',
     dateTime: '2025-02-11T04:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '성남시',
@@ -18,12 +19,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: true,
     isCompleted: false,
+    host: {
+      id: '100',
+      name: '홍길동',
+      profileImage: '',
+    },
   },
   {
-    id: 1,
+    id: '1',
     category: '술',
     name: '동작구 동작그만 ㅋㅋㅋ',
     dateTime: '2025-02-11T04:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '동작구',
@@ -35,12 +42,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '101',
+      name: '김철수',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 2,
+    id: '2',
     category: '술',
     name: '서울 강남구에서 열리는 행사1',
     dateTime: '2025-02-11T05:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '강남구',
@@ -52,12 +65,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: true,
     isCompleted: false,
+    host: {
+      id: '102',
+      name: '이영희',
+      profileImage: '',
+    },
   },
   {
-    id: 3,
+    id: '3',
     category: '술',
     name: '서울 강서구에서 열리는 행사2',
     dateTime: '2025-02-11T06:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '강서구',
@@ -69,12 +88,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '103',
+      name: '박지성',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 4,
+    id: '4',
     category: '술',
     name: '경기 고양시에서 열리는 행사3',
-    dateTime: '2025-02-11T07:00:57.498Z',
+    dateTime: '2025-02-12T07:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '고양시',
@@ -86,12 +111,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: true,
     isCompleted: false,
+    host: {
+      id: '104',
+      name: '최미나',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 5,
+    id: '5',
     category: '카페',
     name: '서울 마포구에서 열리는 행사4',
-    dateTime: '2025-02-11T08:00:57.498Z',
+    dateTime: '2025-02-12T08:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '마포구',
@@ -103,12 +134,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '105',
+      name: '정민수',
+      profileImage: '',
+    },
   },
   {
-    id: 6,
+    id: '6',
     category: '카페',
     name: '서울 송파구에서 열리는 행사5',
     dateTime: '2025-02-11T09:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '송파구',
@@ -120,12 +157,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '106',
+      name: '강수진',
+      profileImage: '',
+    },
   },
   {
-    id: 7,
+    id: '7',
     category: '카페',
     name: '경기 수원시에서 열리는 행사6',
     dateTime: '2025-02-11T10:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '수원시',
@@ -137,12 +180,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '107',
+      name: '윤도현',
+      profileImage: '',
+    },
   },
   {
-    id: 8,
+    id: '8',
     category: '카페',
     name: '서울 용산구에서 열리는 행사7',
-    dateTime: '2025-02-11T11:00:57.498Z',
+    dateTime: '2025-02-12T11:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '용산구',
@@ -154,12 +203,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '108',
+      name: '송혜교',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 9,
+    id: '9',
     category: '카페',
     name: '경기 안산시에서 열리는 행사8',
     dateTime: '2025-02-11T12:00:57.498Z',
+    date: '2025-02-11',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '안산시',
@@ -171,12 +226,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '109',
+      name: '유재석',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 10,
+    id: '10',
     category: '카페',
     name: '서울 구로구에서 열리는 행사9',
-    dateTime: '2025-02-11T13:00:57.498Z',
+    dateTime: '2025-02-12T13:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '구로구',
@@ -188,12 +249,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: true,
     isCompleted: false,
+    host: {
+      id: '110',
+      name: '김태희',
+      profileImage: '',
+    },
   },
   {
-    id: 11,
+    id: '11',
     category: '보드게임',
     name: '서울 서초구에서 열리는 행사10',
-    dateTime: '2025-02-11T14:00:57.498Z',
+    dateTime: '2025-02-12T14:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '서초구',
@@ -205,12 +272,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '111',
+      name: '이민호',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 12,
+    id: '12',
     category: '맛집',
     name: '경기 부천시에서 열리는 행사11',
-    dateTime: '2025-02-11T15:00:57.498Z',
+    dateTime: '2025-02-12T15:00:57.498Z',
+    date: '2025-02-13',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '부천시',
@@ -222,12 +295,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: true,
     isCompleted: false,
+    host: {
+      id: '112',
+      name: '박신혜',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 13,
+    id: '13',
     category: '맛집',
     name: '서울 성북구에서 열리는 행사12',
-    dateTime: '2025-02-11T16:00:57.498Z',
+    dateTime: '2025-02-12T16:00:57.498Z',
+    date: '2025-02-13',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '성북구',
@@ -239,12 +318,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '113',
+      name: '조인성',
+      profileImage: '',
+    },
   },
   {
-    id: 14,
+    id: '14',
     category: '맛집',
     name: '경기 화성시에서 열리는 행사13',
     dateTime: '2025-02-11T17:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '화성시',
@@ -256,12 +341,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '114',
+      name: '한지민',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 15,
+    id: '15',
     category: '맛집',
     name: '서울 양천구에서 열리는 행사14',
-    dateTime: '2025-02-11T18:00:57.498Z',
+    dateTime: '2025-02-12T18:00:57.498Z',
+    date: '2025-02-13',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '양천구',
@@ -273,12 +364,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '115',
+      name: '장동건',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 16,
+    id: '16',
     category: '맛집',
     name: '경기 평택시에서 열리는 행사15',
     dateTime: '2025-02-11T19:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '평택시',
@@ -290,12 +387,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '116',
+      name: '전지현',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 17,
+    id: '17',
     category: '보드게임',
     name: '서울 강동구에서 열리는 행사16',
     dateTime: '2025-02-11T20:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '강동구',
@@ -307,12 +410,18 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '117',
+      name: '권상우',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
   {
-    id: 18,
+    id: '18',
     category: '보드게임',
     name: '경기 의정부시에서 열리는 행사17',
     dateTime: '2025-02-11T21:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '경기',
       region_2depth_name: '의정부시',
@@ -324,12 +433,18 @@ const mockMeetings: Meeting[] = [
     isLiked: true,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '118',
+      name: '손예진',
+      profileImage: '',
+    },
   },
   {
-    id: 19,
+    id: '19',
     category: '보드게임',
     name: '서울 노원구에서 열리는 행사18',
     dateTime: '2025-02-11T22:00:57.498Z',
+    date: '2025-02-12',
     location: {
       region_1depth_name: '서울',
       region_2depth_name: '노원구',
@@ -341,6 +456,11 @@ const mockMeetings: Meeting[] = [
     isLiked: false,
     isConfirmed: false,
     isCompleted: true,
+    host: {
+      id: '119',
+      name: '원빈',
+      profileImage: '/assets/card/example_image.png',
+    },
   },
 ];
 
