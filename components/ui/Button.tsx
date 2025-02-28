@@ -1,0 +1,42 @@
+import { ButtonHTMLAttributes } from 'react';
+import { twMerge } from 'tailwind-merge';
+
+export type ButtonSize = 'sm' | 'lg';
+type ButtonColor = 'filled' | 'white';
+
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: ButtonSize;
+  color?: ButtonColor;
+}
+
+export default function Button({
+  children,
+  className = '',
+  type = 'button',
+  form,
+  onClick,
+  disabled = false,
+  size = 'sm',
+  color = 'filled',
+}: ButtonProps) {
+  const buttonStyle = twMerge(
+    baseStyle,
+    styleByColor[color],
+    size === 'sm' ? 'text-sm w-[120px] h-10' : 'text-base w-[332px] h-11',
+    className,
+  );
+  return (
+    <button className={buttonStyle} type={type} form={form} onClick={onClick} disabled={disabled}>
+      {children}
+    </button>
+  );
+}
+
+const baseStyle =
+  "flex items-center justify-center rounded-xl font-semibold font-['Pretendard'] overflow-hidden gap-2.5 text-center";
+
+const styleByColor: Record<ButtonColor, string> = {
+  filled: 'text-white bg-black hover:bg-black-11 active:bg-black-8 disabled:bg-black-6',
+  white:
+    'bg-white border border-black text-black hover:border-black-11 hover:text-black-11 active:border-black-8 active:text-black-8 disabled:border-black-6 disabled:text-black-6',
+};
