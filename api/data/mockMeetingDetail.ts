@@ -28,18 +28,20 @@ const mockMeetings: {
         host: {
           id: '101',
           name: '책덕후 호스트',
-          profileImage: 'https://randomuser.me/api/portraits/men/1.jpg',
+          profileImage: '/assets/fallback/img.png',
+          email: 'qqq@qqq.com',
+          userBio: '책을 좋아하는 호스트입니다.',
         },
         participants: [
           {
             id: '1',
             name: '조용한 나무늘보',
-            profileImage: 'https://randomuser.me/api/portraits/women/1.jpg',
+            profileImage: 'https://coen.store/api/portraits/women/1.jpg',
           },
           {
             id: '2',
             name: '깊은 생각하는 너구리',
-            profileImage: 'https://randomuser.me/api/portraits/women/2.jpg',
+            profileImage: 'https://coen.store/api/portraits/women/2.jpg',
           },
         ],
         details: {
@@ -61,7 +63,7 @@ const mockMeetings: {
           {
             id: '1',
             writer: '귀여운 사슴',
-            profileImage: 'https://randomuser.me/api/portraits/men/3.jpg',
+            profileImage: 'https://coen.store/api/portraits/men/3.jpg',
             content: '너무 좋은 번개이었어요! 다시 참여하고 싶어요.',
             date: '2025-02-11',
             count: 4,
@@ -69,7 +71,7 @@ const mockMeetings: {
           {
             id: '2',
             writer: '씩씩한 고양이',
-            profileImage: 'https://randomuser.me/api/portraits/men/5.jpg',
+            profileImage: 'https://coen.store/api/portraits/men/5.jpg',
             content: '책을 읽으면서 대화하는 시간이 너무 좋았어요.',
             date: '2025-02-11',
             count: 3,
@@ -77,7 +79,7 @@ const mockMeetings: {
           {
             id: '3',
             writer: '느긋한 거북이',
-            profileImage: 'https://randomuser.me/api/portraits/men/7.jpg',
+            profileImage: 'https://coen.store/api/portraits/men/7.jpg',
             content: '다들 너무 친절하고 좋은 분들이었어요.',
             date: '2025-02-11',
             count: 5,
@@ -85,7 +87,7 @@ const mockMeetings: {
           {
             id: '4',
             writer: '고민 많은 판다',
-            profileImage: 'https://randomuser.me/api/portraits/w/4.jpg',
+            profileImage: 'https://coen.store/api/portraits/w/4.jpg',
             content: '책을 읽으면서 대화하는 시간이 너무 좋았어요.',
             date: '2025-02-11',
             count: 3,
@@ -93,7 +95,7 @@ const mockMeetings: {
           {
             id: '5',
             writer: '장난꾸러기 다람쥐',
-            profileImage: 'https://randomuser.me/api/portraits/w/5.jpg',
+            profileImage: 'https://coen.store/api/portraits/w/5.jpg',
             content: '다들 너무 친절하고 좋은 분들이었어요.',
             date: '2025-02-11',
             count: 5,
@@ -101,7 +103,7 @@ const mockMeetings: {
           {
             id: '6',
             writer: '생각 깊은 올빼미',
-            profileImage: 'https://randomuser.me/api/portraits/w/6.jpg',
+            profileImage: 'https://coen.store/api/portraits/w/6.jpg',
             content: '책을 읽으면서 대화하는 시간이 너무 좋았어요.',
             date: '2025-02-11',
             count: 3,
@@ -109,7 +111,7 @@ const mockMeetings: {
           {
             id: '7',
             writer: '조용한 나무늘보',
-            profileImage: 'https://randomuser.me/api/portraits/w/1.jpg',
+            profileImage: 'https://coen.store/api/portraits/w/1.jpg',
             content: '다들 너무 친절하고 좋은 분들이었어요.',
             date: '2025-02-11',
             count: 5,
@@ -140,18 +142,20 @@ const mockMeetings: {
         host: {
           id: '102',
           name: '맥주 매니아',
-          profileImage: 'https://randomuser.me/api/portraits/men/4.jpg',
+          profileImage: 'https://coen.store/api/portraits/men/4.jpg',
+          email: 'www@www.com',
+          userBio: '맥주를 좋아하는 호스트입니다',
         },
         participants: [
           {
             id: '3',
             name: '신나는 강아지',
-            profileImage: 'https://randomuser.me/api/portraits/women/3.jpg',
+            profileImage: 'https://coen.store/api/portraits/women/3.jpg',
           },
           {
             id: '4',
             name: '고민 많은 판다',
-            profileImage: 'https://randomuser.me/api/portraits/women/4.jpg',
+            profileImage: 'https://coen.store/api/portraits/women/4.jpg',
           },
         ],
         details: {
@@ -172,7 +176,7 @@ const mockMeetings: {
           {
             id: '2',
             writer: '씩씩한 고양이',
-            profileImage: 'https://randomuser.me/api/portraits/men/5.jpg',
+            profileImage: 'https://coen.store/api/portraits/men/5.jpg',
             content: '술도 좋고, 사람들도 너무 좋았어요!',
             date: '2025-02-16',
             count: 3,
@@ -203,18 +207,20 @@ const mockMeetings: {
         host: {
           id: '103',
           name: '보드게임 마스터',
-          profileImage: 'https://randomuser.me/api/portraits/men/6.jpg',
+          profileImage: 'https://coen.store/api/portraits/men/6.jpg',
+          email: 'eee@eee.eee',
+          userBio: '보드게임을 좋아하는 호스트입니다.',
         },
         participants: [
           {
             id: '5',
             name: '장난꾸러기 다람쥐',
-            profileImage: 'https://randomuser.me/api/portraits/women/5.jpg',
+            profileImage: 'https://coen.store/api/portraits/women/5.jpg',
           },
           {
             id: '6',
             name: '생각 깊은 올빼미',
-            profileImage: 'https://randomuser.me/api/portraits/women/6.jpg',
+            profileImage: 'https://coen.store/api/portraits/women/6.jpg',
           },
         ],
         details: {
@@ -235,7 +241,7 @@ const mockMeetings: {
           {
             id: '3',
             writer: '느긋한 거북이',
-            profileImage: 'https://randomuser.me/api/portraits/men/7.jpg',
+            profileImage: 'https://coen.store/api/portraits/men/7.jpg',
             content: '게임 종류가 다양해서 너무 좋았어요!',
             date: '2025-02-19',
             count: 5,

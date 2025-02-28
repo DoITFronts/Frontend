@@ -2,16 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { useSignout } from '@/hooks/useAuth';
 import Logo from '@/public/assets/mainLogo/logoYW.svg';
 
 import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
-
-import { useRouter } from 'next/navigation';
-import { useSignout } from '@/hooks/useAuth';
 
 function NavItem({
   href,
@@ -42,7 +40,7 @@ export default function GNB() {
   const router = useRouter();
   const { mutate: logout } = useSignout();
 
-  //로그인 여부 체크하기
+  // 로그인 여부 체크하기
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('accessToken');
@@ -90,7 +88,7 @@ export default function GNB() {
               optionClassName="w-[110px] px-5 py-3 font-['Pretendard'] text-md font-semibold text-center hover:bg-yellow-5"
             />
           ) : (
-            <div className="flex gap-5 mr-4">
+            <div className="mr-4 flex gap-5">
               <NavItem href="/user/signin" label="로그인" currentPath={pathname} />
               <NavItem href="/user/signup" label="회원가입" currentPath={pathname} />
             </div>

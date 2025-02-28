@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 
+import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
+
 import Button from '../ui/Button';
 
 interface BottomFloatingBarProps {
+  id: string;
   title: string;
   subtitle: string;
 }
 
-export default function BottomFloatingBar({ title, subtitle }: BottomFloatingBarProps) {
+export default function BottomFloatingBar({ id, title, subtitle }: BottomFloatingBarProps) {
   const [isJoined, setIsJoined] = useState(false);
 
   return (
@@ -22,7 +25,14 @@ export default function BottomFloatingBar({ title, subtitle }: BottomFloatingBar
         <Button
           color={isJoined ? 'white' : 'filled'}
           type="button"
-          onClick={() => setIsJoined(!isJoined)}
+          onClick={async () => {
+            if (isJoined) {
+              await leaveLightning(id);
+            } else {
+              await joinLightning(id);
+            }
+            setIsJoined(!isJoined);
+          }}
         >
           {isJoined ? '참여 취소하기' : '참여하기'}
         </Button>

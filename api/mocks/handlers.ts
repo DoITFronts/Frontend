@@ -30,7 +30,7 @@ const handlers = [
       ctx.json({
         id,
         description,
-      })
+      }),
     );
   }),
 
@@ -82,9 +82,9 @@ const handlers = [
     );
   }),
 
-  rest.get('/api/mypage/reviews', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockMyPageReviews));
-  }),
+  rest.get('/api/mypage/reviews', (req, res, ctx) =>
+    res(ctx.status(200), ctx.json(mockMyPageReviews)),
+  ),
 ];
 
 export default handlers;

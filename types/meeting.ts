@@ -17,7 +17,9 @@ export type MeetingDetail = {
   host: {
     id: string;
     name: string;
-    profileImage: string;
+    profileImage?: string;
+    email: string;
+    userBio: string;
   };
   participants: {
     id: string;

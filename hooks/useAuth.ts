@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { signinUser, signupUser, signoutUser } from '@/api/auth';
+import { signinUser, signupUser, signoutUser } from '@/api/user/auth';
 
 //로그인
 export const useSignin = () => {
