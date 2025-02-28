@@ -37,7 +37,7 @@ export default function CreateMeetingModal() {
   } | null>(null);
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
-    console.log(meetingDate);
+    console.log(selectedPlace);
     console.log(deadlineDate);
   }, [selectedPlace]);
 
