@@ -1,4 +1,4 @@
-import Card from '../../list/components/Card';
+import Card from '../../../list/components/Card';
 
 import Tag from '@/components/ui/Tag';
 

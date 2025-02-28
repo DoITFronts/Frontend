@@ -1,6 +1,6 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import fetchMeetingById from '@/api/meeting/fetchMeetingById';
 import updateMeetingDescription from '@/api/meeting/updateMeetingDescription';
@@ -12,34 +12,20 @@ interface UpdateMeetingParams {
   description: string;
 }
 
-
-export function useMeetingDetail(meeting: MeetingDetail) {
-  return useQuery({
-    queryKey: ['event', meeting?.id],
-    queryFn: () => fetchMeetingById(meeting.id),
-    initialData: meeting,
-    enabled: !!meeting.id,
-  });
-}
-
-export function useMeetingData() {
+export function useMeetingDetail(initialMeeting?: MeetingDetail) {
   const params = useParams();
-  const meetingId = params.id as string;
+  const meetingId = (params.id as string) || initialMeeting?.id;
 
-  const {
-    data: meeting,
-    isLoading,
-    error,
-    refetch,
-  } = useQuery<MeetingDetail>({
+  const { data, isLoading, error, refetch } = useQuery<MeetingDetail>({
     queryKey: ['event', meetingId],
     queryFn: () => fetchMeetingById(meetingId),
+    initialData: initialMeeting,
     enabled: !!meetingId,
     staleTime: 1000 * 60 * 10,
     retry: 2,
   });
 
-  return { meetingId, meeting, isLoading, error, refetch };
+  return { meetingId, data, isLoading, error, refetch };
 }
 
 export function useMeetingEditor(meeting?: MeetingDetail) {
@@ -48,13 +34,6 @@ export function useMeetingEditor(meeting?: MeetingDetail) {
   const [title, setTitle] = useState(meeting?.details?.title ?? '');
   const [description, setDescription] = useState(meeting?.details?.description ?? '');
   const [tab, setTab] = useState<'edit' | 'preview'>('edit');
-
-  useEffect(() => {
-    if (meeting?.details) {
-      setTitle(meeting.details.title);
-      setDescription(meeting.details.description);
-    }
-  }, [meeting]);
 
   return {
     isEditing,
@@ -73,8 +52,8 @@ export function useMeetingEditor(meeting?: MeetingDetail) {
 export function useUpdateMeeting(refetch: () => void) {
   return useMutation({
     mutationFn: (updateData: UpdateMeetingParams) => updateMeetingDescription(updateData),
-    onSuccess: async () => {
-      await refetch();
+    onSuccess: () => {
+      refetch();
     },
   });
 }

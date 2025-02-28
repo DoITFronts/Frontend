@@ -1,5 +1,8 @@
 'use client';
 
+import MeetingDetailBody from '@/app/meeting/detail/components/info/MeetingDetailBody';
+import MeetingDetailFooter from '@/app/meeting/detail/components/info/MeetingDetailFooter';
+import MeetingDetailHeader from '@/app/meeting/detail/components/info/MeetingDetailHeader';
 import {
   MeetingDetailError,
   MeetingDetailSkeleton,
@@ -8,10 +11,6 @@ import Card from '@/app/meeting/list/components/Card';
 import FallbackImage from '@/components/shared/FallbackImage';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import { MeetingDetail } from '@/types/meeting';
-
-import MeetingDetailBody from '@/app/meeting/detail/components/MeetingDetailBody';
-import MeetingDetailFooter from '@/app/meeting/detail/components/MeetingDetailFooter';
-import MeetingDetailHeader from '@/app/meeting/detail/components/MeetingDetailHeader';
 
 export default function MeetingDetailClient({ meeting }: { meeting: MeetingDetail }) {
   const { data, error } = useMeetingDetail(meeting);

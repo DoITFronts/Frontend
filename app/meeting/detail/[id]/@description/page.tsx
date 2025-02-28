@@ -9,12 +9,12 @@ import {
   DescriptionSkeleton,
   DescriptionError,
 } from '@/app/meeting/detail/components/skeleton/DescriptionSkeleton';
-import { useMeetingData, useMeetingEditor, useUpdateMeeting } from '@/hooks/useMeetingDetail';
+import { useMeetingDetail, useMeetingEditor, useUpdateMeeting } from '@/hooks/useMeetingDetail';
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 
 export default function MeetingDescription() {
-  const { meetingId, meeting, isLoading, error, refetch } = useMeetingData();
+  const { meetingId, data, isLoading, error, refetch } = useMeetingDetail();
   const {
     isEditing,
     setIsEditing,
@@ -26,7 +26,7 @@ export default function MeetingDescription() {
     setDescription,
     tab,
     setTab,
-  } = useMeetingEditor(meeting);
+  } = useMeetingEditor(data);
   const updateMutation = useUpdateMeeting(refetch);
 
   const handleSave = async () => {
@@ -57,7 +57,7 @@ export default function MeetingDescription() {
     }
     return (
       <ReactMarkdown className="flex flex-col gap-1">
-        {meeting?.details?.description ?? '설명이 없습니다.'}
+        {data?.details?.description ?? '설명이 없습니다.'}
       </ReactMarkdown>
     );
   };
@@ -67,7 +67,7 @@ export default function MeetingDescription() {
 
   return (
     <div className="min-h-[300px] font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
-      <HostProfile host={meeting?.host} />
+      <HostProfile host={data?.host} />
 
       <div className="mb-4 flex w-full items-center justify-between">
         {isEditing ? (
@@ -79,7 +79,7 @@ export default function MeetingDescription() {
           />
         ) : (
           <h2 className="font-dunggeunmo text-2xl font-normal text-black">
-            {meeting?.details?.title ?? '제목 없음'}
+            {data?.details?.title ?? '제목 없음'}
           </h2>
         )}
         <div

@@ -1,8 +1,8 @@
 import axiosInstance from '@/api/api';
 
-const joinLightning = async (id: string) => {
+const joinLightning = async () => {
   try {
-    const response = await axiosInstance.post(`/api/v1/lightenings/${id}/join`);
+    const response = await axiosInstance.post(`/api/v1/lightenings/2/join`);
     console.log('Joined successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -13,7 +13,7 @@ const joinLightning = async (id: string) => {
 
 const leaveLightning = async (id: string) => {
   try {
-    const response = await axiosInstance.delete(`/api/v1/lightenings/${id}/join`);
+    const response = await axiosInstance.delete(`/api/v1/lightenings/${Number(id)}/join`);
     console.log('Left successfully:', response.data);
     return response.data;
   } catch (error) {
