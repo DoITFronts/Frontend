@@ -12,7 +12,7 @@ export function formatDateTime(datetimeStr: string, locale = 'ko-KR'): string {
     hour12: false,
   });
 
-  return `${formattedDate} ⦁ ${formattedTime}`;
+  return `${formattedDate} · ${formattedTime}`;
 }
 
 // 형태 LocalDateTime -> 2025.02.25
