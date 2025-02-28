@@ -41,7 +41,7 @@ export default function MeetingInfo({
                 </div>
               </div>
 
-              <div className="flex h-[206px] flex-col justify-between p-4">
+              <div className="flex h-[206px] flex-col justify-between p-4 pt-0">
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
                     <Card.Title

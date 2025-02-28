@@ -73,7 +73,7 @@ export default function DropDown({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-fit rounded-lg bg-white shadow-lg">
+        <div className="scrollbar-none absolute z-10 mt-1 max-h-60 w-fit overflow-y-scroll rounded-lg bg-white shadow-lg">
           {Array.isArray(options) ? (
             <ul>
               {options.map((option) => (
