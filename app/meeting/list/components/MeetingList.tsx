@@ -16,8 +16,7 @@ import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting.types';
-
-import REGION_DATA from '../regions';
+import { regions } from '@/types/regions';
 
 import MeetingItem from './MeetingItem';
 import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
@@ -107,7 +106,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       params.set('location_1', selected);
 
       // 현재 선택된 두 번째 지역이 유효한지 확인 후 유지
-      const validSecondLocations = REGION_DATA[selected] || [];
+      const validSecondLocations = regions[selected] || [];
       if (!validSecondLocations.includes(selectedSecondLocation)) {
         params.delete('location_2');
       }
@@ -192,10 +191,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   }, [fetchNextPage, hasNextPage]);
 
   // 지역 목록 생성
-  // TODO: 지역 목록 받아오는 api 연결
-  const meetingLocationFirst = useMemo(() => [defaultFirstOption, ...Object.keys(REGION_DATA)], []);
+  const meetingLocationFirst = useMemo(() => [defaultFirstOption, ...Object.keys(regions)], []);
   const meetingLocationSecond = useMemo(
-    () => [defaultSecondOption, ...(REGION_DATA[selectedFirstLocation] || [])],
+    () => [defaultSecondOption, ...(regions[selectedFirstLocation] || [])],
     [selectedFirstLocation],
   );
 
