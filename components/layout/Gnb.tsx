@@ -11,7 +11,7 @@ import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
 
 import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
+import { useSignout } from '@/hooks/useAuth';
 
 function NavItem({
   href,
@@ -40,8 +40,9 @@ export default function GNB() {
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+  const { mutate: logout } = useSignout();
 
-  //TODO: 로그인 여부 로직 정리하기
+  //로그인 여부 체크하기
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('accessToken');
@@ -49,23 +50,13 @@ export default function GNB() {
     }
   }, []);
 
-  // 로그아웃
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    setIsLoggedIn(false);
-    toast.success('로그아웃 되었습니다', {
-      hideProgressBar: true,
-      autoClose: 900,
-    });
-    router.push('/');
-  };
-
   // 드롭다운 아이템 Click시 handler
   const handleDropDownItem = (item: string) => {
     if (item === '마이페이지') {
       router.push('/myprofile'); // 마이페이지로 이동
     } else if (item === '로그아웃') {
-      handleLogout(); // 로그아웃 처리
+      logout(); // 로그아웃 처리
+      setIsLoggedIn(false);
     }
   };
 
@@ -85,8 +76,8 @@ export default function GNB() {
           </Link>
           <div className="mr-5 flex gap-x-3 md:gap-x-6">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
-            <NavItem href="/my/liked" label="찜한 번개" currentPath={pathname} />
-            <NavItem href="/my/review" label="리뷰" currentPath={pathname} />
+            <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
+            <NavItem href="/review" label="리뷰" currentPath={pathname} />
           </div>
         </div>
         <div>

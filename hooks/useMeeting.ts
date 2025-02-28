@@ -19,12 +19,24 @@ const useMeeting = ({
 }) =>
   useInfiniteQuery({
     queryKey: ['meetings', category, location1, location2, date],
-    queryFn: ({ pageParam = 1 }) =>
-      fetchMeeting({ category, location1, location2, date, page: pageParam, per_page }),
-
+    queryFn: async ({ pageParam = 1 }) => {
+      try {
+        return await fetchMeeting({
+          category,
+          location1,
+          location2,
+          date,
+          page: pageParam,
+          per_page,
+        });
+      } catch (error) {
+        console.error('Failed to fetch meetings:', error);
+        throw error;
+      }
+    },
     initialPageParam: 2,
-    getNextPageParam: (lastPage) => (lastPage.next <= lastPage.last ? lastPage.next : undefined),
-
+    getNextPageParam: (lastPage) =>
+      lastPage?.next && lastPage.next <= lastPage.last ? lastPage.next : undefined,
     initialData: {
       pages: [initialMeetings], // 초기 데이터 유지
       pageParams: [1], // 첫 번째 페이지는 SSR에서 가져온 데이터

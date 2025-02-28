@@ -7,29 +7,18 @@ import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { signinUser } from '@/api/auth';
+
+import { useSignin } from '@/hooks/useAuth';
 
 export default function Signin() {
-  const router = useRouter();
+  const { mutate } = useSignin();
 
-  const handleSignin = async (data: SignInRequestData) => {
-    try {
-      console.log('제출된 로그인 데이터:', data);
-      //post요청보내서 response 받기
-      const response = await signinUser(data);
-      //토큰 저장하기
-      const accessToken = response.accessToken;
-      if (accessToken) {
-        localStorage.setItem('accessToken', accessToken);
-        router.push('/');
-      }
-    } catch (error: any) {
-      console.error('Login Failed:', error.response?.data || error.message);
-      throw error;
-    }
+  const handleSignin = (data: SignInRequestData) => {
+    mutate(data);
   };
+
   return (
-    <div className="-mt-[60px] min-h-screen bg-white flex justify-center items-center">
+    <div className="min-h-screen bg-white flex justify-center items-center">
       <div className="w-[402px]">
         <div className="flex justify-center items-center mb-[50px]">
           <Link href="/">
