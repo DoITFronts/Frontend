@@ -5,11 +5,21 @@ import Button from '@/components/ui/Button';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
+import categoryMap from '@/types/categoryMap';
+import cityMap from '@/types/cityMap';
 import { Meeting } from '@/types/meeting.types';
 
 import HostInfo from '../../components/HostInfo';
 
 import Card from './Card';
+
+const reverseCityMap: Record<string, string> = Object.fromEntries(
+  Object.entries(cityMap).map(([kor, eng]) => [eng, kor]),
+);
+
+const reverseCategoryMap: Record<string, string> = Object.fromEntries(
+  Object.entries(categoryMap).map(([kor, eng]) => [eng, kor]),
+);
 
 export default function MeetingInfo({
   meetings,
@@ -28,8 +38,7 @@ export default function MeetingInfo({
                 <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
                 <Image
-                  src="/assets/card/example_image.png"
-                  // src={meetings.image}
+                  src={meetings.image || '/assets/card/example_image.png'}
                   width={384}
                   height={200}
                   alt="thumbnail"
@@ -37,7 +46,7 @@ export default function MeetingInfo({
                 />
                 <Card.Like isLiked={meetings.isLiked} onClick={onClick} meetingId={meetings.id} />
                 <div className="absolute right-[14px] top-[17.5px]">
-                  <Category type={meetings.category} />
+                  <Category type={reverseCategoryMap[meetings.category]} />
                 </div>
               </div>
 
@@ -45,20 +54,25 @@ export default function MeetingInfo({
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
                     <Card.Title
-                      name={meetings.name}
-                      location={`${meetings.location.region_1depth_name} ${meetings.location.region_2depth_name}`}
+                      name={meetings.title}
+                      location={`${reverseCityMap[meetings.city] || meetings.city} ${reverseCityMap[meetings.town] || meetings.town}`}
                     />
-                    <HostInfo
-                      id={meetings.host.id}
-                      name={meetings.host.name}
-                      profileImage={meetings.host.profileImage}
-                    />
+                    {meetings.participants
+                      ?.filter((participant) => participant.isHost)
+                      .map((participant) => (
+                        <HostInfo
+                          key={participant.userId}
+                          name={participant.name}
+                          profileImage={participant.profileImage}
+                        />
+                      ))}
+
                     <div className="flex h-[22px] flex-row items-center gap-1">
-                      <ChipInfo datetime={meetings.dateTime} />
+                      <ChipInfo datetime={meetings.targetAt} />
                     </div>
                   </div>
                   <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
-                    {meetings.description}
+                    {meetings.summary}
                   </div>
                 </div>
               </div>
