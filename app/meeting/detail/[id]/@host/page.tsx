@@ -12,8 +12,8 @@ export default function MeetingHostInfo() {
   if (error || !meeting) return <p>데이터를 불러오지 못했습니다.</p>;
 
   return (
-    <div className="min-h-[300px] font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
-      <div className="mb-6 h-px border-b border-gray-300 opacity-50" />
+    <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
+      <div className="my-8 h-px border-b border-gray-300 opacity-50" />
 
       <div className="mb-7 inline-flex size-full flex-col items-start justify-start gap-6">
         <div className="self-stretch font-['DungGeunMo'] text-2xl font-normal text-black">
@@ -49,7 +49,7 @@ export default function MeetingHostInfo() {
         </div>
       </div>
 
-      <div className="mt-6 h-px border-b border-gray-300 opacity-50" />
+      <div className="my-8 h-px border-b border-gray-300 opacity-50" />
     </div>
   );
 }

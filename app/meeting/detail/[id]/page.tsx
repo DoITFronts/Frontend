@@ -4,9 +4,6 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import fetchMeetingById from '@/api/meeting/fetchMeetingById';
-import MeetingDescription from '@/app/meeting/detail/[id]/@description/page';
-import MeetingHostInfo from '@/app/meeting/detail/[id]/@host/page';
-import MeetingReviews from '@/app/meeting/detail/[id]/@reviews/page';
 import MeetingLayout from '@/app/meeting/detail/[id]/layout';
 import MeetingDetailClient from '@/app/meeting/detail/components/MeetingDetailClient';
 import {
@@ -50,11 +47,7 @@ export default function DetailPage() {
   if (!meeting) return <p>⚠️ 유효한 이벤트 데이터가 없습니다.</p>;
 
   return (
-    <MeetingLayout
-      host={<MeetingHostInfo />}
-      description={<MeetingDescription />}
-      reviews={<MeetingReviews />}
-    >
+    <MeetingLayout host={null} description={null} location={null} reviews={null}>
       <MeetingDetailClient meeting={meeting} />
     </MeetingLayout>
   );
