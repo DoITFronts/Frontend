@@ -13,7 +13,7 @@ const meetingTypes: MeetingType[] = ['술', '카페', '보드게임', '맛집'];
 
 const typeMapping: Record<MeetingType, CreateMeetingParams['category']> = {
   술: 'ALCOHOL',
-  카페: 'CAFFE',
+  카페: 'CAFE',
   보드게임: 'BOARD_GAME',
   맛집: 'GOURMET',
 };
@@ -37,10 +37,8 @@ export default function CreateMeetingModal() {
   } | null>(null);
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
-    if (selectedPlace) {
-      console.log('1depth: ', selectedPlace.city);
-      console.log('2depth: ', selectedPlace.town);
-    }
+    console.log(selectedPlace);
+    console.log(deadlineDate);
   }, [selectedPlace]);
 
   const handleMeetingName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,8 +121,8 @@ export default function CreateMeetingModal() {
       city: selectedPlace.city,
       town: selectedPlace.town,
       category: apiType,
-      targetAt: meetingDate,
-      endAt: deadlineDate,
+      targetAt: meetingDate.toISOString(),
+      endAt: deadlineDate.toISOString(),
       capacity: parseInt(participantCount),
       minCapacity: parseInt(minParticipants) || 1,
       ...(imageFile && { image: imageFile }),
@@ -132,7 +130,10 @@ export default function CreateMeetingModal() {
 
     try {
       const response = await createMeeting(meetingData);
-      if (response.success) {
+
+      if (response.id) {
+        console.log(response);
+
         closeModal();
       }
     } catch (error) {

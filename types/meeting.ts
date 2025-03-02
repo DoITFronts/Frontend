@@ -44,9 +44,10 @@ export interface CreateMeetingParams {
   address: string;
   city: string;
   town: string;
-  category: 'ALCOHOL' | 'CAFFE' | 'BOARD_GAME' | 'GOURMET';
-  targetAt: Date;
-  endAt: Date;
+
+  category: 'ALCOHOL' | 'CAFE' | 'BOARD_GAME' | 'GOURMET';
+  targetAt: string;
+  endAt: string;
   capacity: number;
   minCapacity: number;
   image?: File;
