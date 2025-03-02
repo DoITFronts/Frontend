@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 
+import { toast } from 'react-toastify';
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import useModalStore from '@/store/useModalStore';
 import isUserLoggedIn from '@/utils/authUtils';
-import { toast } from 'react-toastify';
 
 import Button from '../ui/Button';
 
