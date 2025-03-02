@@ -13,7 +13,7 @@ import Pagination from '@/components/ui/Pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';
 import { MeetingDetail } from '@/types/meeting';
 
-export default function ReviewList() {
+export default function MeetingReviews() {
   const params = useParams();
   const meetingId = params.id as string;
 
@@ -48,7 +48,7 @@ export default function ReviewList() {
   const selectedReviews = meeting.reviews.slice(startIndex, startIndex + reviewsPerPage);
 
   return (
-    <div className="flex-col">
+    <div className="flex-col mb-24">
       <div className="font-['DungGeunMo'] text-2xl font-normal text-black">이전 번개 리뷰</div>
       <div className="mt-4 space-y-4">
         {selectedReviews.map((review, index) => (
