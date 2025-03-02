@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 
 declare global {
@@ -22,18 +23,24 @@ export default function MeetingLocation() {
     script.onload = () => {
       window.kakao.maps.load(() => {
         const mapOptions = {
-          center: new window.kakao.maps.LatLng(meeting.location.latitude, meeting.location.longitude),
+          center: new window.kakao.maps.LatLng(
+            meeting?.location.latitude,
+            meeting.location.longitude,
+          ),
           level: 3,
         };
         const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
 
-        const markerPosition = new window.kakao.maps.LatLng(meeting.location.latitude, meeting.location.longitude);
+        const markerPosition = new window.kakao.maps.LatLng(
+          meeting.location.latitude,
+          meeting.location.longitude,
+        );
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
           image: new window.kakao.maps.MarkerImage(
             'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
             new window.kakao.maps.Size(40, 40),
-            { offset: new window.kakao.maps.Point(20, 40) }
+            { offset: new window.kakao.maps.Point(20, 40) },
           ),
         });
         marker.setMap(map);

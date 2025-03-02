@@ -17,7 +17,7 @@ const mockMeetings: {
       data: {
         id: '1',
         title: '📖 번개 1 - 함께하는 독서',
-        category: '카페',
+        category: 'CAFE',
         imageUrl: 'https://coen.store/event1.jpg',
         location: {
           latitude: 37.497942,
@@ -137,7 +137,7 @@ const mockMeetings: {
       data: {
         id: '2',
         title: '🍺 번개 2 - 소맥의 밤',
-        category: '술',
+        category: 'ALCOHOL',
         imageUrl: 'https://coen.store/event2.jpg',
         location: {
           latitude: 35.158698,
@@ -208,7 +208,7 @@ const mockMeetings: {
       data: {
         id: '3',
         title: '🎲 번개 3 - 보드게임의 밤',
-        category: '보드게임',
+        category: 'BOARD_GAME',
         imageUrl: 'https://coen.store/event3.jpg',
         location: {
           latitude: 36.35111,

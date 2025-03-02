@@ -47,7 +47,7 @@ export default function DetailPage() {
   if (!meeting) return <p>⚠️ 유효한 이벤트 데이터가 없습니다.</p>;
 
   return (
-    <MeetingLayout host={null} description={null} location={null} reviews={null}>
+    <MeetingLayout host={null} description={null} location={null} reviews={null} bottombar={null}>
       <MeetingDetailClient meeting={meeting} />
     </MeetingLayout>
   );
