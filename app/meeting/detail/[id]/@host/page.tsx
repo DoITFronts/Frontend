@@ -2,14 +2,18 @@
 
 import Image from 'next/image';
 
+import {
+  HostInfoSkeleton,
+  HostInfoError,
+} from '@/app/meeting/detail/components/skeleton/HostInfoSkeleton';
 import ProfileIcon from '@/components/shared/BaseProfile';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 
 export default function MeetingHostInfo() {
-  const { data: meeting, isLoading, error } = useMeetingDetail();
+  const { data: meeting, isLoading, error, refetch } = useMeetingDetail();
 
-  if (isLoading) return <p>로딩 중...</p>;
-  if (error || !meeting) return <p>데이터를 불러오지 못했습니다.</p>;
+  if (isLoading) return <HostInfoSkeleton />;
+  if (error || !meeting) return <HostInfoError onRetry={() => refetch()} />;
 
   return (
     <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
