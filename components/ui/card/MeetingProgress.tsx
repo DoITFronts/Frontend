@@ -5,7 +5,7 @@ import Card from '@/app/meeting/list/components/Card';
 import Button from '../Button';
 
 interface MeetingProgressProps {
-  id: string;
+  id: number;
   participantCount: number;
   capacity: number;
   isConfirmed: boolean;
