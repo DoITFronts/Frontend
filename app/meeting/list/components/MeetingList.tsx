@@ -12,21 +12,18 @@ import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
 import useMeeting from '@/hooks/useMeeting';
+import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
+import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting.types';
+import { regions } from '@/types/regions';
 
-import REGION_DATA from '../regions';
-
-import MeetingInfo from './MeetingInfo';
+import MeetingItem from './MeetingItem';
 import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
 interface InitialMeetingsProps {
   initialMeetings: Meeting[];
 }
-
-const meetingTypes = ['전체', '술', '카페', '보드게임', '맛집'];
-const defaultFirstOption = '지역 전체';
-const defaultSecondOption = '동 전체';
 
 // 드롭다운 재사용 컴포넌트
 function FilterDropdown({
@@ -109,7 +106,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       params.set('location_1', selected);
 
       // 현재 선택된 두 번째 지역이 유효한지 확인 후 유지
-      const validSecondLocations = REGION_DATA[selected] || [];
+      const validSecondLocations = regions[selected] || [];
       if (!validSecondLocations.includes(selectedSecondLocation)) {
         params.delete('location_2');
       }
@@ -194,10 +191,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   }, [fetchNextPage, hasNextPage]);
 
   // 지역 목록 생성
-  // TODO: 지역 목록 받아오는 api 연결
-  const meetingLocationFirst = useMemo(() => [defaultFirstOption, ...Object.keys(REGION_DATA)], []);
+  const meetingLocationFirst = useMemo(() => [defaultFirstOption, ...Object.keys(regions)], []);
   const meetingLocationSecond = useMemo(
-    () => [defaultSecondOption, ...(REGION_DATA[selectedFirstLocation] || [])],
+    () => [defaultSecondOption, ...(regions[selectedFirstLocation] || [])],
     [selectedFirstLocation],
   );
 
@@ -235,7 +231,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 번개 카테고리 */}
       <div className="mb-10 flex gap-3">
-        {meetingTypes.map((category) => (
+        {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
@@ -252,6 +248,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       </div>
 
       {/* 필터링 드롭다운 */}
+      {/* TODO: 마감일자, 참여인원 필터링 추가 */}
       <div className="flex-start mb-10 flex gap-3">
         <FilterDropdown
           options={meetingLocationFirst}
@@ -285,9 +282,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
         {!isLoading && !isError && meetings.length > 0 && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting) => (
-              <MeetingInfo
+              <MeetingItem
                 key={meeting.id}
-                meetings={meeting}
+                meeting={meeting}
                 onClick={() => handleClickLike(meeting.id)}
               />
             ))}
@@ -297,7 +294,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 무한 스크롤 트리거 */}
       <div ref={observerRef} className="h-10" />
-      {isFetchingNextPage && <p className="text-center text-gray-500">Loading more...</p>}
+      {isFetchingNextPage && <MeetingCardLoading />}
     </div>
   );
 }

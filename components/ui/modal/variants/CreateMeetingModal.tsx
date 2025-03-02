@@ -130,8 +130,10 @@ export default function CreateMeetingModal() {
 
     try {
       const response = await createMeeting(meetingData);
+
       if (response.id) {
         console.log(response);
+
         closeModal();
       }
     } catch (error) {
