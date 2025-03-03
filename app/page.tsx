@@ -11,11 +11,24 @@ import { useRouter } from 'next/navigation';
 import Lottie from 'lottie-react';
 import fireworkAnimation from '@/public/assets/landing/fireworks.json';
 
+//FramerMotion
+const fadeInVariant = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
 export default function Page() {
   const router = useRouter();
+
   return (
     <div className="bg-black w-full font-['Pretendard'] text-white">
-      <section className="flex items-center justify-center gap-6">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInVariant}
+        className="flex items-center justify-center gap-6"
+      >
         <Lottie animationData={fireworkAnimation} loop />
         <div className="text-[80px] font-extrabold leading-[100px]  pt-[10%] pb-[350px] flex flex-col items-center">
           <Image src={Logo} height={41} width={181} alt="번개팅 로고" />
@@ -32,9 +45,15 @@ export default function Page() {
           </Button>
         </div>
         <Lottie animationData={fireworkAnimation} loop />
-      </section>
+      </motion.section>
       <section className="flex flex-col items-center justify-center gap-y-[330px]">
-        <div className="flex gap-x-[78px] items-center">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInVariant}
+          className="flex gap-x-[78px] items-center"
+        >
           <div className="gap-[30px] w-[714px]">
             <h2 className="text-[40px] font-bold">
               빠르게 약속을 잡고 싶다면?
@@ -49,8 +68,14 @@ export default function Page() {
             </p>
           </div>
           <Image src={Section01} width={408} height={408} alt="section01" />
-        </div>
-        <div className="flex gap-x-[78px] items-center">
+        </motion.div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInVariant}
+          className="flex gap-x-[78px] items-center"
+        >
           <Image src={Section02} width={408} height={408} alt="section02" />
           <div className="w-[714px]">
             <h2 className="text-[40px] font-bold">
@@ -63,9 +88,15 @@ export default function Page() {
               수 있어요.
             </p>
           </div>
-        </div>
+        </motion.div>
       </section>
-      <section className="flex flex-col justify-center items-center pb-[10%]">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={fadeInVariant}
+        className="flex flex-col justify-center items-center pb-[10%]"
+      >
         <h2 className="text-[40px] font-bold leading-[55px] text-center pb-[83px] pt-[502px]">
           오늘, 새로운 사람들과 번개처럼 <br />
           빠르게 만나보세요! 🚀
@@ -77,7 +108,7 @@ export default function Page() {
         >
           시작하기
         </Button>
-      </section>
+      </motion.section>
     </div>
   );
 }
