@@ -1,7 +1,7 @@
 ![Group 33981](https://github.com/user-attachments/assets/2afd98ae-6bf6-422c-95e1-c96ab9d8b4d9)
 
 
-# ⚡️ 목차
+# 목차
 1. [팀원 소개](#팀원-소개)
 2. [프로젝트 소개](#프로젝트-소개)
 3. [주요 기능](#주요-기능)
