@@ -11,7 +11,7 @@
 7. [폴더 구조](#폴더-구조)
 8. [구현 페이지](#구현-페이지)
 
-# ⚡️ 팀원 소개
+# 팀원 소개
 > **TEAM DOIT**<br>
 > 깔쌈한 프론트엔드 개발자 단체 DOIT 입니다.
 <table align="center">
@@ -30,12 +30,12 @@
   </table>
 <br>
 
-# ⚡️ 프로젝트 소개
+# 프로젝트 소개
 ### 번개처럼 빠르게! 새로운 사람들과 만나보세요. 번개팅!
 번개팅은 빠르게 모임을 생성하고 참여할 수 있는 번개 모임 플랫폼으로, 실제 참여자들의 솔직한 리뷰를 통해 신뢰할 수 있는 만남을 제공합니다.
 <br/>
 
-# ⚡️ 주요 기능
+# 주요 기능
 ### 1. 모임 조회
 술자리, 보드게임, 카페, 맛집 등 다양한 번개 모임을 조회하고 즉시 참여할 수 있습니다.    
 ### 2. 모임 생성
@@ -51,7 +51,7 @@
 ### 7. 실시간 채팅
 실시간 채팅을 통해 참가자 간 일정 조율 및 모임 정보를 공유할 수 있습니다.
 
-# ⚡️ 기술 스택
+# 기술 스택
 <div style="flex">
  <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat&logo=Javascript&logoColor=white">
  <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white">
@@ -69,17 +69,17 @@
  <img src="https://img.shields.io/badge/Netlify-00C7B7?style=flat&logo=Netlify&logoColor=white">
 </div>
 
-# ⚡️ 배포 주소
+# 배포 주소
 https://doitz.netlify.app/
 
-# ⚡️ 화면 설계
+# 화면 설계
 <a href="https://www.figma.com/design/zvZ4WQR7gW7C72Mxo0oZGw/%EB%B2%88%EA%B0%9C%ED%8C%85?node-id=84-24401&p=f&t=5qYKX6gI25qwi3fz-0
 ">Figma 링크</a>
 
-# ⚡⚡️ API 명세서
+# API 명세서
 <a href="https://harmless-gander-9c6.notion.site/API-191768e5758280a69a2acb4095ba7c31">API 명세서 (노션)</a>
 
-# ⚡️ 폴더 구조
+# 폴더 구조
 ```aiignore
 📦 프로젝트 루트
 ├── 📂 app
@@ -121,7 +121,7 @@ https://doitz.netlify.app/
 ├── package.json             # 패키지 목록
 ```
 
-# ⚡️ 구현 페이지 
+# 구현 페이지 
 ### 랜딩 페이지
 번개팅에 대한 소개가 담긴 첫 페이지입니다
 
