@@ -11,6 +11,8 @@ import HostInfo from '../../components/HostInfo';
 
 import Card from './Card';
 
+import useLikeToggle from '@/hooks/useLikeToggle';
+
 export default function MeetingInfo({
   meetings,
   onClick,
@@ -18,6 +20,8 @@ export default function MeetingInfo({
   meetings: Meeting;
   onClick: () => void;
 }) {
+  const { isLiked, handleLikeClick } = useLikeToggle(meetings.id, meetings.isLiked, onClick);
+
   return (
     <Card>
       <div className="flex h-[430px] flex-col justify-between overflow-hidden">
@@ -32,7 +36,7 @@ export default function MeetingInfo({
             alt="thumbnail"
             className="w-full"
           />
-          <Card.Like isLiked={meetings.isLiked} onClick={onClick} meetingId={meetings.id} />
+          <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meetings.id} />
           <div className="absolute right-[14px] top-[17.5px]">
             <Category type={meetings.category} />
           </div>
