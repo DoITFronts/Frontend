@@ -4,6 +4,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import fetchMeetingById from '@/api/meeting/fetchMeetingById';
+import MeetingLayout from '@/app/meeting/detail/[id]/layout';
 import MeetingDetailClient from '@/app/meeting/detail/components/MeetingDetailClient';
 import {
   MeetingDetailSkeleton,
@@ -45,5 +46,9 @@ export default function DetailPage() {
   if (error) return <MeetingDetailError onRetry={() => window.location.reload()} />;
   if (!meeting) return <p>⚠️ 유효한 이벤트 데이터가 없습니다.</p>;
 
-  return <MeetingDetailClient meeting={meeting} />;
+  return (
+    <MeetingLayout host={null} description={null} location={null} reviews={null} bottombar={null}>
+      <MeetingDetailClient meeting={meeting} />
+    </MeetingLayout>
+  );
 }

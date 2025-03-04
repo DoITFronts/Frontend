@@ -1,4 +1,4 @@
-const fetchMeetingById = async (id: string) => {
+const fetchMeetingById = async (id: string | undefined) => {
   if (!id) {
     throw new Error('Invalid event ID');
   }

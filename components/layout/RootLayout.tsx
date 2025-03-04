@@ -5,16 +5,14 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import startMockWorker from '@/api/mocks/setup';
-import BottomFloatingBar from '@/components/layout/BottomFloatingBar';
 import Gnb from '@/components/layout/Gnb';
-import Modal from '@/components/ui/modal/Modal';
 import ErrorBoundary from '@/components/shared/query/ErrorBoundary';
+import Modal from '@/components/ui/modal/Modal';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const pathname = usePathname();
-  const isMeetingDetail = pathname.includes('/meeting/detail');
 
   const queryClient = useMemo(() => new QueryClient(), []);
 
