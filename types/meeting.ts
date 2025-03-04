@@ -44,6 +44,7 @@ export interface CreateMeetingParams {
   address: string;
   city: string;
   town: string;
+
   category: 'ALCOHOL' | 'CAFE' | 'BOARD_GAME' | 'GOURMET';
   targetAt: string;
   endAt: string;

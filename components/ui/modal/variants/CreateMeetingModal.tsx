@@ -133,8 +133,10 @@ export default function CreateMeetingModal() {
 
     try {
       const response = await createMeeting(meetingData);
+
       if (response.id) {
         router.push(`/api/v1/lightenings/${response.id}`);
+
         closeModal();
       }
     } catch (error) {

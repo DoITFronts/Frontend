@@ -4,6 +4,7 @@ import axiosInstance from '../api';
 const createMeeting = async (meetingData: CreateMeetingParams) => {
   const formData = new FormData();
 
+
   const lightening = {
     title: meetingData.title,
     summary: meetingData.summary,
@@ -11,6 +12,7 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
     city: meetingData.city,
     town: meetingData.town,
     category: meetingData.category,
+
     targetAt: meetingData.targetAt,
     endAt: meetingData.endAt,
     capacity: meetingData.capacity,
@@ -24,6 +26,7 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
   }
 
   const response = await axiosInstance.post(`/api/v1/lightenings`, formData, {
+
     headers: {
       'Content-Type': 'multipart/form-data',
     },
