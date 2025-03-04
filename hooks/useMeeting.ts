@@ -6,25 +6,25 @@ const useMeeting = ({
   category,
   city,
   town,
-  date,
+  targetAt,
   initialMeetings,
 }: {
   category: string;
   city: string;
   town: string;
-  date: Date | null;
+  targetAt: Date | null;
   per_page: number;
   initialMeetings: any[];
 }) =>
   useInfiniteQuery({
-    queryKey: ['meetings', category, city, town, date],
+    queryKey: ['meetings', category, city, town, targetAt],
     queryFn: async ({ pageParam = 1 }) => {
       try {
         return await fetchMeeting({
           category,
           city,
           town,
-          date,
+          targetAt,
         });
       } catch (error) {
         console.error('Failed to fetch meetings:', error);

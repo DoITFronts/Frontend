@@ -49,7 +49,7 @@ export default function MeetingDetailClient({ meeting }: { meeting: MeetingDetai
             </div>
           </div>
           <MeetingProgress
-            id="1"
+            id={1}
             participantCount={data?.participants?.length ?? 0}
             capacity={20}
             isConfirmed

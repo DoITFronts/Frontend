@@ -38,7 +38,7 @@ export default function MeetingInfo({
                 <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
                 <Image
-                  src={meetings.image || '/assets/card/example_image.png'}
+                  src={meetings.imageUrl || '/assets/card/example_image.png'}
                   width={384}
                   height={200}
                   alt="thumbnail"

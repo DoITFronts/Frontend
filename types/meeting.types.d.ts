@@ -15,13 +15,13 @@ export interface Meeting {
   category: string;
   title: string;
   summary: string;
+  imageUrl: string;
   targetAt: string;
   date: string;
   city: string;
   town: string;
   participantCount: number;
   capacity: number;
-  image: string;
   description: string;
   isLiked: boolean;
   isJoined: boolean;

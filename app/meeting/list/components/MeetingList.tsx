@@ -67,7 +67,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     searchParams.get('location_2') || defaultSecondOption,
   );
   const [selectedDate, setSelectedDate] = useState(
-    searchParams.get('date') ? new Date(searchParams.get('date') as string) : null,
+    searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -75,18 +75,20 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     setSelectedCategory(searchParams.get('category') || '전체');
     setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
     setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
-    setSelectedDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : null);
+    setSelectedDate(
+      searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
+    );
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
   const updateSearchParams = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
-      params.set(key, value);
+      params.set(key === 'date' ? 'targetAt' : key, value);
     } else {
-      params.delete(key);
+      params.delete(key === 'date' ? 'targetAt' : key);
     }
-    router.replace(`?${params.toString()}`, { scroll: false });
+    router.replace(`?${decodeURIComponent(params.toString())}`, { scroll: false });
   };
 
   //  카테고리 변경 핸들러
@@ -126,15 +128,15 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const handleDateChange = (date: Date | null) => {
     if (date?.toDateString() === selectedDate?.toDateString()) {
       setSelectedDate(null);
-      updateSearchParams('date', '');
+      updateSearchParams('targetAt', '');
     } else if (date) {
       const fixedDate = new Date(date);
       fixedDate.setHours(12, 0, 0, 0); // **12시로 고정** (UTC 보정용)
       setSelectedDate(fixedDate);
-      updateSearchParams('date', fixedDate.toISOString().split('T')[0]); // ISO 포맷 유지
+      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`); // ISO 포맷 유지
     } else {
       setSelectedDate(null);
-      updateSearchParams('date', '');
+      updateSearchParams('targetAt', '');
     }
   };
 
@@ -177,7 +179,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     category: selectedCategory,
     city: selectedFirstLocation,
     town: selectedSecondLocation,
-    date: selectedDate,
+    targetAt: selectedDate,
     per_page: 10,
     initialMeetings,
   });

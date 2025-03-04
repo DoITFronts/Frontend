@@ -11,13 +11,13 @@ export default async function Page({ searchParams }: PageProps) {
   const category = params?.category ?? '';
   const city = params?.location_1 ?? '';
   const town = params?.location_2 ?? '';
-  const date = params?.date ? new Date(params.date) : null;
+  const targetAt = params?.targetAt ? new Date(params.targetAt) : null;
 
   const initialMeetings = await fetchMeeting({
     category,
     city,
     town,
-    date,
+    targetAt,
   });
 
   return <MeetingList initialMeetings={initialMeetings} />;
