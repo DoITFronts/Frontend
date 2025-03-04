@@ -24,7 +24,7 @@ export interface Meeting {
   capacity: number;
   description: string;
   isLiked: boolean;
-  isJoined?: boolean;
+  isJoined: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
   participants: Participants[];
