@@ -28,7 +28,7 @@ export const useSignin = () => {
         console.log('디코딩된 유저 정보:', decodedToken);
 
         toast.success('성공적으로 로그인 되었습니다 :)', { hideProgressBar: true, autoClose: 900 });
-        router.push('/');
+        router.push('/meeting/list');
       }
     },
     onError: (error: any) => {
