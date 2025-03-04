@@ -21,6 +21,7 @@ export interface Meeting {
   image: string;
   description: string;
   isLiked: boolean;
+  isJoined?: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
   host: Host;
