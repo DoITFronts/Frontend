@@ -1,5 +1,6 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
@@ -12,6 +13,11 @@ import {
 import Pagination from '@/components/ui/Pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';
 import { MeetingDetail } from '@/types/meeting';
+
+const reviewVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.4 } },
+};
 
 export default function MeetingReviews() {
   const params = useParams();
@@ -42,6 +48,7 @@ export default function MeetingReviews() {
         아직 리뷰가 없습니다.
       </p>
     );
+
   const totalReviews = meeting.reviews.length;
   const totalPages = Math.ceil(totalReviews / reviewsPerPage);
   const startIndex = (currentPage - 1) * reviewsPerPage;
@@ -52,7 +59,13 @@ export default function MeetingReviews() {
       <div className="font-['DungGeunMo'] text-2xl font-normal text-black">이전 번개 리뷰</div>
       <div className="mt-4 space-y-4">
         {selectedReviews.map((review, index) => (
-          <React.Fragment key={review.id}>
+          <motion.div
+            key={review.id}
+            variants={reviewVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+          >
             <ReviewItem
               date={review.date}
               content={review.content}
@@ -60,7 +73,7 @@ export default function MeetingReviews() {
               username={review.writer}
             />
             {index < selectedReviews.length - 1 && (
-              <div data-svg-wrapper="">
+              <div className='mt-2' data-svg-wrapper="">
                 <svg
                   width="1200"
                   height="4"
@@ -78,7 +91,7 @@ export default function MeetingReviews() {
                 </svg>
               </div>
             )}
-          </React.Fragment>
+          </motion.div>
         ))}
       </div>
       {totalPages > 1 && (

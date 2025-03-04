@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-
+import { motion } from 'framer-motion';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 
 declare global {
@@ -9,6 +9,11 @@ declare global {
     kakao: any;
   }
 }
+
+const mapVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 export default function MeetingLocation() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
@@ -25,7 +30,7 @@ export default function MeetingLocation() {
         const mapOptions = {
           center: new window.kakao.maps.LatLng(
             meeting?.location.latitude,
-            meeting.location.longitude,
+            meeting.location.longitude
           ),
           level: 3,
         };
@@ -33,14 +38,14 @@ export default function MeetingLocation() {
 
         const markerPosition = new window.kakao.maps.LatLng(
           meeting.location.latitude,
-          meeting.location.longitude,
+          meeting.location.longitude
         );
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
           image: new window.kakao.maps.MarkerImage(
             'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
             new window.kakao.maps.Size(40, 40),
-            { offset: new window.kakao.maps.Point(20, 40) },
+            { offset: new window.kakao.maps.Point(20, 40) }
           ),
         });
         marker.setMap(map);
@@ -88,7 +93,13 @@ export default function MeetingLocation() {
         <div className="self-stretch font-['DungGeunMo'] text-2xl font-normal text-black">
           번개 위치
         </div>
-        <div className="inline-flex h-[373px] w-full flex-col items-start justify-start gap-[19px]">
+        <motion.div
+          className="inline-flex h-[373px] w-full flex-col items-start justify-start gap-[19px]"
+          variants={mapVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <div className="inline-flex items-start justify-start">
             <div data-svg-wrapper="" className="relative">
               <svg
@@ -109,7 +120,7 @@ export default function MeetingLocation() {
             </div>
           </div>
           <div ref={mapContainer} className="h-[330px] self-stretch bg-[#d9d9d9]" />
-        </div>
+        </motion.div>
       </div>
 
       <div className="my-8 h-px border-b border-gray-300 opacity-50" />
