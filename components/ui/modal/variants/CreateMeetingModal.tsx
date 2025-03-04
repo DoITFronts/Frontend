@@ -7,6 +7,7 @@ import Icon from '@/components/shared/Icon';
 import { CreateMeetingParams } from '@/types/meeting';
 import createMeeting from '@/api/meeting/createMeeting';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
+import { useRouter } from 'next/navigation';
 
 type MeetingType = '술' | '카페' | '보드게임' | '맛집';
 const meetingTypes: MeetingType[] = ['술', '카페', '보드게임', '맛집'];
@@ -40,6 +41,8 @@ export default function CreateMeetingModal() {
     console.log(selectedPlace);
     console.log(deadlineDate);
   }, [selectedPlace]);
+
+  const router = useRouter();
 
   const handleMeetingName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -131,7 +134,7 @@ export default function CreateMeetingModal() {
     try {
       const response = await createMeeting(meetingData);
       if (response.id) {
-        console.log(response);
+        router.push(`/api/v1/lightenings/${response.id}`);
         closeModal();
       }
     } catch (error) {
