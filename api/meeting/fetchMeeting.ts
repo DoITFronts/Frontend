@@ -33,7 +33,7 @@ const fetchMeeting = async ({
 
   try {
     const response = await fetch(
-      `https://${process.env.NEXT_PUBLIC_IMAGE_DOMAINS}/api/v1/lightenings?${queryParams.toString()}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings?${queryParams.toString()}`,
     );
 
     if (!response.ok) {
