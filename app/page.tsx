@@ -38,7 +38,7 @@ export default function Page() {
           </div>
           <Button
             color="white"
-            onClick={() => router.push('meeting/list')}
+            onClick={() => router.push('user/signup')}
             className="w-[234px] h-[60px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
           >
             시작하기
@@ -103,7 +103,7 @@ export default function Page() {
         </h2>
         <Button
           color="white"
-          onClick={() => router.push('meeting/list')}
+          onClick={() => router.push('user/signup')}
           className="w-[234px] h-[60px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
         >
           시작하기
