@@ -3,25 +3,29 @@ export interface Location {
   region_2depth_name: string;
 }
 
-export interface Host {
-  id: string;
+export interface Participants {
+  userId: number;
   name: string;
-  profileImage: string;
+  profileImage?: string;
+  isHost: boolean;
 }
 
 export interface Meeting {
   id: string;
   category: string;
-  name: string;
-  dateTime: string;
+  title: string;
+  summary: string;
+  imageUrl: string;
+  targetAt: string;
   date: string;
-  location: Location;
+  city: string;
+  town: string;
   participantCount: number;
   capacity: number;
-  image: string;
   description: string;
   isLiked: boolean;
+  isJoined?: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
-  host: Host;
+  participants: Participants[];
 }
