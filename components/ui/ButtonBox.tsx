@@ -5,7 +5,7 @@ export default function ButonBox({
   onClick,
   chatIconDisabled,
 }: {
-  isJoined: boolean;
+  isJoined?: boolean;
   onClick?: () => void;
   chatIconDisabled?: boolean;
 }) {

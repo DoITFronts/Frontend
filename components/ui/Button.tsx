@@ -1,6 +1,6 @@
+import { motion } from 'framer-motion';
 import { ButtonHTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { motion } from 'framer-motion';
 
 export type ButtonSize = 'sm' | 'lg';
 type ButtonColor = 'filled' | 'white';
@@ -9,6 +9,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   color?: ButtonColor;
 }
+
+const baseStyle =
+  "flex items-center justify-center rounded-xl font-semibold font-['Pretendard'] overflow-hidden gap-2.5 text-center transition-all";
+
+const styleByColor: Record<ButtonColor, string> = {
+  filled: 'text-white bg-black hover:bg-black-11 active:bg-black-8 disabled:bg-black-6',
+  white:
+    'bg-white border border-black text-black hover:border-black-11 hover:text-black-11 active:border-black-8 active:text-black-8 disabled:border-black-6 disabled:text-black-6',
+};
 
 export default function Button({
   children,
@@ -24,7 +33,7 @@ export default function Button({
     baseStyle,
     styleByColor[color],
     size === 'sm' ? 'text-sm w-[120px] h-10' : 'text-base w-[332px] h-11',
-    className
+    className,
   );
 
   const buttonVariants = {
@@ -47,12 +56,3 @@ export default function Button({
     </motion.button>
   );
 }
-
-const baseStyle =
-  "flex items-center justify-center rounded-xl font-semibold font-['Pretendard'] overflow-hidden gap-2.5 text-center transition-all";
-
-const styleByColor: Record<ButtonColor, string> = {
-  filled: 'text-white bg-black hover:bg-black-11 active:bg-black-8 disabled:bg-black-6',
-  white:
-    'bg-white border border-black text-black hover:border-black-11 hover:text-black-11 active:border-black-8 active:text-black-8 disabled:border-black-6 disabled:text-black-6',
-};

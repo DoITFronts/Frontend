@@ -5,6 +5,7 @@ import Button from '@/components/ui/Button';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
+import useLikeToggle from '@/hooks/useLikeToggle';
 import categoryMap from '@/types/categoryMap';
 import cityMap from '@/types/cityMap';
 import { Meeting } from '@/types/meeting.types';
@@ -46,7 +47,7 @@ export default function MeetingInfo({
                   alt="thumbnail"
                   className="w-full"
                 />
-                <Card.Like isLiked={meetings.isLiked} onClick={onClick} meetingId={meetings.id} />
+                <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meetings.id} />
                 <div className="absolute right-[14px] top-[17.5px]">
                   <Category type={reverseCategoryMap[meetings.category]} />
                 </div>

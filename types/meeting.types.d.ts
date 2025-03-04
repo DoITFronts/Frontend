@@ -11,7 +11,7 @@ export interface Participants {
 }
 
 export interface Meeting {
-  id: number;
+  id: string;
   category: string;
   title: string;
   summary: string;
@@ -24,7 +24,7 @@ export interface Meeting {
   capacity: number;
   description: string;
   isLiked: boolean;
-  isJoined?: boolean;
+  isJoined: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
   participants: Participants[];
