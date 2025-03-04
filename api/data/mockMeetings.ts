@@ -2,7 +2,7 @@ import { Meeting } from '@/types/meeting.types';
 
 const mockMeetings: Meeting[] = [
   {
-    id: 0,
+    id: "0",
     category: '술',
     title: '경기 성남시에서 진행하는 어쩌구',
     targetAt: '2025-02-11T04:00:57.498Z',
@@ -26,10 +26,9 @@ const mockMeetings: Meeting[] = [
       },
     ],
     summary: '성남시에서 즐거운 술 모임! ...',
-    isJoined: false,
   },
   {
-    id: 1,
+    id: "1",
     category: '술',
     title: '동작구 동작그만 ㅋㅋㅋ',
     targetAt: '2025-02-11T04:00:57.498Z',
@@ -54,7 +53,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 2,
+    id: "2",
     category: '술',
     title: '서울 강남구에서 열리는 행사1',
     targetAt: '2025-02-11T05:00:57.498Z',
@@ -79,7 +78,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 3,
+    id: "3",
     category: '술',
     title: '서울 강서구에서 열리는 행사2',
     targetAt: '2025-02-11T06:00:57.498Z',
@@ -104,7 +103,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 4,
+    id: "4",
     category: '술',
     title: '경기 고양시에서 열리는 행사3',
     targetAt: '2025-02-12T07:00:57.498Z',
@@ -129,7 +128,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 5,
+    id: "5",
     category: '카페',
     title: '서울 마포구에서 열리는 행사4',
     targetAt: '2025-02-12T08:00:57.498Z',
@@ -154,7 +153,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 6,
+    id: "6",
     category: '카페',
     title: '서울 송파구에서 열리는 행사5',
     targetAt: '2025-02-11T09:00:57.498Z',
@@ -179,7 +178,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 7,
+    id: "7",
     category: '카페',
     title: '경기 수원시에서 열리는 행사6',
     targetAt: '2025-02-11T10:00:57.498Z',
@@ -204,7 +203,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 8,
+    id: "8",
     category: '카페',
     title: '서울 용산구에서 열리는 행사7',
     targetAt: '2025-02-12T11:00:57.498Z',
@@ -229,7 +228,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 9,
+    id: "9",
     category: '카페',
     title: '경기 안산시에서 열리는 행사8',
     targetAt: '2025-02-11T12:00:57.498Z',
@@ -254,7 +253,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 10,
+    id: "10",
     category: '카페',
     title: '서울 구로구에서 열리는 행사9',
     targetAt: '2025-02-12T13:00:57.498Z',
@@ -279,7 +278,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 11,
+    id: "11",
     category: '보드게임',
     title: '서울 서초구에서 열리는 행사10',
     targetAt: '2025-02-12T14:00:57.498Z',
@@ -304,7 +303,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 12,
+    id: "12",
     category: '맛집',
     title: '경기 부천시에서 열리는 행사11',
     targetAt: '2025-02-12T15:00:57.498Z',
@@ -329,7 +328,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 13,
+    id: "13",
     category: '맛집',
     title: '서울 성북구에서 열리는 행사12',
     targetAt: '2025-02-12T16:00:57.498Z',
@@ -354,7 +353,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 14,
+    id: "14",
     category: '맛집',
     title: '경기 화성시에서 열리는 행사13',
     targetAt: '2025-02-11T17:00:57.498Z',
@@ -379,7 +378,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 15,
+    id: "15",
     category: '맛집',
     title: '서울 양천구에서 열리는 행사14',
     targetAt: '2025-02-12T18:00:57.498Z',
@@ -404,7 +403,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 16,
+    id: "16",
     category: '맛집',
     title: '경기 평택시에서 열리는 행사15',
     targetAt: '2025-02-11T19:00:57.498Z',
@@ -429,7 +428,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 17,
+    id: "17",
     category: '보드게임',
     title: '서울 강동구에서 열리는 행사16',
     targetAt: '2025-02-11T20:00:57.498Z',
@@ -454,7 +453,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 18,
+    id: "18",
     category: '보드게임',
     title: '경기 의정부시에서 열리는 행사17',
     targetAt: '2025-02-11T21:00:57.498Z',
@@ -479,7 +478,7 @@ const mockMeetings: Meeting[] = [
     isJoined: false,
   },
   {
-    id: 19,
+    id: "19",
     category: '보드게임',
     title: '서울 노원구에서 열리는 행사18',
     targetAt: '2025-02-11T22:00:57.498Z',
