@@ -58,6 +58,7 @@
  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white">
  <img src="https://img.shields.io/badge/Next.js-000000?style=flat&logo=Next.js&logoColor=white">
  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=Tailwind CSS&logoColor=white">
+ <br/>
  <img src="https://img.shields.io/badge/React Query-FF4154?style=flat&logo=React Query&logoColor=white">
  <img src="https://img.shields.io/badge/Zustand-000000?style=flat&logo=Zustand&logoColor=white">
  <img src="https://img.shields.io/badge/React Hook Form-EC5990?style=flat&logo=React-Hook-Form&logoColor=white"> 
