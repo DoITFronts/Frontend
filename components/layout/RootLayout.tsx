@@ -55,7 +55,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             {children}
           </React.Suspense>
-        </div>
+          </div>
         <Modal />
       </div>
     </QueryClientProvider>
