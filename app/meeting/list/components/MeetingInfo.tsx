@@ -11,6 +11,8 @@ import HostInfo from '../../components/HostInfo';
 
 import Card from './Card';
 
+import useLikeToggle from '@/hooks/useLikeToggle';
+
 export default function MeetingInfo({
   meetings,
   onClick,
@@ -18,27 +20,28 @@ export default function MeetingInfo({
   meetings: Meeting;
   onClick: () => void;
 }) {
+  const { isLiked, handleLikeClick } = useLikeToggle(meetings.id, meetings.isLiked, onClick);
+
   return (
     <Card>
-      <Link href={`/meeting/detail/${meetings.id}`} className="block">
-        <div className="flex h-[430px] flex-col justify-between overflow-hidden">
-          <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
-            <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-            <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-            <Image
-              src="/assets/card/example_image.png"
-              // src={meetings.image}
-              width={384}
-              height={200}
-              alt="thumbnail"
-              className="w-full"
-            />
-            <Card.Like isLiked={meetings.isLiked} onClick={onClick} meetingId={meetings.id} />
-            <div className="absolute right-[14px] top-[17.5px]">
-              <Category type={meetings.category} />
-            </div>
+      <div className="flex h-[430px] flex-col justify-between overflow-hidden">
+        <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
+          <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
+          <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
+          <Image
+            src="/assets/card/example_image.png"
+            // src={meetings.image}
+            width={384}
+            height={200}
+            alt="thumbnail"
+            className="w-full"
+          />
+          <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meetings.id} />
+          <div className="absolute right-[14px] top-[17.5px]">
+            <Category type={meetings.category} />
           </div>
-
+        </div>
+        <Link href={`/meeting/detail/${meetings.id}`} className="block">
           <div className="flex h-[206px] flex-col justify-between">
             <div className="flex flex-col gap-[10px]">
               <div className="flex flex-col gap-2">
@@ -60,8 +63,8 @@ export default function MeetingInfo({
               </div>
             </div>
           </div>
-        </div>
-      </Link>
+        </Link>
+      </div>
 
       <div className="flex flex-row items-center">
         <MeetingProgress

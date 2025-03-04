@@ -46,14 +46,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex h-screen flex-col">
-        {!pathname.includes('/user') && <Gnb />}
-        <div className="mt-16 flex-1 overflow-auto">
+        {!pathname.includes('/user') && pathname !== '/' && <Gnb />}
+        <div
+          className={`flex-1 overflow-auto ${!pathname.includes('/user') && pathname !== '/' ? 'mt-16' : ''}`}
+        >
           <React.Suspense
             fallback={<div className="p-4 text-center">⏳ 데이터 불러오는 중...</div>}
           >
             {children}
           </React.Suspense>
         </div>
+        {isMeetingDetail && (
+          <BottomFloatingBar key={pathname} title="번개팅" subtitle="지금 당장 신청해보라능" />
+        )}
         <Modal />
       </div>
     </QueryClientProvider>
