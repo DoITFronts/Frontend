@@ -28,6 +28,8 @@ export default function MeetingInfo({
   meetings: Meeting;
   onClick: () => void;
 }) {
+  const { isLiked, handleLikeClick } = useLikeToggle(meetings.id, meetings.isLiked, onClick);
+
   return (
     <Card>
       <div className="relative">
