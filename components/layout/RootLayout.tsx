@@ -55,10 +55,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             {children}
           </React.Suspense>
-        </div>
-        {isMeetingDetail && (
-          <BottomFloatingBar key={pathname} title="번개팅" subtitle="지금 당장 신청해보라능" />
-        )}
         <Modal />
       </div>
     </QueryClientProvider>
