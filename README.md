@@ -63,7 +63,13 @@
  <img src="https://img.shields.io/badge/Zustand-000000?style=flat&logo=Zustand&logoColor=white">
  <img src="https://img.shields.io/badge/React Hook Form-EC5990?style=flat&logo=React-Hook-Form&logoColor=white"> 
  <img src="https://img.shields.io/badge/Framer Motion-0055FF?style=flat&logo=Framer&logoColor=white"> 
+ <br/>
+ <img src="https://img.shields.io/badge/MSW-FF6A00?style=flat&logo=MSW&logoColor=white"> 
+ <img src="https://img.shields.io/badge/JSON Server-323232?style=flat&logo=JSON&logoColor=white"> 
+ <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=Axios&logoColor=white">
+ <img src="https://img.shields.io/badge/Fetch API-2396F3?style=flat&logo=javascript&logoColor=white">
 </div>
+
 
 #### 🤝 협업 & 버전 관리
 <div style="flex">
