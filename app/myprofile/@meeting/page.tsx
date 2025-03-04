@@ -8,9 +8,9 @@ import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
 import Icon from '@/components/shared/Icon';
 import Button from '@/components/ui/Button';
+import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
-import { Meeting } from '@/types/meeting.types';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
@@ -158,16 +158,7 @@ export default function Page() {
                       isConfirmed={meeting.isConfirmed}
                       isCompleted={meeting.isCompleted}
                     />
-                    <div className="flex h-[44px] w-[160px] gap-3">
-                      <Button
-                        color="white"
-                        children="참여 취소"
-                        className="h-[44px] w-full px-5 py-2.5 text-base font-semibold"
-                      />
-                      <div className="h-[44px] w-full rounded-[12px] bg-yellow-6 p-2.5">
-                        <Icon path="chat" width="28px" height="24px" />
-                      </div>
-                    </div>
+                    <ButonBox isJoined={meeting.isJoined} />
                   </div>
                 </div>
               </div>

@@ -16,6 +16,7 @@ const mockMeetings: Meeting[] = [
       '성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! 성남시에서 즐거운 술 모임! ',
     isLiked: false,
     isConfirmed: true,
+    isJoined: true,
     isCompleted: false,
     participants: [
       {
