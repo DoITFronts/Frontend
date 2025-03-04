@@ -2,15 +2,15 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
-import { Meeting } from '@/types/meeting.types';
+
 import mockMeetings from '@/api/data/mockMeetings';
+import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
+import Icon from '@/components/shared/Icon';
+import Button from '@/components/ui/Button';
+import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
-import Button from '@/components/ui/Button';
-import Icon from '@/components/shared/Icon';
-import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
-import ButonBox from '@/components/ui/ButtonBox';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
@@ -131,8 +131,8 @@ export default function Page() {
                   <div className="flex flex-col gap-[10px]">
                     <div className="flex flex-col gap-2">
                       <Card.Title
-                        name={meeting.name}
-                        location={`${meeting.location.region_1depth_name} ${meeting.location.region_2depth_name}`}
+                        name={meeting.title}
+                        location={`${meeting.city} ${meeting.town}`}
                       />
                       <div className="flex h-[22px] flex-row items-center gap-1">
                         <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
@@ -150,7 +150,7 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="w-full h-auto flex gap-6">
+                  <div className="flex h-auto w-full gap-6">
                     <MeetingProgress
                       id={meeting.id}
                       participantCount={meeting.participantCount}

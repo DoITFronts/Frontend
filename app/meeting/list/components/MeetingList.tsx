@@ -1,6 +1,7 @@
 'use client';
 
 import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
@@ -66,7 +67,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     searchParams.get('location_2') || defaultSecondOption,
   );
   const [selectedDate, setSelectedDate] = useState(
-    searchParams.get('date') ? new Date(searchParams.get('date') as string) : null,
+    searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
   const observerRef = useRef<HTMLDivElement | null>(null);
 
@@ -74,18 +75,20 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     setSelectedCategory(searchParams.get('category') || '전체');
     setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
     setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
-    setSelectedDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : null);
+    setSelectedDate(
+      searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
+    );
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
   const updateSearchParams = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
-      params.set(key, value);
+      params.set(key === 'date' ? 'targetAt' : key, value);
     } else {
-      params.delete(key);
+      params.delete(key === 'date' ? 'targetAt' : key);
     }
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.replace(`?${decodeURIComponent(params.toString())}`, { scroll: false });
   };
 
   //  카테고리 변경 핸들러
@@ -123,14 +126,24 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
   // 날짜 변경 핸들러
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
-    updateSearchParams('date', date ? date.toISOString().split('T')[0] : '');
+    if (date?.toDateString() === selectedDate?.toDateString()) {
+      setSelectedDate(null);
+      updateSearchParams('targetAt', '');
+    } else if (date) {
+      const fixedDate = new Date(date);
+      fixedDate.setHours(12, 0, 0, 0); // **12시로 고정** (UTC 보정용)
+      setSelectedDate(fixedDate);
+      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`); // ISO 포맷 유지
+    } else {
+      setSelectedDate(null);
+      updateSearchParams('targetAt', '');
+    }
   };
 
   // 좋아요 Mutation
   const likeMutation = useMutation({
-    mutationFn: (meetingId: string) => toggleLike(meetingId),
-    onMutate: async (meetingId: string) => {
+    mutationFn: (meetingId: number) => toggleLike(meetingId),
+    onMutate: async (meetingId: number) => {
       await queryClient.cancelQueries({ queryKey: ['meetings'] });
 
       // 기존 데이터 가져오기
@@ -164,15 +177,23 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeeting({
     category: selectedCategory,
-    location1: selectedFirstLocation,
-    location2: selectedSecondLocation,
-    date: selectedDate,
+    city: selectedFirstLocation,
+    town: selectedSecondLocation,
+    targetAt: selectedDate,
     per_page: 10,
     initialMeetings,
   });
 
   // 번개 데이터 통합
-  const meetings = data?.pages.flatMap((page) => page.data) || [];
+  const meetings = useMemo(
+    () =>
+      data?.pages.flatMap((page) =>
+        page?.lighteningResponses ? page.lighteningResponses : page,
+      ) || [],
+    [data?.pages],
+  );
+
+  console.log(meetings);
 
   // IntersectionObserver를 이용한 무한 스크롤 구현
   useEffect(() => {
@@ -208,7 +229,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   };
 
   // 좋아요 버튼 클릭 핸들러
-  const handleClickLike = (meetingId: string) => {
+  const handleClickLike = (meetingId: number) => {
     likeMutation.mutate(meetingId);
   };
 
@@ -261,7 +282,26 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           onSelect={handleSelectSecondLocation}
         />
         <DropDown
-          options={<DatePicker inline selected={selectedDate} onChange={handleDateChange} />}
+          options={
+            <DatePicker
+              locale={ko}
+              inline
+              selected={selectedDate}
+              onChange={handleDateChange}
+              dayClassName={(date) => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const isToday = date.getTime() === today.getTime();
+                const isSelected = selectedDate?.getTime() === date.getTime();
+
+                if (isSelected) return 'custom-selected'; // 선택된 날짜
+                if (isToday) return 'custom-today'; // 오늘 날짜
+                return 'custom-default'; // 기본 날짜
+              }}
+              calendarClassName="custom-calendar"
+            />
+          }
           trigger={
             <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
               {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
@@ -279,11 +319,11 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
         {!isLoading && !isError && meetings.length === 0 && (
           <EmptyMessage firstLine="아직 번개가 없어요" secondLine="지금 번개를 만들어 보세요!" />
         )}
-        {!isLoading && !isError && meetings.length > 0 && (
+        {!isLoading && !isError && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-            {meetings.map((meeting: Meeting) => (
+            {meetings.map((meeting: Meeting, index) => (
               <MeetingItem
-                key={meeting.id}
+                key={`${meeting.id}-${index}`}
                 meeting={meeting}
                 onClick={() => handleClickLike(meeting.id)}
               />
