@@ -6,11 +6,15 @@ const fetchMeeting = async ({
   city,
   town,
   targetAt,
+  page,
+  per_page,
 }: {
   category: string;
   city: string;
   town: string;
   targetAt: Date | null;
+  page?: number;
+  per_page?: number;
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -31,9 +35,13 @@ const fetchMeeting = async ({
     queryParams.append('targetAt', `${dateString}T00:00:00`);
   }
 
+  if (page) {
+    queryParams.append('page', page.toString());
+  }
+
   try {
     const response = await fetch(
-      `https://${process.env.NEXT_PUBLIC_IMAGE_DOMAINS}/api/v1/lightenings?${queryParams.toString()}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings?${queryParams.toString()}`,
     );
 
     if (!response.ok) {
