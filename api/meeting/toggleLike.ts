@@ -1,7 +1,12 @@
+import axiosInstance from '../api';
+
 const toggleLike = async (meetingId: string) => {
-  // TODO: 실제 좋아요 동작 구현
-  console.log(`좋아요 누름! - Meeting ID: ${meetingId}`);
-  return { success: true };
+  try {
+    await axiosInstance.post(`/api/v1/lightenings/${meetingId}/like`);
+    console.log('서버에 좋아요 상태 반영');
+  } catch (error) {
+    console.error('서버에 요청 실패', error);
+  }
 };
 
 export default toggleLike;
