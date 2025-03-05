@@ -1,41 +1,75 @@
-export interface Location {
-  region_1depth_name: string;
-  region_2depth_name: string;
+export enum MeetingCategory {
+  GOURMET = "GOURMET",
+  CAFE = "CAFE",
+  BOARD_GAME = "BOARD_GAME",
+  ALCOHOL = "ALCOHOL",
 }
 
-export type MeetingDetail = {
+export const categoryMap: Record<string, MeetingCategory> = {
+  맛집: MeetingCategory.GOURMET,
+  카페: MeetingCategory.CAFE,
+  보드게임: MeetingCategory.BOARD_GAME,
+  술: MeetingCategory.ALCOHOL,
+};
+
+export interface Participant {
+  lighteningId: number;
+  userId: number;
+  name: string;
+  profileImage?: string;
+  isHost: boolean;
+}
+
+export interface Host {
+  id: string;
+  name: string;
+  email: string;
+  profileImage: string;
+  userBio: string;
+}
+
+export interface Description {
   id: string;
   title: string;
-  category: string;
-  imageUrl: string;
-  location: Location;
-  datetime: string;
+  description: string;
+}
+
+export interface Meeting {
+  id: string;
+  category: MeetingCategory;
+  title: string;
   summary: string;
+  imageUrl: string;
+  targetAt: string;
+  city: string;
+  town: string;
+  participantCount: number;
+  capacity: number;
   isLiked: boolean;
-  maxParticipants: number;
-  currentParticipants: number;
-  host: {
-    id: string;
-    name: string;
-    profileImage?: string;
-    email: string;
-    userBio: string;
-  };
-  participants: {
-    id: string;
-    name: string;
-    profileImage: string;
-  }[];
-  details: {
-    title: string;
-    description: string;
-  };
-  reviews: {
-    id: string;
-    writer: string;
-    profileImage: string;
-    content: string;
-    date: string;
-    count: number;
-  }[];
-};
+  isJoined: boolean;
+  isConfirmed: boolean;
+  isCompleted: boolean;
+  participants: Participant[];
+}
+
+export interface MeetingDetail extends Meeting {
+  address: string;
+  latitude: number;
+  longitude: number;
+  host: Host;
+  description: Description;
+}
+
+export interface CreateMeetingParams {
+  title: string;
+  summary: string;
+  address: string;
+  city: string;
+  town: string;
+  category: MeetingCategory;
+  targetAt: string;
+  endAt: string;
+  capacity: number;
+  minCapacity: number;
+  image?: File;
+}

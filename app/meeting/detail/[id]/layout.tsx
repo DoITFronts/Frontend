@@ -1,26 +1,32 @@
 'use client';
 
-import { useParams } from 'next/navigation';
 import React from 'react';
 
-import BottomFloatingBar from '@/components/layout/BottomFloatingBar';
-
 interface MeetingLayoutProps {
-  children: React.ReactNode;
-  reviews: React.ReactNode | null;
-  description: React.ReactNode | null;
+  card: React.ReactNode;
+  host: React.ReactNode;
+  description: React.ReactNode;
+  location: React.ReactNode;
+  reviews: React.ReactNode;
+  bottombar: React.ReactNode;
 }
 
-export default function MeetingLayout({ children, reviews, description }: MeetingLayoutProps) {
-  const params = useParams();
-  const id = params.id as string;
-
+export default function MeetingLayout({
+  card,
+  host,
+  description,
+  location,
+  reviews,
+  bottombar,
+}: MeetingLayoutProps) {
   return (
-    <div className="mx-auto flex max-w-5xl flex-col gap-14">
-      <div className="flex">{children}</div>
-      <div>{description}</div>
-      <div className="mb-24">{reviews}</div>
-      <BottomFloatingBar id={id} title="번개팅" subtitle="지금 당장 신청해보라능" />
+    <div className="mx-auto flex max-w-5xl flex-col">
+      {card && <div>{card}</div>}
+      {host && <div>{host}</div>}
+      {description && <div>{description}</div>}
+      {location && <div>{location}</div>}
+      {reviews && <div>{reviews}</div>}
+      {bottombar && <div>{bottombar}</div>}
     </div>
   );
 }

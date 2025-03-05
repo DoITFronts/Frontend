@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 import ReactMarkdown from 'react-markdown';
 
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
-import HostProfile from '@/app/meeting/detail/components/HostProfile';
 import {
   DescriptionSkeleton,
   DescriptionError,
@@ -26,7 +25,7 @@ export default function MeetingDescription() {
     setDescription,
     tab,
     setTab,
-  } = useMeetingEditor(data);
+  } = useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
 
   const handleSave = async () => {
@@ -40,14 +39,12 @@ export default function MeetingDescription() {
     if (isEditing) handleSave();
     setIsEditing((prev) => !prev);
   };
+
   const renderContent = () => {
     if (isEditing) {
-      if (tab === 'edit') {
-        return (
-          <MarkdownEditor value={description} onChange={(value) => setDescription(value || '')} />
-        );
-      }
-      return (
+      return tab === 'edit' ? (
+        <MarkdownEditor value={description} onChange={(value) => setDescription(value || '')} />
+      ) : (
         <div className="rounded-md border bg-gray-50 p-4">
           <ReactMarkdown className="flex flex-col gap-1">
             {description || '설명이 없습니다.'}
@@ -55,9 +52,10 @@ export default function MeetingDescription() {
         </div>
       );
     }
+
     return (
       <ReactMarkdown className="flex flex-col gap-1">
-        {data?.details?.description ?? '설명이 없습니다.'}
+        {description ?? '설명이 없습니다.'}
       </ReactMarkdown>
     );
   };
@@ -67,8 +65,6 @@ export default function MeetingDescription() {
 
   return (
     <div className="min-h-[300px] font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
-      <HostProfile host={data?.host} />
-
       <div className="mb-4 flex w-full items-center justify-between">
         {isEditing ? (
           <input
@@ -79,7 +75,7 @@ export default function MeetingDescription() {
           />
         ) : (
           <h2 className="font-dunggeunmo text-2xl font-normal text-black">
-            {data?.details?.title ?? '제목 없음'}
+            {data?.description?.title ?? '제목 없음'}
           </h2>
         )}
         <div
