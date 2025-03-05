@@ -88,6 +88,13 @@ function Input({ className, name, ...rest }: InputProps) {
         {...rest}
         placeholder={placeholder}
         onBlur={() => trigger(name)}
+        //엔터 입력했을때 유효성 검사 실행되도록
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            trigger(name);
+          }
+        }}
       />
       {errors[name]?.message && <ErrorMessage>{String(errors[name]?.message)}</ErrorMessage>}
     </>
@@ -139,6 +146,12 @@ function PasswordInput({ className, name, ...rest }: InputProps) {
           type={inputType}
           placeholder={placeholder}
           onBlur={() => trigger(name)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              trigger(name);
+            }
+          }}
         />
         <button
           type="button"

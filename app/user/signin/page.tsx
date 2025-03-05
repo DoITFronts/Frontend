@@ -6,7 +6,6 @@ import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { useSignin } from '@/hooks/useAuth';
 
