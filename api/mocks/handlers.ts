@@ -1,7 +1,7 @@
 // API 요청을 가로채는 핸들러 정의
 import { rest } from 'msw';
 
-import mockMeetingDetail from '@/api/data/mockMeetingDetail';
+import mockMeetingDetail from '@/api/data/mockMeetingDetail.md';
 
 // import mockMyPageReviews from '@/api/data/mockMyPageReviews';
 
