@@ -190,3 +190,4 @@ Form.LabelHeader = LabelHeader;
 Form.Input = Input;
 Form.PasswordInput = PasswordInput;
 Form.Submit = Submit;
+Form.ErrorMessage = ErrorMessage;

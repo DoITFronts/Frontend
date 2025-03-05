@@ -4,14 +4,16 @@ import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 import { signinUser, signupUser, signoutUser } from '@/api/user/auth';
 
 // 로그인
 export const useSignin = () => {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: signinUser,
     onMutate: async (data) => {
       console.log('제출된 로그인 데이터:', data);
@@ -29,14 +31,21 @@ export const useSignin = () => {
         localStorage.setItem('유저 정보', JSON.stringify(decodedToken));
 
         toast.success('성공적으로 로그인 되었습니다 :)', { hideProgressBar: true, autoClose: 900 });
+        setErrorMessage(null);
         router.push('/meeting/list');
       }
     },
     onError: (error: any) => {
       console.error('로그인 실패:', error.response?.data || error.message);
       toast.error('로그인에 실패했습니다.');
+      if (error.response?.status === 401) {
+        setErrorMessage('이메일 또는 비밀번호가 올바르지 않습니다.');
+      } else {
+        setErrorMessage('로그인에 실패했습니다. 다시 시도해주세요!');
+      }
     },
   });
+  return { ...mutation, errorMessage };
 };
 
 // 회원가입
