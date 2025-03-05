@@ -1,10 +1,9 @@
-const fetchMeetingById = async (id: string) => {
+const fetchMeetingById = async (id: string | undefined) => {
   if (!id) {
     throw new Error('Invalid event ID');
   }
-
-  const baseURL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-  const apiUrl = `${baseURL}/api/meeting/detail/${id}`;
+  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const apiUrl = `${baseURL}/api/lightenings/${id}`;
 
   try {
     const response = await fetch(apiUrl);

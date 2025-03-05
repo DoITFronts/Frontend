@@ -1,14 +1,23 @@
 'use client';
 import useModalStore from '@/store/useModalStore';
-import BoxSelect from '../../BoxSelect';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomDatePicker from '../datePicker';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
-import axios from 'axios';
+import { CreateMeetingParams } from '@/types/meeting';
+import createMeeting from '@/api/meeting/createMeeting';
+import PlaceSearch from '@/components/ui/modal/SearchPlace';
+import { useRouter } from 'next/navigation';
 
 type MeetingType = '술' | '카페' | '보드게임' | '맛집';
 const meetingTypes: MeetingType[] = ['술', '카페', '보드게임', '맛집'];
+
+const typeMapping: Record<MeetingType, CreateMeetingParams['category']> = {
+  술: 'ALCOHOL',
+  카페: 'CAFE',
+  보드게임: 'BOARD_GAME',
+  맛집: 'GOURMET',
+};
 
 export default function CreateMeetingModal() {
   const { closeModal } = useModalStore();
@@ -21,7 +30,19 @@ export default function CreateMeetingModal() {
   const [meetingType, setMeetingType] = useState<MeetingType | null>(null);
   const [participantCount, setParticipantCount] = useState('');
   const [minParticipants, setMinParticipants] = useState('');
+  const [selectedPlace, setSelectedPlace] = useState<{
+    placeName: string;
+    address: string;
+    city: string;
+    town: string;
+  } | null>(null);
   // TODO: 추후에 데이터 연결 시 보내는 postData.
+  useEffect(() => {
+    console.log(selectedPlace);
+    console.log(deadlineDate);
+  }, [selectedPlace]);
+
+  const router = useRouter();
 
   const handleMeetingName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -36,8 +57,14 @@ export default function CreateMeetingModal() {
   };
 
   // TODO?: 따로 행정구역(~도 ~시)파일을 만들어서 지역을 검색했을 때 자동 완성 되는 기능을 넣어볼까 합니다.
-  const handleMeetingPlace = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMeetingPlace(e.target.value);
+  const handlePlaceSelect = (place: {
+    placeName: string;
+    address: string;
+    city: string;
+    town: string;
+  }) => {
+    setSelectedPlace(place);
+    setMeetingPlace(place.placeName); // 기존 상태 업데이트
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,31 +105,38 @@ export default function CreateMeetingModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    const formData = new FormData();
-
-    if (imageFile) {
-      formData.append('image', imageFile);
+    if (!meetingType) {
+      console.error('모임 유형을 선택해주세요');
+      return;
     }
-    const meetingData = {
-      name: meetingName,
+
+    if (!selectedPlace) {
+      console.error('장소를 선택해주세요');
+      return;
+    }
+
+    const apiType = typeMapping[meetingType];
+
+    const meetingData: CreateMeetingParams = {
+      title: meetingName,
       summary: meetingSummary,
-      location: meetingPlace,
-      type: meetingType,
-      dateTime: meetingDate.toISOString(),
-      registrationEnd: deadlineDate.toISOString(),
+      address: selectedPlace.address,
+      city: selectedPlace.city,
+      town: selectedPlace.town,
+      category: apiType,
+      targetAt: meetingDate.toISOString(),
+      endAt: deadlineDate.toISOString(),
       capacity: parseInt(participantCount),
+      minCapacity: parseInt(minParticipants) || 1,
+      ...(imageFile && { image: imageFile }),
     };
 
-    formData.append('meetingData', JSON.stringify(meetingData));
-
     try {
-      const response = await axios.post('/api/meetings', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      if (response.data.success) {
+      const response = await createMeeting(meetingData);
+
+      if (response.id) {
+        router.push(`/api/v1/lightenings/${response.id}`);
+
         closeModal();
       }
     } catch (error) {
@@ -158,12 +192,12 @@ export default function CreateMeetingModal() {
             <label htmlFor="meetingPlace" className="font-dunggeunmo text-base text-black-11">
               장소
             </label>
-            <input //TODO: 나중에 드롭다운으로 바꾼 다음, 지역 검색 가능하게 할까??
-              type="text"
-              onChange={handleMeetingPlace}
-              placeholder="장소를 선택해 주세요"
-              className="text-black-8 w-full bg-black-2 px-4 py-2.5 rounded-[12px] placeholder:text-black-6"
-            />
+            <PlaceSearch onPlaceSelect={handlePlaceSelect} />
+            {selectedPlace && (
+              <div className="mt-2 p-2 bg-black-2 rounded-[12px]">
+                <p className="text-sm text-black-8">{selectedPlace.address}</p>
+              </div>
+            )}
           </div>
 
           {/* TODO: 파일명 제출 버튼 위치 바꾸기 */}
@@ -276,7 +310,13 @@ export default function CreateMeetingModal() {
         </form>
         <div className="w-full flex justify-center mt-4">
           {/* TODO: form value 모두 작성 시, 버튼 활성화 로직 추가 */}
-          <Button color="filled" size="lg" disabled={!isFormValid} className="w-full">
+          <Button
+            color="filled"
+            size="lg"
+            disabled={!isFormValid}
+            className="w-full"
+            onClick={handleSubmit}
+          >
             확인
           </Button>
         </div>

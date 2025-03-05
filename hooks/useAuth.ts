@@ -1,11 +1,13 @@
-import { useRouter } from 'next/navigation';
+// useSignin, useSignup, useSignout 훅 관리
 import { useMutation } from '@tanstack/react-query';
-import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { signinUser, signupUser, signoutUser } from '@/api/auth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
-//로그인
+import { signinUser, signupUser, signoutUser } from '@/api/user/auth';
+
+// 로그인
 export const useSignin = () => {
   const router = useRouter();
 
@@ -16,9 +18,9 @@ export const useSignin = () => {
     },
     onSuccess: (response) => {
       console.log('로그인 응답:', response);
-      const accessToken = response.accessToken;
+      const { accessToken } = response;
       if (accessToken) {
-        //로컬 스토리지,쿠키에 토큰 저장(쿠키 만료시간:1일 설정해둠)
+        // 로컬 스토리지,쿠키에 토큰 저장(쿠키 만료시간:1일 설정해둠)
         localStorage.setItem('accessToken', accessToken);
         Cookies.set('accessToken', accessToken, { expires: 1 });
         // 토큰 디코딩 test
@@ -26,7 +28,7 @@ export const useSignin = () => {
         console.log('디코딩된 유저 정보:', decodedToken);
 
         toast.success('성공적으로 로그인 되었습니다 :)', { hideProgressBar: true, autoClose: 900 });
-        router.push('/');
+        router.push('/meeting/list');
       }
     },
     onError: (error: any) => {
@@ -36,7 +38,7 @@ export const useSignin = () => {
   });
 };
 
-//회원가입
+// 회원가입
 export const useSignup = () => {
   const router = useRouter();
 
@@ -57,7 +59,7 @@ export const useSignup = () => {
   });
 };
 
-//로그아웃
+// 로그아웃
 export const useSignout = () => {
   const router = useRouter();
 

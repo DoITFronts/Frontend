@@ -52,22 +52,47 @@
 실시간 채팅을 통해 참가자 간 일정 조율 및 모임 정보를 공유할 수 있습니다.
 
 # 기술 스택
+#### 🎨 프론트엔드
 <div style="flex">
- <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=flat&logo=Javascript&logoColor=white">
  <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=white">
  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white">
  <img src="https://img.shields.io/badge/Next.js-000000?style=flat&logo=Next.js&logoColor=white">
- <img src="https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=HTML5&logoColor=white">
  <img src="https://img.shields.io/badge/Tailwind CSS-06B6D4?style=flat&logo=Tailwind CSS&logoColor=white">
-<br/>
- <img src="https://img.shields.io/badge/Eslint-4B32C3?style=flat&logo=Eslint&logoColor=white">
- <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=Prettier&logoColor=white">
+ <br/>
+ <img src="https://img.shields.io/badge/React Query-FF4154?style=flat&logo=React Query&logoColor=white">
+ <img src="https://img.shields.io/badge/Zustand-000000?style=flat&logo=Zustand&logoColor=white">
+ <img src="https://img.shields.io/badge/React Hook Form-EC5990?style=flat&logo=React-Hook-Form&logoColor=white"> 
+ <img src="https://img.shields.io/badge/Framer Motion-0055FF?style=flat&logo=Framer&logoColor=white"> 
+ <br/>
+ <img src="https://img.shields.io/badge/MSW-FF6A00?style=flat&logo=MSW&logoColor=white"> 
+ <img src="https://img.shields.io/badge/JSON Server-323232?style=flat&logo=JSON&logoColor=white"> 
+ <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=Axios&logoColor=white">
+ <img src="https://img.shields.io/badge/Fetch API-2396F3?style=flat&logo=javascript&logoColor=white">
+</div>
+
+
+#### 🤝 협업 & 버전 관리
+<div style="flex">
+ <img src="https://img.shields.io/badge/Jira-0052CC?style=flat&logo=Jira&logoColor=white">
  <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=Figma&logoColor=white">
  <img src="https://img.shields.io/badge/Git-F05032?style=flat&logo=Git&logoColor=white">
  <img src="https://img.shields.io/badge/Github-181717?style=flat&logo=Github&logoColor=white">
-<br/>
- <img src="https://img.shields.io/badge/Netlify-00C7B7?style=flat&logo=Netlify&logoColor=white">
 </div>
+
+#### ⚙️ 개발 도구
+<div style="flex">
+ <img src="https://img.shields.io/badge/Eslint-4B32C3?style=flat&logo=Eslint&logoColor=white">
+ <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=Prettier&logoColor=white">
+ <img src="https://img.shields.io/badge/Husky-000000?style=flat&logo=Husky&logoColor=white"> 
+</div>
+
+#### 🚀 CI/CD
+<div style="flex">
+ <img src="https://img.shields.io/badge/Netlify-00C7B7?style=flat&logo=Netlify&logoColor=white">
+ <img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=Vercel&logoColor=white">
+</div>
+
+
 
 # 배포 주소
 https://doitz.netlify.app/
