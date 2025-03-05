@@ -1,3 +1,10 @@
+export const cityMap: Record<string, string> = {
+  세종특별자치시: '세종',
+  강원특별자치도: '강원',
+  전북특별자치도: '전북',
+  제주특별자치도: '제주',
+};
+
 export const regions: Record<string, string[]> = {
   "서울": [
     "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", 

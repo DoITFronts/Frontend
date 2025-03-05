@@ -16,7 +16,7 @@ import useMeeting from '@/hooks/useMeeting';
 import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
-import { Meeting } from '@/types/meeting.types';
+import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
 import MeetingItem from './MeetingItem';

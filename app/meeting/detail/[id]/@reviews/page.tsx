@@ -5,14 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
-import fetchMeetingById from '@/api/meeting/fetchMeetingById';
 import {
   ReviewListError,
   ReviewListSkeleton,
 } from '@/app/meeting/detail/components/skeleton/ReviewSkeleton';
 import Pagination from '@/components/ui/Pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';
-import { Review } from '@/types/review';
+import { ReviewList } from '@/types/review';
 
 const reviewVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -31,9 +30,9 @@ export default function MeetingReviews() {
     isLoading,
     error,
     refetch,
-  } = useQuery<Review>({
+  } = useQuery<ReviewList>({
     queryKey: ['event', meetingId],
-    queryFn: () => fetchMeetingById(meetingId),
+    queryFn: () => fetchDetailReview(meetingId),
     enabled: !!meetingId,
     staleTime: 1000 * 60 * 5,
     retry: 2,
@@ -49,10 +48,10 @@ export default function MeetingReviews() {
       </p>
     );
 
-  const totalReviews = meeting.reviews.length;
+  const totalReviews = meeting.length;
   const totalPages = Math.ceil(totalReviews / reviewsPerPage);
   const startIndex = (currentPage - 1) * reviewsPerPage;
-  const selectedReviews = meeting.reviews.slice(startIndex, startIndex + reviewsPerPage);
+  const selectedReviews = meeting.slice(startIndex, startIndex + reviewsPerPage);
 
   return (
     <div className="flex-col mb-24">

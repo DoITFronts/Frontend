@@ -29,7 +29,7 @@ export default function MeetingLocation() {
       window.kakao.maps.load(() => {
         const mapOptions = {
           center: new window.kakao.maps.LatLng(
-            meeting?.latitude,
+            meeting.latitude,
             meeting.longitude
           ),
           level: 3,
