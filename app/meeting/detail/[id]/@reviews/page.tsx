@@ -5,14 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
-import fetchMeetingById from '@/api/meeting/fetchMeetingById';
 import {
   ReviewListError,
   ReviewListSkeleton,
 } from '@/app/meeting/detail/components/skeleton/ReviewSkeleton';
 import Pagination from '@/components/ui/Pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';
-import { MeetingDetail } from '@/types/meeting';
+import { ReviewList } from '@/types/review';
 
 const reviewVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -31,9 +30,9 @@ export default function MeetingReviews() {
     isLoading,
     error,
     refetch,
-  } = useQuery<MeetingDetail>({
+  } = useQuery<ReviewList>({
     queryKey: ['event', meetingId],
-    queryFn: () => fetchMeetingById(meetingId),
+    queryFn: () => fetchDetailReview(meetingId),
     enabled: !!meetingId,
     staleTime: 1000 * 60 * 5,
     retry: 2,
@@ -42,17 +41,17 @@ export default function MeetingReviews() {
   if (!meetingId) return <p>⚠️ 이벤트 ID가 필요합니다.</p>;
   if (isLoading) return <ReviewListSkeleton />;
   if (error || !meeting) return <ReviewListError onRetry={refetch} />;
-  if (!meeting?.reviews?.length)
+  if (!meeting?.length)
     return (
       <p className="flex h-[200px] items-center justify-center text-gray-500">
         아직 리뷰가 없습니다.
       </p>
     );
 
-  const totalReviews = meeting.reviews.length;
+  const totalReviews = meeting.length;
   const totalPages = Math.ceil(totalReviews / reviewsPerPage);
   const startIndex = (currentPage - 1) * reviewsPerPage;
-  const selectedReviews = meeting.reviews.slice(startIndex, startIndex + reviewsPerPage);
+  const selectedReviews = meeting.slice(startIndex, startIndex + reviewsPerPage);
 
   return (
     <div className="flex-col mb-24">

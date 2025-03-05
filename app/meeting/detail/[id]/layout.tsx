@@ -3,7 +3,7 @@
 import React from 'react';
 
 interface MeetingLayoutProps {
-  children: React.ReactNode;
+  card: React.ReactNode;
   host: React.ReactNode;
   description: React.ReactNode;
   location: React.ReactNode;
@@ -12,7 +12,7 @@ interface MeetingLayoutProps {
 }
 
 export default function MeetingLayout({
-  children,
+  card,
   host,
   description,
   location,
@@ -21,7 +21,7 @@ export default function MeetingLayout({
 }: MeetingLayoutProps) {
   return (
     <div className="mx-auto flex max-w-5xl flex-col">
-      <div>{children}</div>
+      {card && <div>{card}</div>}
       {host && <div>{host}</div>}
       {description && <div>{description}</div>}
       {location && <div>{location}</div>}

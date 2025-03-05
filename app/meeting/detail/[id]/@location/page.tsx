@@ -29,16 +29,16 @@ export default function MeetingLocation() {
       window.kakao.maps.load(() => {
         const mapOptions = {
           center: new window.kakao.maps.LatLng(
-            meeting?.location.latitude,
-            meeting.location.longitude
+            meeting.latitude,
+            meeting.longitude
           ),
           level: 3,
         };
         const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
 
         const markerPosition = new window.kakao.maps.LatLng(
-          meeting.location.latitude,
-          meeting.location.longitude
+          meeting.latitude,
+          meeting.longitude
         );
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
@@ -52,9 +52,9 @@ export default function MeetingLocation() {
 
         const infowindowContent = `
           <div style="padding:10px; font-size:14px;">
-            <strong>${meeting.location.address}</strong><br>
-            위도: ${meeting.location.latitude}, 경도: ${meeting.location.longitude}<br>
-            <a href="https://map.kakao.com/link/to/${meeting.location.address},${meeting.location.latitude},${meeting.location.longitude}" target="_blank">
+            <strong>${meeting.address}</strong><br>
+            위도: ${meeting.latitude}, 경도: ${meeting.longitude}<br>
+            <a href="https://map.kakao.com/link/to/${meeting.address},${meeting.latitude},${meeting.longitude}" target="_blank">
               길찾기 (카카오맵)
             </a>
           </div>`;
@@ -67,7 +67,7 @@ export default function MeetingLocation() {
         });
 
         const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.addressSearch(meeting.location.address, (result: any, status: any) => {
+        geocoder.addressSearch(meeting.address, (result: any, status: any) => {
           if (status === window.kakao.maps.services.Status.OK) {
             const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
             map.setCenter(coords);
@@ -116,7 +116,7 @@ export default function MeetingLocation() {
               </svg>
             </div>
             <div className="font-['Pretendard'] text-base font-semibold leading-snug text-[#595959]">
-              {meeting.location.address}
+              {meeting.address}
             </div>
           </div>
           <div ref={mapContainer} className="h-[330px] self-stretch bg-[#d9d9d9]" />
