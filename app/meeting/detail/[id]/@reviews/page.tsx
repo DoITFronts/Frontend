@@ -12,7 +12,7 @@ import {
 } from '@/app/meeting/detail/components/skeleton/ReviewSkeleton';
 import Pagination from '@/components/ui/Pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';
-import { MeetingDetail } from '@/types/meeting';
+import { Review } from '@/types/review';
 
 const reviewVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -31,7 +31,7 @@ export default function MeetingReviews() {
     isLoading,
     error,
     refetch,
-  } = useQuery<MeetingDetail>({
+  } = useQuery<Review>({
     queryKey: ['event', meetingId],
     queryFn: () => fetchMeetingById(meetingId),
     enabled: !!meetingId,
@@ -42,7 +42,7 @@ export default function MeetingReviews() {
   if (!meetingId) return <p>⚠️ 이벤트 ID가 필요합니다.</p>;
   if (isLoading) return <ReviewListSkeleton />;
   if (error || !meeting) return <ReviewListError onRetry={refetch} />;
-  if (!meeting?.reviews?.length)
+  if (!meeting?.length)
     return (
       <p className="flex h-[200px] items-center justify-center text-gray-500">
         아직 리뷰가 없습니다.

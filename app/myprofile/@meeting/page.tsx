@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
-import mockMeetings from '@/api/data/mockMeetings';
+// import mockMeetings from '@/api/data/mockMeetings.md';
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
 import Icon from '@/components/shared/Icon';

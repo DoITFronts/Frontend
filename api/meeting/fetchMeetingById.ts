@@ -1,24 +1,16 @@
+import axiosInstance from '@/api/api';
+
 const fetchMeetingById = async (id: string | undefined) => {
   if (!id) {
     throw new Error('Invalid event ID');
   }
-  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
-  const apiUrl = `${baseURL}/api/lightenings/${id}`;
 
   try {
-    const response = await fetch(apiUrl);
+    const response = await axiosInstance.get(`/api/v1/lightenings/${id}`);
+    const meetingData = response.data[0]?.result?.data || response.data?.result?.data;
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
-    }
-
-    const jsonData = await response.json();
-    // console.log('Fetched Data:', jsonData);
-    // console.log(' jsonData[0]?.result:', jsonData[0]?.result);
-    // console.log('jsonData[0]?.result?.data:', jsonData[0]?.result?.data);
-    const meetingData = jsonData[0]?.result?.data || jsonData?.result?.data;
     if (!meetingData) {
-      console.error('Invalid response structure:', jsonData);
+      console.error('Invalid response structure:', response.data);
       throw new Error('Invalid response format');
     }
 
