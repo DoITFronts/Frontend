@@ -233,6 +233,12 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     likeMutation.mutate(meetingId);
   };
 
+  // 날짜 필터링 초기화 클릭 핸들러
+  const handleResetDate = () => {
+    setSelectedDate(null);
+    updateSearchParams('targetAt', '');
+  };
+
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
@@ -288,6 +294,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               inline
               selected={selectedDate}
               onChange={handleDateChange}
+              minDate={new Date()}
               dayClassName={(date) => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
@@ -305,7 +312,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           trigger={
             <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
               {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
-              <Icon path="chevron_down" />
+              <button type="button" onClick={handleResetDate}>
+                <Icon path={selectedDate ? 'x' : 'chevron_down'} />
+              </button>
             </div>
           }
           onSelect={handleClickCalendar}
