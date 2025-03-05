@@ -34,7 +34,6 @@ export default function Signin() {
               required
             />
           </Form.Label>
-
           <Form.Label className="pb-10">
             <Form.LabelHeader className="pb-2">비밀번호</Form.LabelHeader>
             <Form.PasswordInput
@@ -44,11 +43,12 @@ export default function Signin() {
               required
             />
             {errorMessage && (
-              <Form.ErrorMessage className="pt-1 text-right w-full">
+              <Form.ErrorMessage className="pt-3 pr-2 text-right w-full">
                 {errorMessage}
               </Form.ErrorMessage>
             )}
           </Form.Label>
+
           <Form.Submit className="w-full">로그인</Form.Submit>
           <Button className="py-[10px] px-3 bg-[#fee500] hover:bg-[#fee500] active:bg-[#fee500] w-full mt-[18px] text-black text-base font-bold text-center">
             <Icon path="user/kakaoLogo" width="22px" height="22px" />
