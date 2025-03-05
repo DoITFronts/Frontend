@@ -7,6 +7,7 @@ const useMeeting = ({
   city,
   town,
   targetAt,
+  per_page,
   initialMeetings,
 }: {
   category: string;
@@ -19,27 +20,26 @@ const useMeeting = ({
   useInfiniteQuery({
     queryKey: ['meetings', category, city, town, targetAt],
     queryFn: async ({ pageParam = 1 }) => {
-      try {
-        return await fetchMeeting({
-          category,
-          city,
-          town,
-          targetAt,
-        });
-      } catch (error) {
-        console.error('Failed to fetch meetings:', error);
-        throw error;
-      }
+      const response = await fetchMeeting({
+        category,
+        city,
+        town,
+        targetAt,
+        page: pageParam, // ✅ 페이지 번호 추가
+        per_page,
+      });
+      return {
+        lighteningResponses: response.lighteningResponses,
+      };
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage) =>
-      lastPage?.next && lastPage.next <= lastPage.last ? lastPage.next : undefined,
+    getNextPageParam: (lastPage, allPages, lastPageParam) =>
+      lastPage?.lighteningResponses.length === per_page ? lastPageParam + 1 : undefined,
+
     initialData: {
       pages: [
         {
-          data: {
-            lighteningResponses: initialMeetings,
-          },
+          lighteningResponses: initialMeetings,
         },
       ],
       pageParams: [1],

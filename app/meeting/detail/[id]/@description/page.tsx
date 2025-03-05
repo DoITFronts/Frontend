@@ -25,7 +25,7 @@ export default function MeetingDescription() {
     setDescription,
     tab,
     setTab,
-  } = useMeetingEditor(data);
+  } = useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
 
   const handleSave = async () => {
@@ -55,7 +55,7 @@ export default function MeetingDescription() {
 
     return (
       <ReactMarkdown className="flex flex-col gap-1">
-        {data?.details?.description ?? '설명이 없습니다.'}
+        {description ?? '설명이 없습니다.'}
       </ReactMarkdown>
     );
   };
@@ -75,7 +75,7 @@ export default function MeetingDescription() {
           />
         ) : (
           <h2 className="font-dunggeunmo text-2xl font-normal text-black">
-            {data?.details?.title ?? '제목 없음'}
+            {data?.description?.title ?? '제목 없음'}
           </h2>
         )}
         <div

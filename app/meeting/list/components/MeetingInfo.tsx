@@ -8,7 +8,7 @@ import ChipInfo from '@/components/ui/chip/ChipInfo';
 import useLikeToggle from '@/hooks/useLikeToggle';
 import categoryMap from '@/types/categoryMap';
 import cityMap from '@/types/cityMap';
-import { Meeting } from '@/types/meeting.types';
+import { Meeting } from '@/types/meeting';
 
 import HostInfo from '../../components/HostInfo';
 

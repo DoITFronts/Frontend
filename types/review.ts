@@ -9,6 +9,8 @@ export interface Review {
   count: number;
 }
 
+export type ReviewList = Review[];
+
 export interface Reviews {
   id: string;
   category: MeetingCategory;

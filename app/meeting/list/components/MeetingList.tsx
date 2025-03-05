@@ -13,10 +13,15 @@ import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
 import useMeeting from '@/hooks/useMeeting';
-import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
+import {
+  defaultFilter,
+  defaultFirstOption,
+  defaultSecondOption,
+  participantFilter,
+} from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
-import { Meeting } from '@/types/meeting.types';
+import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
 import MeetingItem from './MeetingItem';
@@ -69,6 +74,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
+  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('filter') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -140,6 +146,13 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     }
   };
 
+  // 마감 임박, 참여 인원 필터링 클릭 핸들러
+  // TODO: 실제 api에 맞는 params 참조
+  const handleSelectFilter = (selected: string) => {
+    setSelectedFilter(selected);
+    updateSearchParams('filter', selected);
+  };
+
   // 좋아요 Mutation
   const likeMutation = useMutation({
     mutationFn: (meetingId: string) => toggleLike(meetingId),
@@ -193,8 +206,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     [data?.pages],
   );
 
-  console.log(meetings);
-
   // IntersectionObserver를 이용한 무한 스크롤 구현
   useEffect(() => {
     if (!observerRef.current || !hasNextPage) return;
@@ -233,6 +244,18 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     likeMutation.mutate(meetingId);
   };
 
+  // 날짜 필터링 초기화 클릭 핸들러
+  const handleResetDate = () => {
+    setSelectedDate(null);
+    updateSearchParams('targetAt', '');
+  };
+
+  // 마감 임박, 참여 인원 필터링 초기화 클릭 핸들러
+  const handleResetFilter = () => {
+    setSelectedFilter('');
+    updateSearchParams('filter', '');
+  };
+
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
@@ -269,46 +292,64 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       </div>
 
       {/* 필터링 드롭다운 */}
-      {/* TODO: 마감일자, 참여인원 필터링 추가 */}
-      <div className="flex-start mb-10 flex gap-3">
-        <FilterDropdown
-          options={meetingLocationFirst}
-          selectedValue={selectedFirstLocation}
-          onSelect={handleSelectFirstLocation}
-        />
-        <FilterDropdown
-          options={meetingLocationSecond}
-          selectedValue={selectedSecondLocation}
-          onSelect={handleSelectSecondLocation}
-        />
+      <div className="flex justify-between">
+        <div className="flex-start mb-10 flex gap-3">
+          <FilterDropdown
+            options={meetingLocationFirst}
+            selectedValue={selectedFirstLocation}
+            onSelect={handleSelectFirstLocation}
+          />
+          <FilterDropdown
+            options={meetingLocationSecond}
+            selectedValue={selectedSecondLocation}
+            onSelect={handleSelectSecondLocation}
+          />
+          <DropDown
+            options={
+              <DatePicker
+                locale={ko}
+                inline
+                selected={selectedDate}
+                onChange={handleDateChange}
+                minDate={new Date()}
+                dayClassName={(date) => {
+                  const today = new Date();
+                  today.setHours(0, 0, 0, 0);
+
+                  const isToday = date.getTime() === today.getTime();
+                  const isSelected = selectedDate?.getTime() === date.getTime();
+
+                  if (isSelected) return 'custom-selected'; // 선택된 날짜
+                  if (isToday) return 'custom-today'; // 오늘 날짜
+                  return 'custom-default'; // 기본 날짜
+                }}
+                calendarClassName="custom-calendar"
+              />
+            }
+            trigger={
+              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
+                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
+                <div onClick={handleResetDate}>
+                  <Icon path={selectedDate ? 'x' : 'chevron_down'} />
+                </div>
+              </div>
+            }
+            onSelect={handleClickCalendar}
+          />
+        </div>
         <DropDown
-          options={
-            <DatePicker
-              locale={ko}
-              inline
-              selected={selectedDate}
-              onChange={handleDateChange}
-              dayClassName={(date) => {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const isToday = date.getTime() === today.getTime();
-                const isSelected = selectedDate?.getTime() === date.getTime();
-
-                if (isSelected) return 'custom-selected'; // 선택된 날짜
-                if (isToday) return 'custom-today'; // 오늘 날짜
-                return 'custom-default'; // 기본 날짜
-              }}
-              calendarClassName="custom-calendar"
-            />
-          }
+          options={[defaultFilter, participantFilter]}
+          selectedValue={selectedFilter}
+          onSelect={handleSelectFilter}
           trigger={
             <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-              {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
-              <Icon path="chevron_down" />
+              {selectedFilter || defaultFilter}
+              <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
+                <Icon path={selectedFilter ? 'x' : 'chevron_down'} />
+              </div>
             </div>
           }
-          onSelect={handleClickCalendar}
+          optionClassName="justify-start min-w-[95px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
         />
       </div>
 
