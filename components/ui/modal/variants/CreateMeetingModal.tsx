@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import CustomDatePicker from '../datePicker';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
-import { CreateMeetingParams } from '@/types/meeting';
+import { CreateMeetingParams } from '@/types/createMeeting';
 import createMeeting from '@/api/meeting/createMeeting';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import { useRouter } from 'next/navigation';

@@ -1,9 +1,8 @@
-import { CreateMeetingParams } from '@/types/meeting';
+import { CreateMeetingParams } from '@/types/createMeeting';
 import axiosInstance from '../api';
 
 const createMeeting = async (meetingData: CreateMeetingParams) => {
   const formData = new FormData();
-
 
   const lightening = {
     title: meetingData.title,
@@ -26,7 +25,6 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
   }
 
   const response = await axiosInstance.post(`/api/v1/lightenings`, formData, {
-
     headers: {
       'Content-Type': 'multipart/form-data',
     },
