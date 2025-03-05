@@ -51,8 +51,9 @@ export const useSignin = () => {
 // 회원가입
 export const useSignup = () => {
   const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: signupUser,
     onMutate: async (data) => {
       console.log('제출된 회원가입 데이터:', data);
@@ -60,13 +61,18 @@ export const useSignup = () => {
     onSuccess: (response) => {
       console.log('회원가입 응답:', response);
       toast.success('회원가입이 완료되었습니다.', { hideProgressBar: true, autoClose: 900 });
+      setErrorMessage(null);
       router.push('/user/signin');
     },
-    onError: (err: any) => {
-      console.error('회원가입 실패:', err);
+    onError: (error: any) => {
+      console.error('회원가입 실패:', error);
       toast.error('회원가입에 실패했습니다.');
+      if (error.response?.status === 400) {
+        setErrorMessage('이미 가입되어있는 이메일입니다.');
+      }
     },
   });
+  return { ...mutation, errorMessage };
 };
 
 // 로그아웃
