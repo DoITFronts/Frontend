@@ -1,59 +1,38 @@
-export interface Location {
-  latitude: number;
-  longitude: number;
-  address: string;
-  city: string;
-  town: string;
-}
-
-export type MeetingDetail = {
+export interface MeetingDetail {
   id: string;
   title: string;
-  category: string;
+  category: 'ALCOHOL' | 'CAFE' | 'BOARD_GAME' | 'GOURMET';
   imageUrl: string;
   location: Location;
   datetime: string;
   summary: string;
   isLiked: boolean;
+  isJoined: boolean;
   maxParticipants: number;
   currentParticipants: number;
-  host: {
-    id: string;
-    name: string;
-    profileImage?: string;
-    email: string;
-    userBio: string;
-  };
-  participants: {
-    id: string;
-    name: string;
-    profileImage: string;
-  }[];
-  details: {
-    title: string;
-    description: string;
-  };
-  reviews: {
-    id: string;
-    writer: string;
-    profileImage: string;
-    content: string;
-    date: string;
-    count: number;
-  }[];
-};
+  isConfirmed: boolean;
+  isCompleted: boolean;
+  host: Host;
+  participants: Participant[];
+}
 
-export interface CreateMeetingParams {
-  title: string;
-  summary: string;
+export interface Location {
+  latitude?: number;
+  longitude?: number;
   address: string;
   city: string;
   town: string;
+}
 
-  category: 'ALCOHOL' | 'CAFE' | 'BOARD_GAME' | 'GOURMET';
-  targetAt: string;
-  endAt: string;
-  capacity: number;
-  minCapacity: number;
-  image?: File;
+export interface Host {
+  id: string;
+  name: string;
+  email: string;
+  profileImage?: string;
+}
+
+export interface Participant {
+  id: string;
+  name: string;
+  profileImage?: string;
 }
