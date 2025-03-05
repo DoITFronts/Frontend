@@ -25,7 +25,7 @@ export default function Page() {
       <motion.section
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         variants={fadeInVariant}
         className="flex items-center justify-center gap-6"
       >
@@ -50,7 +50,7 @@ export default function Page() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           variants={fadeInVariant}
           className="flex gap-x-[78px] items-center"
         >
@@ -72,7 +72,7 @@ export default function Page() {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true }}
+          viewport={{ once: false }}
           variants={fadeInVariant}
           className="flex gap-x-[78px] items-center"
         >
@@ -93,7 +93,7 @@ export default function Page() {
       <motion.section
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         variants={fadeInVariant}
         className="flex flex-col justify-center items-center pb-[10%]"
       >
