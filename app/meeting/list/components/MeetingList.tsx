@@ -346,7 +346,12 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           trigger={
             <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
               {selectedFilter || defaultFilter}
-              <button type="button" onClick={handleResetFilter}>
+              <button
+                type="button"
+                onClick={handleResetFilter}
+                aria-label="필터 초기화"
+                className="cursor-pointer"
+              >
                 <Icon path={selectedFilter ? 'x' : 'chevron_down'} />
               </button>
             </div>
