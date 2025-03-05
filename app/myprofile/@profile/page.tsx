@@ -2,6 +2,7 @@
 
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
 import ProfileIcon from '@/components/shared/BaseProfile';
+import useModalStore from '@/store/useModalStore';
 import { hover } from 'framer-motion';
 import { useState } from 'react';
 
@@ -11,12 +12,15 @@ export default function Page() {
   const [userBio, setUserBio] = useState('');
   const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
 
+  const { openModal } = useModalStore();
+
   return (
     <div className="w-full h-auto flex gap-6 items-center relative">
       <div
         className="cursor-pointer absolute top-3 right-0"
         onMouseEnter={() => setIconStatus('hover')}
         onMouseLeave={() => setIconStatus('default')}
+        onClick={() => openModal('editProfile')}
       >
         <EditingIcon status={iconStatus} />
       </div>
