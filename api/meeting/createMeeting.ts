@@ -11,7 +11,6 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
     city: meetingData.city,
     town: meetingData.town,
     category: meetingData.category,
-
     targetAt: meetingData.targetAt,
     endAt: meetingData.endAt,
     capacity: meetingData.capacity,
