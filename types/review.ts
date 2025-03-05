@@ -9,7 +9,7 @@ export interface Review {
   count: number;
 }
 
-export interface ReviewSummary {
+export interface Reviews {
   id: string;
   category: MeetingCategory;
   summary: string;
