@@ -31,7 +31,8 @@ const fetchMeeting = async ({
   }
 
   if (targetAt) {
-    const dateString = targetAt.toISOString().split('T')[0]; // "2025-11-22"
+    const kstDate = new Date(targetAt.getTime() + 9 * 60 * 60 * 1000); // UTC + 9시간
+    const dateString = kstDate.toISOString().split('T')[0]; // "2025-11-22"
     queryParams.append('targetAt', `${dateString}T00:00:00`);
   }
 
