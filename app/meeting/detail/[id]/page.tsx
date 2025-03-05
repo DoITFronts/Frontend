@@ -12,7 +12,6 @@ import {
 } from '@/app/meeting/detail/components/skeleton/MeetingDetailSkeleton';
 import { MeetingDetail } from '@/types/meeting';
 
-
 export default function DetailPage() {
   const params = useParams();
   const meetingId = params.id as string;
@@ -48,7 +47,7 @@ export default function DetailPage() {
   if (!meeting) return <p>⚠️ 유효한 이벤트 데이터가 없습니다.</p>;
 
   return (
-    <MeetingLayout reviews={null} description={null}>
+    <MeetingLayout host={null} description={null} location={null} reviews={null} bottombar={null}>
       <MeetingDetailClient meeting={meeting} />
     </MeetingLayout>
   );

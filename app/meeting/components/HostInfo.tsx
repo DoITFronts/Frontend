@@ -1,12 +1,11 @@
 import Image from 'next/image';
 
 interface HostInfoProps {
-  id: string;
   name: string;
   profileImage?: string;
 }
 
-function HostInfo({ id, name, profileImage }: HostInfoProps) {
+function HostInfo({ name, profileImage }: HostInfoProps) {
   const imageSrc = profileImage || '/assets/profile/userProfileDarkDefault.svg';
 
   return (

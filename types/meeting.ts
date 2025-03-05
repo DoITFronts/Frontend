@@ -1,6 +1,9 @@
 export interface Location {
-  region_1depth_name: string;
-  region_2depth_name: string;
+  latitude: number;
+  longitude: number;
+  address: string;
+  city: string;
+  town: string;
 }
 
 export type MeetingDetail = {
@@ -39,3 +42,18 @@ export type MeetingDetail = {
     count: number;
   }[];
 };
+
+export interface CreateMeetingParams {
+  title: string;
+  summary: string;
+  address: string;
+  city: string;
+  town: string;
+
+  category: 'ALCOHOL' | 'CAFE' | 'BOARD_GAME' | 'GOURMET';
+  targetAt: string;
+  endAt: string;
+  capacity: number;
+  minCapacity: number;
+  image?: File;
+}

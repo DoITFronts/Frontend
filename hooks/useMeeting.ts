@@ -4,42 +4,45 @@ import fetchMeeting from '@/api/meeting/fetchMeeting';
 
 const useMeeting = ({
   category,
-  location1,
-  location2,
-  date,
-  per_page,
+  city,
+  town,
+  targetAt,
   initialMeetings,
 }: {
   category: string;
-  location1: string;
-  location2: string;
-  date: Date | null;
+  city: string;
+  town: string;
+  targetAt: Date | null;
   per_page: number;
   initialMeetings: any[];
 }) =>
   useInfiniteQuery({
-    queryKey: ['meetings', category, location1, location2, date],
+    queryKey: ['meetings', category, city, town, targetAt],
     queryFn: async ({ pageParam = 1 }) => {
       try {
         return await fetchMeeting({
           category,
-          location1,
-          location2,
-          date,
-          page: pageParam,
-          per_page,
+          city,
+          town,
+          targetAt,
         });
       } catch (error) {
         console.error('Failed to fetch meetings:', error);
         throw error;
       }
     },
-    initialPageParam: 2,
+    initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage?.next && lastPage.next <= lastPage.last ? lastPage.next : undefined,
     initialData: {
-      pages: [initialMeetings], // 초기 데이터 유지
-      pageParams: [1], // 첫 번째 페이지는 SSR에서 가져온 데이터
+      pages: [
+        {
+          data: {
+            lighteningResponses: initialMeetings,
+          },
+        },
+      ],
+      pageParams: [1],
     },
   });
 

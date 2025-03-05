@@ -16,7 +16,9 @@ axiosInstance.interceptors.request.use(
       config.headers.Authorization = token.startsWith('Bearer') ? token : `Bearer ${token}`;
     }
 
-    requestTimes.set(config.url!, Date.now());
+    if (config.url) {
+      requestTimes.set(config.url, Date.now());
+    }
 
     return config;
   },
@@ -25,10 +27,13 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    const startTime = requestTimes.get(response.config.url!);
-    if (startTime) {
-      console.log(`[${response.config.url}] 응답 시간: ${Date.now() - startTime}ms`);
-      requestTimes.delete(response.config.url);
+    const { url } = response.config;
+    if (url) {
+      const startTime = requestTimes.get(url);
+      if (startTime) {
+        console.log(`[${url}] 응답 시간: ${Date.now() - startTime}ms`);
+        requestTimes.delete(url);
+      }
     }
     return response;
   },
@@ -51,7 +56,9 @@ axiosInstance.interceptors.response.use(
         break;
 
       case 429:
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        await new Promise((resolve) => {
+          setTimeout(resolve, 3000);
+        });
         return axiosInstance(config);
 
       case 500:

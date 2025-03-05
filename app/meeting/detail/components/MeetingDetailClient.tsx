@@ -20,7 +20,7 @@ export default function MeetingDetailClient({ meeting }: { meeting: MeetingDetai
 
   return (
     <Card mode="detail">
-      <div className="flex h-[271px] gap-6">
+      <div className="mt-14 flex h-[271px] gap-6">
         <div className="relative flex w-[518px] items-center justify-center overflow-hidden">
           <FallbackImage />
           <Card.Like meetingId={data?.id} isLiked={data?.isLiked} onClick={() => null} />
@@ -28,7 +28,7 @@ export default function MeetingDetailClient({ meeting }: { meeting: MeetingDetai
         <div className="flex h-[271px] w-[calc(100%-518px)] flex-col justify-between">
           <MeetingDetailHeader
             title={data?.title}
-            location={`${data?.location.region_1depth_name} ${data?.location.region_2depth_name}`}
+            location={`${data?.location.city} ${data?.location.town}`}
             datetime={data?.datetime}
           />
           <MeetingDetailBody summary={data?.summary} />

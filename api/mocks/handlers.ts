@@ -2,12 +2,12 @@
 import { rest } from 'msw';
 
 import mockMeetingDetail from '@/api/data/mockMeetingDetail';
-import mockMyPageReviews from '@/api/data/mockMyPageReviews';
 
-import mockMeetings from '../data/mockMeetings';
-import mockMyPageMeetings from '../data/mockMyPageMeetings';
+// import mockMyPageReviews from '@/api/data/mockMyPageReviews';
 
-const MOCK_USER_ID = 'user1';
+// import mockMyPageMeetings from '../data/mockMyPageMeetings';
+
+// const MOCK_USER_ID = 'user1';
 
 const handlers = [
   rest.get('/api/meeting/detail/:id', (req, res, ctx) => {
@@ -34,57 +34,36 @@ const handlers = [
     );
   }),
 
-  rest.get('/api/meeting/list', (req, res, ctx) => {
-    const category = req.url.searchParams.get('category') || '전체';
-    const location1 = req.url.searchParams.get('location_1') || '지역 전체';
-    const location2 = req.url.searchParams.get('location_2') || '동 전체';
-    const date = req.url.searchParams.get('date') || '';
+  // rest.get('/api/mypage/meetings', (req, res, ctx) => {
+  //   const category = req.url.searchParams.get('category') || '';
+  //   const type = req.url.searchParams.get('type') || '나의 번개';
 
-    // 필터링 로직
-    const filteredMeetings = mockMeetings.filter((meeting) => {
-      const matchesCategory = category === '전체' || meeting.category === category;
-      const matchesLocation1 =
-        location1 === '지역 전체' || meeting.location.region_1depth_name === location1;
-      const matchesLocation2 =
-        location2 === '동 전체' || meeting.location.region_2depth_name === location2;
-      const matchesDate = date === '' || meeting.dateTime.startsWith(date);
+  //   let filteredMeetings = mockMyPageMeetings;
 
-      return matchesCategory && matchesLocation1 && matchesLocation2 && matchesDate;
-    });
+  //   if (type === '나의 번개') {
+  //     filteredMeetings = mockMyPageMeetings.filter((meeting) =>
+  //       meeting.participants.includes(MOCK_USER_ID),
+  //     );
+  //   } else if (type === '내가 만든 번개') {
+  //     filteredMeetings = mockMyPageMeetings.filter((meeting) => meeting.createdBy === MOCK_USER_ID);
+  //   }
 
-    return res(ctx.status(200), ctx.json(filteredMeetings));
-  }),
+  //   if (category) {
+  //     filteredMeetings = filteredMeetings.filter((meeting) => meeting.category === category);
+  //   }
 
-  rest.get('/api/mypage/meetings', (req, res, ctx) => {
-    const category = req.url.searchParams.get('category') || '';
-    const type = req.url.searchParams.get('type') || '나의 번개';
+  //   return res(
+  //     ctx.status(200),
+  //     ctx.json({
+  //       meetings: filteredMeetings,
+  //       totalCount: filteredMeetings.length,
+  //     }),
+  //   );
+  // }),
 
-    let filteredMeetings = mockMyPageMeetings;
-
-    if (type === '나의 번개') {
-      filteredMeetings = mockMyPageMeetings.filter((meeting) =>
-        meeting.participants.includes(MOCK_USER_ID),
-      );
-    } else if (type === '내가 만든 번개') {
-      filteredMeetings = mockMyPageMeetings.filter((meeting) => meeting.createdBy === MOCK_USER_ID);
-    }
-
-    if (category) {
-      filteredMeetings = filteredMeetings.filter((meeting) => meeting.category === category);
-    }
-
-    return res(
-      ctx.status(200),
-      ctx.json({
-        meetings: filteredMeetings,
-        totalCount: filteredMeetings.length,
-      }),
-    );
-  }),
-
-  rest.get('/api/mypage/reviews', (req, res, ctx) =>
-    res(ctx.status(200), ctx.json(mockMyPageReviews)),
-  ),
+  // rest.get('/api/mypage/reviews', (req, res, ctx) =>
+  //   res(ctx.status(200), ctx.json(mockMyPageReviews)),
+  // ),
 ];
 
 export default handlers;
