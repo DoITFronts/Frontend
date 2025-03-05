@@ -23,9 +23,10 @@ export const useSignin = () => {
         // 로컬 스토리지,쿠키에 토큰 저장(쿠키 만료시간:1일 설정해둠)
         localStorage.setItem('accessToken', accessToken);
         Cookies.set('accessToken', accessToken, { expires: 1 });
-        // 토큰 디코딩 test
+        // 토큰 디코딩
         const decodedToken: any = jwtDecode(accessToken);
         console.log('디코딩된 유저 정보:', decodedToken);
+        localStorage.setItem('유저 정보', JSON.stringify(decodedToken));
 
         toast.success('성공적으로 로그인 되었습니다 :)', { hideProgressBar: true, autoClose: 900 });
         router.push('/meeting/list');
