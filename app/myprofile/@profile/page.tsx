@@ -3,15 +3,14 @@
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
 import ProfileIcon from '@/components/shared/BaseProfile';
 import useModalStore from '@/store/useModalStore';
+import useProfileStore from '@/store/useProfileStore';
 import { hover } from 'framer-motion';
 import { useState } from 'react';
 
 export default function Page() {
-  const [nickname, setNickname] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-  const [userBio, setUserBio] = useState('');
   const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
 
+  const { nickname, email, userBio, profileImage } = useProfileStore();
   const { openModal } = useModalStore();
 
   return (
