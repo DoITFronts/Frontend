@@ -29,7 +29,7 @@ export interface Host {
 }
 
 export interface Meeting {
-  id: number;
+  id: string;
   category: MeetingCategory;
   title: string;
   summary: string;
