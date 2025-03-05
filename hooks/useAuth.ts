@@ -82,7 +82,9 @@ export const useSignout = () => {
   return useMutation({
     mutationFn: signoutUser,
     onSuccess: () => {
-      localStorage.removeItem('accessToken');
+      //로컬스토리지 초기화
+      localStorage.clear();
+      // localStorage.removeItem('accessToken');
       Cookies.remove('accessToken');
 
       toast.success('로그아웃 되었습니다.', { autoClose: 900 });
