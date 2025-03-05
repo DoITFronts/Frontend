@@ -3,6 +3,10 @@
 import { motion } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
+import {
+  LocationError,
+  LocationSkeleton,
+} from '@/app/meeting/detail/components/skeleton/LocationSkeleton';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 
 declare global {
@@ -80,8 +84,8 @@ export default function MeetingLocation() {
     document.head.appendChild(script);
   }, [meeting]);
 
-  if (isLoading) return <p>로딩 중...</p>;
-  if (error || !meeting) return <p>데이터를 불러오지 못했습니다.</p>;
+  if (isLoading) return <LocationSkeleton />;
+  if (error || !meeting) return null;
 
   return (
     <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
