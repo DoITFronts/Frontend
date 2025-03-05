@@ -4,20 +4,12 @@ import { useEffect, useState } from 'react';
 import CustomDatePicker from '../datePicker';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
-import { CreateMeetingParams } from '@/types/createMeeting';
+import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 import createMeeting from '@/api/meeting/createMeeting';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import { useRouter } from 'next/navigation';
 
-type MeetingType = '술' | '카페' | '보드게임' | '맛집';
-const meetingTypes: MeetingType[] = ['술', '카페', '보드게임', '맛집'];
-
-const typeMapping: Record<MeetingType, CreateMeetingParams['category']> = {
-  술: 'ALCOHOL',
-  카페: 'CAFE',
-  보드게임: 'BOARD_GAME',
-  맛집: 'GOURMET',
-};
+const meetingCategories = Object.values(MeetingCategory);
 
 export default function CreateMeetingModal() {
   const { closeModal } = useModalStore();
@@ -27,7 +19,7 @@ export default function CreateMeetingModal() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [meetingDate, setMeetingDate] = useState(new Date());
   const [deadlineDate, setDeadlineDate] = useState(new Date());
-  const [meetingType, setMeetingType] = useState<MeetingType | null>(null);
+  const [meetingType, setMeetingType] = useState<MeetingCategory | null>(null);
   const [participantCount, setParticipantCount] = useState('');
   const [minParticipants, setMinParticipants] = useState('');
   const [selectedPlace, setSelectedPlace] = useState<{
@@ -73,7 +65,7 @@ export default function CreateMeetingModal() {
     }
   };
 
-  const handleMeetingType = (type: MeetingType) => {
+  const handleMeetingType = (type: MeetingCategory) => {
     setMeetingType((prev) => (prev === type ? null : type));
   };
 
@@ -115,7 +107,7 @@ export default function CreateMeetingModal() {
       return;
     }
 
-    const apiType = typeMapping[meetingType];
+    // const apiType = typeMapping[meetingType];
 
     const meetingData: CreateMeetingParams = {
       title: meetingName,
@@ -123,7 +115,7 @@ export default function CreateMeetingModal() {
       address: selectedPlace.address,
       city: selectedPlace.city,
       town: selectedPlace.town,
-      category: apiType,
+      category: meetingType,
       targetAt: meetingDate.toISOString(),
       endAt: deadlineDate.toISOString(),
       capacity: parseInt(participantCount),
@@ -227,7 +219,7 @@ export default function CreateMeetingModal() {
           <div className="w-full flex flex-col gap-3">
             <span className="font-dunggeunmo text-base text-blac-11k">카테고리</span>
             <div className="w-full flex justify-between gap-3">
-              {meetingTypes.map((type) => (
+              {meetingCategories.map((type) => (
                 <div
                   key={type}
                   className={`w-full border rounded-[12px] cursor-pointer border-black-6 pl-[6px] pr-2.5 py-2 flex items-center ${meetingType === type ? 'bg-black-10 border-black-10' : ''}`}

@@ -2,12 +2,13 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
+
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
 import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
-import { Meeting } from '@/types/meeting.types';
+import { Meeting } from '@/types/meeting';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
@@ -143,7 +144,7 @@ export default function Page() {
                     </div>
 
                     <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
-                      {meeting.description}
+                      {meeting.summary}
                     </div>
                   </div>
 

@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-import { Meeting } from '@/types/meeting.types';
+import { Meeting } from '@/types/meeting';
 
 import MeetingInfo from './MeetingInfo';
 
