@@ -74,7 +74,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
-  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('filter') || defaultFilter);
+  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('filter') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -206,8 +206,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     [data?.pages],
   );
 
-  console.log(meetings);
-
   // IntersectionObserver를 이용한 무한 스크롤 구현
   useEffect(() => {
     if (!observerRef.current || !hasNextPage) return;
@@ -331,9 +329,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
             trigger={
               <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
                 {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
-                <button type="button" onClick={handleResetDate}>
+                <div onClick={handleResetDate}>
                   <Icon path={selectedDate ? 'x' : 'chevron_down'} />
-                </button>
+                </div>
               </div>
             }
             onSelect={handleClickCalendar}
@@ -346,14 +344,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           trigger={
             <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
               {selectedFilter || defaultFilter}
-              <button
-                type="button"
-                onClick={handleResetFilter}
-                aria-label="필터 초기화"
-                className="cursor-pointer"
-              >
+              <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
                 <Icon path={selectedFilter ? 'x' : 'chevron_down'} />
-              </button>
+              </div>
             </div>
           }
           optionClassName="justify-start min-w-[95px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
