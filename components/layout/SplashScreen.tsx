@@ -16,23 +16,27 @@ export default function SplashScreen({ onCompleteAction }: { onCompleteAction: (
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black"
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black gap-9"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0, scale: 1.2 }}
         transition={{ duration: 1 }}
       >
-        {/* ✅ 스플래쉬 이미지 */}
-        <Image src="/splash.png" alt="Splash" width={300} height={300} />
-
-        {/* ✅ 텍스트 애니메이션 */}
-        <motion.p
-          className="mt-4 text-2xl font-bold text-white"
+        <motion.div
+          className="mt-4 text-center text-2xl font-bold"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, ease: 'easeOut' }}
         >
-          즉흥적인 만남은 <span className="text-yellow-400">여기서 시작!</span>
-        </motion.p>
+          <p className="text-white">즉흥적인 만남은</p>
+          <p className="text-yellow-400">여기서 시작!</p>
+        </motion.div>
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+        >
+          <Image src="/assets/mainLogo/splash.svg" alt="Splash" width={76} height={60} />
+        </motion.div>
       </motion.div>
     </AnimatePresence>
   );
