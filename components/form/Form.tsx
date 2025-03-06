@@ -59,7 +59,7 @@ function LabelHeader({ children, className }: BaseProps) {
 
 //인풋 기본 스타일
 const baseInputStyle =
-  "h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
+  "focus:outline-black-7 h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
 
 const baseInputErrorStyle = 'outline outline-2 outline-red-500 focus:outline-gray-500';
 
@@ -88,6 +88,13 @@ function Input({ className, name, ...rest }: InputProps) {
         {...rest}
         placeholder={placeholder}
         onBlur={() => trigger(name)}
+        //엔터 입력했을때 유효성 검사 실행되도록
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            trigger(name);
+          }
+        }}
       />
       {errors[name]?.message && <ErrorMessage>{String(errors[name]?.message)}</ErrorMessage>}
     </>
@@ -139,6 +146,12 @@ function PasswordInput({ className, name, ...rest }: InputProps) {
           type={inputType}
           placeholder={placeholder}
           onBlur={() => trigger(name)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              trigger(name);
+            }
+          }}
         />
         <button
           type="button"
@@ -177,3 +190,4 @@ Form.LabelHeader = LabelHeader;
 Form.Input = Input;
 Form.PasswordInput = PasswordInput;
 Form.Submit = Submit;
+Form.ErrorMessage = ErrorMessage;

@@ -89,23 +89,10 @@ export const PASSWORD_CONFIRM_RULES = (passwordValue: string): RegisterOptions =
   validate: (value) => value === passwordValue || '비밀번호가 일치하지 않습니다.',
 });
 
-const BIRTH_RULES: RegisterOptions = {
-  required: generateRequiredMessage('birth'),
-  pattern: { value: BIRTH_PATTERN, message: 'yyyy.mm.dd 형식으로 작성해 주세요.' },
-  validate: (value) => {
-    const [year, month, day] = value.split('.').map(Number);
-    const date = new Date(year, month - 1, day);
-    return (
-      (date.getFullYear() === year && date.getMonth() + 1 === month && date.getDate() === day) ||
-      '올바른 날짜를 입력해 주세요.'
-    );
-  },
-};
-
 const VALIDATION_RULES: Record<Field, RegisterOptions> = {
   name: NAME_RULES,
   email: EMAIL_RULES,
-  username: {},
+  username: EMAIL_RULES,
   nickname: NICKNAME_RULES,
   password: PASSWORD_RULES,
   passwordConfirmation: {},

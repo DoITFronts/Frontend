@@ -110,7 +110,17 @@ export default function MeetingDescription() {
         </div>
       )}
 
-      <div className="mt-4">{renderContent()}</div>
+      <div className="mt-4">
+        {data?.description ? (
+          renderContent()
+        ) : (
+          <div className="mb-16 inline-flex h-[500px] w-full items-center justify-center gap-2.5">
+            <div className="text-center font-['Pretendard'] text-base font-medium leading-snug text-[#c0c1c2]">
+              상세 설명이 없어요
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
