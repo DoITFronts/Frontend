@@ -53,9 +53,8 @@ export interface Meeting {
 }
 
 export interface MeetingDetail extends Meeting {
+  placeName: string;
   address: string;
-  latitude: number;
-  longitude: number;
   host: Host;
   description: Description;
 }
@@ -64,6 +63,7 @@ export interface CreateMeetingParams {
   title: string;
   summary: string;
   address: string;
+  placeName: string;
   city: string;
   town: string;
   category: MeetingCategory;

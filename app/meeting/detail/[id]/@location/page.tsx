@@ -1,12 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-import {
-  LocationError,
-  LocationSkeleton,
-} from '@/app/meeting/detail/components/skeleton/LocationSkeleton';
+import { LocationSkeleton } from '@/app/meeting/detail/components/skeleton/LocationSkeleton';
+import useKakaoPlaceInfo from '@/hooks/useKakaoPlaceInfo';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 
 declare global {
@@ -23,70 +21,32 @@ const mapVariants = {
 export default function MeetingLocation() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
   const mapContainer = useRef<HTMLDivElement>(null);
+  const placeInfo = useKakaoPlaceInfo(meeting?.address ?? null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   useEffect(() => {
-    if (!meeting || !mapContainer.current) return;
+    if (!placeInfo || !mapContainer.current || isMapLoaded) return;
 
-    const script = document.createElement('script');
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_API_KEY}&libraries=services&autoload=false`;
-    script.async = true;
-    script.onload = () => {
-      window.kakao.maps.load(() => {
-        const mapOptions = {
-          center: new window.kakao.maps.LatLng(meeting.latitude, meeting.longitude),
-          level: 3,
-        };
-        const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
+    console.log('🗺️ 지도 렌더링 시작');
 
-        const markerPosition = new window.kakao.maps.LatLng(
-          meeting.latitude || 37.5563,
-          meeting.longitude || 126.9723,
-        );
-        const marker = new window.kakao.maps.Marker({
-          position: markerPosition,
-          image: new window.kakao.maps.MarkerImage(
-            'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
-            new window.kakao.maps.Size(40, 40),
-            { offset: new window.kakao.maps.Point(20, 40) },
-          ),
-        });
-        marker.setMap(map);
+    window.kakao.maps.load(() => {
+      const mapOptions = {
+        center: new window.kakao.maps.LatLng(placeInfo.latitude, placeInfo.longitude),
+        level: 3,
+      };
+      const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
 
-        const infowindowContent = `
-          <div style="padding:10px; font-size:14px;">
-            <strong>${meeting.address}</strong><br>
-            위도: ${meeting.latitude}, 경도: ${meeting.longitude}<br>
-            <a href="https://map.kakao.com/link/to/${meeting.address},${meeting.latitude},${meeting.longitude}" target="_blank">
-              길찾기 (카카오맵)
-            </a>
-          </div>`;
-        const infowindow = new window.kakao.maps.InfoWindow({
-          content: infowindowContent,
-        });
-
-        window.kakao.maps.event.addListener(marker, 'click', () => {
-          infowindow.open(map, marker);
-        });
-
-        const geocoder = new window.kakao.maps.services.Geocoder();
-        geocoder.addressSearch(meeting.address, (result: any, status: any) => {
-          if (status === window.kakao.maps.services.Status.OK) {
-            const coords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
-            map.setCenter(coords);
-          }
-        });
-
-        const zoomControl = new window.kakao.maps.ZoomControl();
-        map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+      const marker = new window.kakao.maps.Marker({
+        position: new window.kakao.maps.LatLng(placeInfo.latitude, placeInfo.longitude),
       });
-    };
+      marker.setMap(map);
 
-    document.head.appendChild(script);
-  }, [meeting]);
+      setIsMapLoaded(true);
+    });
+  }, [placeInfo, isMapLoaded]);
 
   if (isLoading) return <LocationSkeleton />;
   if (error || !meeting) return null;
-
   return (
     <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
       <div className="my-8 h-px border-b border-gray-300 opacity-50" />
@@ -106,15 +66,15 @@ export default function MeetingLocation() {
           <div className="inline-flex h-full w-2/6 flex-col items-start justify-start gap-[19px]">
             <div className="flex flex-col items-start justify-center gap-1">
               <div className="font-['Pretendard'] text-2xl font-bold text-black">
-                {meeting.address}
+                {placeInfo?.roadAddress || meeting.address}
               </div>
               <div className="font-['Pretendard'] text-base font-semibold leading-snug text-[#bfbfbf]">
-                카페,디저트
+                {placeInfo?.categoryGroupName || '기타'}
               </div>
             </div>
-            <div className="flex flex-col items-start justify-start gap-2">
-              <div className="inline-flex items-center justify-start gap-2">
-                <div className="flex items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
+            <div className="inline-flex h-16 flex-col items-start justify-start gap-2">
+              <div className="inline-flex items-start justify-start gap-2">
+                <div className="flex w-14 items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
                   <div className="flex items-center justify-start gap-1">
                     <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
                       도로명
@@ -122,11 +82,11 @@ export default function MeetingLocation() {
                   </div>
                 </div>
                 <div className="font-['Pretendard'] text-base font-medium leading-snug text-neutral-800">
-                  {meeting.address}
+                  서울 중구 을지로 106 203-117호
                 </div>
               </div>
-              <div className="inline-flex items-center justify-start gap-2">
-                <div className="flex items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
+              <div className="inline-flex items-start justify-start gap-2">
+                <div className="flex w-14 items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
                   <div className="flex items-center justify-start gap-1">
                     <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
                       지번
@@ -134,7 +94,7 @@ export default function MeetingLocation() {
                   </div>
                 </div>
                 <div className="font-['Pretendard'] text-base font-medium leading-snug text-neutral-800">
-                  {meeting.address}
+                  서울 중구 을지로3가 347-3
                 </div>
               </div>
             </div>
