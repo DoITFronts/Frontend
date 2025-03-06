@@ -28,7 +28,16 @@ export const useSignin = () => {
         // 토큰 디코딩
         const decodedToken: any = jwtDecode(accessToken);
         console.log('디코딩된 유저 정보:', decodedToken);
-        localStorage.setItem('유저 정보', JSON.stringify(decodedToken));
+        const userInfo = {
+          email: decodedToken.email,
+          exp: decodedToken.exp,
+          iat: decodedToken.iat,
+          nickname: decodedToken.nickname,
+          sub: decodedToken.sub,
+        };
+        localStorage.setItem('email', userInfo.email);
+        localStorage.setItem('nickname', userInfo.nickname);
+        localStorage.setItem('sub', userInfo.sub);
 
         toast.success('성공적으로 로그인 되었습니다 :)', { hideProgressBar: true, autoClose: 900 });
         setErrorMessage(null);

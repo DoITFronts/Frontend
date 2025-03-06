@@ -21,7 +21,7 @@ export interface Participant {
 }
 
 export interface Host {
-  id: string;
+  id: number;
   name: string;
   email: string;
   profileImage: string;

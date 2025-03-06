@@ -4,7 +4,7 @@ import ProfileIcon from '@/components/shared/BaseProfile';
 interface AvatarGroupProps {
   count: number;
   maxCount?: number;
-  theme?: 'light' | 'dark';
+  participantId?: number[];
 }
 
 const profileVariants = {
@@ -21,7 +21,7 @@ const moreVariants = {
   visible: { scale: 1, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-function AvatarGroup({ count, maxCount = 4, theme = 'light' }: AvatarGroupProps) {
+function AvatarGroup({ count, maxCount = 4, participantId = [] }: AvatarGroupProps) {
   const visibleIcons = Math.min(count, maxCount);
   const remaining = count - maxCount;
   const showMore = count > maxCount;
@@ -37,7 +37,7 @@ function AvatarGroup({ count, maxCount = 4, theme = 'light' }: AvatarGroupProps)
           whileInView="visible"
         >
           <motion.div whileHover="hover" variants={profileVariants}>
-            <ProfileIcon theme={theme} />
+            <ProfileIcon id={participantId[i] || i} />
           </motion.div>
         </motion.div>
       ))}

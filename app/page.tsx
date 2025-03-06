@@ -6,10 +6,10 @@ import Logo from '@/public/assets/logoWhite.svg';
 import Image from 'next/image';
 import Section01 from '@/public/assets/landing/section01.svg';
 import Section02 from '@/public/assets/landing/section02.svg';
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Lottie from 'lottie-react';
 import fireworkAnimation from '@/public/assets/landing/fireworks.json';
+import { useSetUserTheme } from "@/hooks/useUserInfo";
 
 //FramerMotion
 const fadeInVariant = {
@@ -19,6 +19,7 @@ const fadeInVariant = {
 
 export default function Page() {
   const router = useRouter();
+  useSetUserTheme();
 
   return (
     <div className="bg-black w-full font-['Pretendard'] text-white">

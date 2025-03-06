@@ -14,6 +14,7 @@ import Card from '@/app/meeting/list/components/Card';
 import Category from '@/components/ui/chip/Category';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import categoryMap from '@/types/categoryMap';
+import { Participant } from "@/types/meeting";
 
 export default function DetailCard() {
   const params = useParams();
@@ -53,7 +54,7 @@ export default function DetailCard() {
             datetime={data.targetAt}
           />
           <MeetingDetailBody summary={data.summary} />
-          <MeetingDetailFooter participantCount={data.participantCount} capacity={data.capacity} />
+          <MeetingDetailFooter participantCount={data.participantCount} capacity={data.capacity} participantId={data.participants.map((p: Participant) => p.userId)} />
         </div>
       </div>
     </Card>
