@@ -1,13 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
+import {
+  BottomFloatingBarError,
+  BottomFloatingBarSkeleton,
+} from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
 import Button from '@/components/ui/Button';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import useModalStore from '@/store/useModalStore';
 import isUserLoggedIn from '@/utils/authUtils';
-import { toast } from 'react-toastify';
 
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
   ALCOHOL: {
@@ -49,8 +53,8 @@ export default function BottomFloatingBar() {
     setIsJoined(!isJoined);
   };
 
-  if (isLoading) return null;
-  if (error) return <div>모임 정보를 불러오는 중 오류가 발생했습니다.</div>;
+  if (isLoading) return <BottomFloatingBarSkeleton />;
+  if (error) return <BottomFloatingBarError onRetry={() => window.location.reload()} />;
 
   const category = meeting?.category as 'ALCOHOL' | 'CAFE' | 'BOARD_GAME' | 'GOURMET';
 

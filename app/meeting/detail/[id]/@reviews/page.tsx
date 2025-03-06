@@ -1,7 +1,7 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -40,12 +40,14 @@ export default function MeetingReviews() {
 
   if (!meetingId) return <p>⚠️ 이벤트 ID가 필요합니다.</p>;
   if (isLoading) return <ReviewListSkeleton />;
-  if (error || !meeting) return <ReviewListError onRetry={refetch} />;
+  if (error || !meeting) return null;
   if (!meeting?.length)
     return (
-      <p className="flex h-[200px] items-center justify-center text-gray-500">
-        아직 리뷰가 없습니다.
-      </p>
+      <div className="mb-16 inline-flex h-[500px] w-full items-center justify-center gap-2.5">
+        <div className="text-center font-['Pretendard'] text-base font-medium leading-snug text-[#c0c1c2]">
+          아직 리뷰가 없어요
+        </div>
+      </div>
     );
 
   const totalReviews = meeting.length;
@@ -54,7 +56,7 @@ export default function MeetingReviews() {
   const selectedReviews = meeting.slice(startIndex, startIndex + reviewsPerPage);
 
   return (
-    <div className="flex-col mb-24">
+    <div className="mb-24 flex-col">
       <div className="font-['DungGeunMo'] text-2xl font-normal text-black">이전 번개 리뷰</div>
       <div className="mt-4 space-y-4">
         {selectedReviews.map((review, index) => (
@@ -72,7 +74,7 @@ export default function MeetingReviews() {
               username={review.writer}
             />
             {index < selectedReviews.length - 1 && (
-              <div className='mt-2' data-svg-wrapper="">
+              <div className="mt-2" data-svg-wrapper="">
                 <svg
                   width="1200"
                   height="4"

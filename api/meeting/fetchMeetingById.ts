@@ -7,7 +7,8 @@ const fetchMeetingById = async (id: string | undefined) => {
 
   try {
     const response = await axiosInstance.get(`/api/v1/lightenings/${id}`);
-    const meetingData = response.data[0]?.result?.data || response.data?.result?.data;
+
+    const meetingData = response.data;
 
     if (!meetingData) {
       console.error('Invalid response structure:', response.data);

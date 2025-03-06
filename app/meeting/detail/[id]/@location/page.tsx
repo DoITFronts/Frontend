@@ -1,7 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+
+import {
+  LocationError,
+  LocationSkeleton,
+} from '@/app/meeting/detail/components/skeleton/LocationSkeleton';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 
 declare global {
@@ -28,24 +33,21 @@ export default function MeetingLocation() {
     script.onload = () => {
       window.kakao.maps.load(() => {
         const mapOptions = {
-          center: new window.kakao.maps.LatLng(
-            meeting.latitude,
-            meeting.longitude
-          ),
+          center: new window.kakao.maps.LatLng(meeting.latitude, meeting.longitude),
           level: 3,
         };
         const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
 
         const markerPosition = new window.kakao.maps.LatLng(
-          meeting.latitude,
-          meeting.longitude
+          meeting.latitude || 37.5563,
+          meeting.longitude || 126.9723,
         );
         const marker = new window.kakao.maps.Marker({
           position: markerPosition,
           image: new window.kakao.maps.MarkerImage(
             'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
             new window.kakao.maps.Size(40, 40),
-            { offset: new window.kakao.maps.Point(20, 40) }
+            { offset: new window.kakao.maps.Point(20, 40) },
           ),
         });
         marker.setMap(map);
@@ -82,8 +84,8 @@ export default function MeetingLocation() {
     document.head.appendChild(script);
   }, [meeting]);
 
-  if (isLoading) return <p>로딩 중...</p>;
-  if (error || !meeting) return <p>데이터를 불러오지 못했습니다.</p>;
+  if (isLoading) return <LocationSkeleton />;
+  if (error || !meeting) return null;
 
   return (
     <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
@@ -94,32 +96,49 @@ export default function MeetingLocation() {
           번개 위치
         </div>
         <motion.div
-          className="inline-flex h-[373px] w-full flex-col items-start justify-start gap-[19px]"
+          className="inline-flex h-[373px] w-full items-start justify-start gap-[19px]"
           variants={mapVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <div className="inline-flex items-start justify-start">
-            <div data-svg-wrapper="" className="relative">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M16.2427 15.3429L13.0605 18.5563C12.9213 18.6969 12.7561 18.8085 12.5742 18.8847C12.3923 18.9608 12.1973 19 12.0004 19C11.8035 19 11.6085 18.9608 11.4266 18.8847C11.2447 18.8085 11.0794 18.6969 10.9403 18.5563L7.75725 15.3429C6.91817 14.4955 6.34675 13.4159 6.11527 12.2407C5.88378 11.0654 6.00262 9.84718 6.45675 8.74011C6.91089 7.63303 7.67992 6.6868 8.66661 6.02106C9.6533 5.35533 10.8133 5 12 5C13.1867 5 14.3467 5.35533 15.3334 6.02106C16.3201 6.6868 17.0891 7.63303 17.5432 8.74011C17.9974 9.84718 18.1162 11.0654 17.8847 12.2407C17.6532 13.4159 17.0818 14.4955 16.2427 15.3429Z"
-                  fill="#595959"
-                />
-              </svg>
+          <div ref={mapContainer} className="size-full self-stretch bg-[#d9d9d9]" />
+          <div className="inline-flex h-full w-2/6 flex-col items-start justify-start gap-[19px]">
+            <div className="flex flex-col items-start justify-center gap-1">
+              <div className="font-['Pretendard'] text-2xl font-bold text-black">
+                {meeting.address}
+              </div>
+              <div className="font-['Pretendard'] text-base font-semibold leading-snug text-[#bfbfbf]">
+                카페,디저트
+              </div>
             </div>
-            <div className="font-['Pretendard'] text-base font-semibold leading-snug text-[#595959]">
-              {meeting.address}
+            <div className="flex flex-col items-start justify-start gap-2">
+              <div className="inline-flex items-center justify-start gap-2">
+                <div className="flex items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
+                  <div className="flex items-center justify-start gap-1">
+                    <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
+                      도로명
+                    </div>
+                  </div>
+                </div>
+                <div className="font-['Pretendard'] text-base font-medium leading-snug text-neutral-800">
+                  {meeting.address}
+                </div>
+              </div>
+              <div className="inline-flex items-center justify-start gap-2">
+                <div className="flex items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
+                  <div className="flex items-center justify-start gap-1">
+                    <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
+                      지번
+                    </div>
+                  </div>
+                </div>
+                <div className="font-['Pretendard'] text-base font-medium leading-snug text-neutral-800">
+                  {meeting.address}
+                </div>
+              </div>
             </div>
           </div>
-          <div ref={mapContainer} className="h-[330px] self-stretch bg-[#d9d9d9]" />
         </motion.div>
       </div>
 
