@@ -3,6 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 import React, { useMemo } from 'react';
+import { ToastContainer } from 'react-toastify';
 
 import Gnb from '@/components/layout/Gnb';
 import Modal from '@/components/ui/modal/Modal';
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </React.Suspense>
         </div>
+        <ToastContainer />
         <Modal />
       </div>
     </QueryClientProvider>
