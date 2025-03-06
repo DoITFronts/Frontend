@@ -9,7 +9,7 @@ export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeeting
     ...(category && { category }),
   }).toString();
 
-  const response = await fetch(`/api/mypage/meetings?${queryParams}`);
+  const response = await fetch(`/api/v1/lightenings`);
 
   if (!response.ok) throw new Error(`API Error: ${response.status}`);
 
