@@ -1,3 +1,4 @@
+import mockMyProfile from '@/api/data/mockMyProfile';
 import { create } from 'zustand';
 
 interface ProfileStore extends User {

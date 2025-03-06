@@ -6,3 +6,5 @@ const mockMyProfile = {
   userBio: '안녕하세요, 저는 바보 돼지입니다',
   profileImage: '',
 };
+
+export default mockMyProfile;
