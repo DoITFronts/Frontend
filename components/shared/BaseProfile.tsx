@@ -17,7 +17,7 @@ function ProfileIcon({ size = 'medium', id }: ProfileIconProps) {
     return <img src={profileImage} alt="User Profile" className="rounded-full object-cover" />;
   }
 
-  const backgroundColor = theme === 'dark' ? '#BFBFBF' : '#F0F0F0';
+  const backgroundColor = theme === 'dark' ? '#595959' : '#F0F0F0';
   const pathColor = theme === 'dark' ? '#F0F0F0' : '#BFBFBF';
 
   const predefinedSizes = {
