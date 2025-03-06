@@ -110,7 +110,7 @@ export default function CreateMeetingModal() {
     }
 
     if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 3000 });
+      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 900 });
       return;
     }
 
