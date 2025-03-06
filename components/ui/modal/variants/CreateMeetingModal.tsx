@@ -127,7 +127,7 @@ export default function CreateMeetingModal() {
       const response = await createMeeting(meetingData);
 
       if (response.id) {
-        router.push(`/api/v1/lightenings/${response.id}`);
+        router.push(`/meeting/detail/${response.id}`);
 
         closeModal();
       }
