@@ -35,24 +35,23 @@ export default function MeetingInfo({
     <Card>
       <div className="relative">
         <div className="transition-shadow duration-300 hover:rounded-2xl hover:shadow-[0px_10px_20px_-5px_rgba(0,0,0,0.1)]">
-          <Link href={`/meeting/detail/${meetings.id}`} className="block">
-            <div className="flex h-[430px] flex-col justify-between overflow-hidden">
-              <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
-                <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-                <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-                <Image
-                  src={meetings.imageUrl || '/assets/card/example_image.png'}
-                  width={384}
-                  height={200}
-                  alt="thumbnail"
-                  className="w-full"
-                />
-                <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meetings.id} />
-                <div className="absolute right-[14px] top-[17.5px]">
-                  <Category type={reverseCategoryMap[meetings.category]} />
-                </div>
+          <div className="flex h-[430px] flex-col justify-between overflow-hidden">
+            <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
+              <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
+              <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
+              <Image
+                src={meetings.imageUrl || '/assets/card/example_image.png'}
+                width={384}
+                height={200}
+                alt="thumbnail"
+                className="w-full"
+              />
+              <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meetings.id} />
+              <div className="absolute right-[14px] top-[17.5px]">
+                <Category type={reverseCategoryMap[meetings.category]} />
               </div>
-
+            </div>
+            <Link href={`/meeting/detail/${meetings.id}`} className="block">
               <div className="flex h-[206px] flex-col justify-between p-4 pt-0">
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
@@ -79,8 +78,8 @@ export default function MeetingInfo({
                   </div>
                 </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </div>
 
           <div className="flex flex-row items-center p-4">
             <MeetingProgress

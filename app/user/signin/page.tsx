@@ -6,12 +6,11 @@ import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import { useSignin } from '@/hooks/useAuth';
 
 export default function Signin() {
-  const { mutate } = useSignin();
+  const { mutate, errorMessage } = useSignin();
 
   const handleSignin = (data: SignInRequestData) => {
     mutate(data);
@@ -35,7 +34,6 @@ export default function Signin() {
               required
             />
           </Form.Label>
-
           <Form.Label className="pb-10">
             <Form.LabelHeader className="pb-2">비밀번호</Form.LabelHeader>
             <Form.PasswordInput
@@ -44,6 +42,9 @@ export default function Signin() {
               autoComplete="password"
               required
             />
+            {errorMessage && (
+              <Form.ErrorMessage className="pt-3 pl-2">{errorMessage}</Form.ErrorMessage>
+            )}
           </Form.Label>
           <Form.Submit className="w-full">로그인</Form.Submit>
           <Button className="py-[10px] px-3 bg-[#fee500] hover:bg-[#fee500] active:bg-[#fee500] w-full mt-[18px] text-black text-base font-bold text-center">
