@@ -60,7 +60,7 @@ export default function Signin() {
           </Form.Label>
           <Form.Submit className="w-full">로그인</Form.Submit>
           <Button
-            className="py-[10px] px-3 bg-gradient-to-r from-black to-cyan-800  hover:bg-red-7 w-full mt-[18px] text-white text-base font-bold text-center"
+            className="py-[10px] px-3 bg-gradient-to-r from-black to-cyan-800 w-full mt-[18px] text-white text-base font-bold text-center"
             onClick={handleTestAccountClick}
           >
             ⚡️ 게스트 로그인 ⚡️
