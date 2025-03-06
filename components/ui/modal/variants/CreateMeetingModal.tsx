@@ -8,6 +8,7 @@ import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 import createMeeting from '@/api/meeting/createMeeting';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const meetingCategories = Object.values(MeetingCategory);
 
@@ -32,6 +33,7 @@ export default function CreateMeetingModal() {
   useEffect(() => {
     console.log(selectedPlace);
     console.log(deadlineDate);
+    console.log(imageFile?.size);
   }, [selectedPlace]);
 
   const router = useRouter();
@@ -107,7 +109,10 @@ export default function CreateMeetingModal() {
       return;
     }
 
-    // const apiType = typeMapping[meetingType];
+    if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 3000 });
+      return;
+    }
 
     const meetingData: CreateMeetingParams = {
       title: meetingName,
@@ -128,10 +133,11 @@ export default function CreateMeetingModal() {
 
       if (response.id) {
         router.push(`/meeting/detail/${response.id}`);
-
+        toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
         closeModal();
       }
     } catch (error) {
+      toast.error('에러가 발생했습니다.', { autoClose: 900 });
       console.error('Error: ', error);
     }
   };
