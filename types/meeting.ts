@@ -1,8 +1,8 @@
 export enum MeetingCategory {
-  GOURMET = "GOURMET",
-  CAFE = "CAFE",
-  BOARD_GAME = "BOARD_GAME",
-  ALCOHOL = "ALCOHOL",
+  GOURMET = 'GOURMET',
+  CAFE = 'CAFE',
+  BOARD_GAME = 'BOARD_GAME',
+  ALCOHOL = 'ALCOHOL',
 }
 
 export const categoryMap: Record<string, MeetingCategory> = {

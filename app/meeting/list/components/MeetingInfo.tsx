@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-
 import Button from '@/components/ui/Button';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
