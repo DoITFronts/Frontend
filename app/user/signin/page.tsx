@@ -7,28 +7,33 @@ import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
 import Link from 'next/link';
 
+import { useSignin } from '@/hooks/useAuth';
+
 export default function Signin() {
+  const { mutate, errorMessage } = useSignin();
+
+  const handleSignin = (data: SignInRequestData) => {
+    mutate(data);
+  };
+
   return (
-    <div className="bg-white py-52 flex justify-center items-center">
+    <div className="min-h-screen bg-white flex justify-center items-center">
       <div className="w-[402px]">
         <div className="flex justify-center items-center mb-[50px]">
-          <Image src={Logo} alt="번개팅 로고" width={147.6} height={32.4} />
+          <Link href="/">
+            <Image src={Logo} alt="번개팅 로고" width={147.6} height={32.4} />
+          </Link>
         </div>
-        <Form
-          onSubmit={() => {
-            console.log('로그인 폼 제출');
-          }}
-        >
-          <Form.Label className="pb-3">
+        <Form onSubmit={handleSignin}>
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">이메일</Form.LabelHeader>
             <Form.Input
-              name="email"
+              name="username"
               placeholder="이메일을 입력해 주세요"
               autoComplete="email"
               required
             />
           </Form.Label>
-
           <Form.Label className="pb-10">
             <Form.LabelHeader className="pb-2">비밀번호</Form.LabelHeader>
             <Form.PasswordInput
@@ -37,6 +42,9 @@ export default function Signin() {
               autoComplete="password"
               required
             />
+            {errorMessage && (
+              <Form.ErrorMessage className="pt-3 pl-2">{errorMessage}</Form.ErrorMessage>
+            )}
           </Form.Label>
           <Form.Submit className="w-full">로그인</Form.Submit>
           <Button className="py-[10px] px-3 bg-[#fee500] hover:bg-[#fee500] active:bg-[#fee500] w-full mt-[18px] text-black text-base font-bold text-center">

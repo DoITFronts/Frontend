@@ -4,20 +4,25 @@ import Form from '@/components/form/Form';
 import Logo from '@/public/assets/logo.svg';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSignup } from '@/hooks/useAuth';
 
 export default function Signup() {
+  const { mutate, errorMessage } = useSignup();
+
+  const handleSignup = (data: SignUpRequestData) => {
+    mutate(data);
+  };
+
   return (
-    <div className="bg-white py-52 flex justify-center items-center">
+    <div className="min-h-screen py-[5%] bg-white flex justify-center items-center">
       <div className="w-[402px]">
         <div className="flex justify-center items-center mb-[50px]">
-          <Image src={Logo} alt="번개팅 로고" width={147.6} height={32.4} />
+          <Link href="/">
+            <Image src={Logo} alt="번개팅 로고" width={148} height={33} />
+          </Link>
         </div>
-        <Form
-          onSubmit={(data: any): void => {
-            console.log('제출된 데이터:', data);
-          }}
-        >
-          <Form.Label className="pb-3">
+        <Form onSubmit={handleSignup}>
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">이름</Form.LabelHeader>
             <Form.Input
               name="name"
@@ -26,7 +31,7 @@ export default function Signup() {
               required
             />
           </Form.Label>
-          <Form.Label className="pb-3">
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">이메일</Form.LabelHeader>
             <Form.Input
               name="email"
@@ -34,8 +39,11 @@ export default function Signup() {
               autoComplete="email"
               required
             />
+            {errorMessage && (
+              <Form.ErrorMessage className="mt-1 pl-2">{errorMessage}</Form.ErrorMessage>
+            )}
           </Form.Label>
-          <Form.Label className="pb-3">
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">닉네임</Form.LabelHeader>
             <Form.Input
               name="nickname"
@@ -44,7 +52,7 @@ export default function Signup() {
               required
             />
           </Form.Label>
-          <Form.Label className="pb-3">
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">비밀번호</Form.LabelHeader>
             <Form.PasswordInput
               name="password"
@@ -53,7 +61,7 @@ export default function Signup() {
               required
             />
           </Form.Label>
-          <Form.Label className="pb-3">
+          <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">비밀번호 확인</Form.LabelHeader>
             <Form.PasswordInput
               name="passwordConfirmation"
@@ -63,11 +71,12 @@ export default function Signup() {
             />
           </Form.Label>
           <Form.Label className="pb-10">
-            <Form.LabelHeader className="pb-2">본인인증</Form.LabelHeader>
+            <Form.LabelHeader className="pb-2">생년월일</Form.LabelHeader>
             <Form.Input
-              name="birthVerify"
+              name="birth"
               placeholder="YYYY.MM.DD 생년월일을 입력해 주세요"
               required
+              type="date"
             />
           </Form.Label>
           <Form.Submit className="w-full">회원가입</Form.Submit>

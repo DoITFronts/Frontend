@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
+
 import Icon from '../shared/Icon';
 
 interface DropDownProps {
@@ -11,6 +12,8 @@ interface DropDownProps {
   onSelect: (selected: string) => void;
   /** 드롭다운 옵션 아이템에 적용될 클래스 */
   optionClassName?: string;
+  /** 선택된 옵션 값 */
+  selectedValue?: string;
 }
 
 /**
@@ -36,8 +39,13 @@ interface DropDownProps {
  * ```
  */
 
-export default function DropDown({ options, onSelect, optionClassName, trigger }: DropDownProps) {
-  const [selected, setSelected] = useState('');
+export default function DropDown({
+  options,
+  onSelect,
+  optionClassName,
+  trigger,
+  selectedValue,
+}: DropDownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -54,29 +62,32 @@ export default function DropDown({ options, onSelect, optionClassName, trigger }
   }, [isOpen]);
 
   const handleSelected = (option: string) => {
-    setSelected(option);
     setIsOpen(false);
     onSelect(option);
   };
 
   return (
     <div ref={dropdownRef} className="relative">
-      <button type="button" onClick={() => setIsOpen(!isOpen)} className={`flex items-center`}>
+      <button type="button" onClick={() => setIsOpen(!isOpen)}>
         {trigger}
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 w-fit mt-1 rounded-lg bg-white shadow-lg">
+        <div className="scrollbar-none absolute z-10 mt-1 max-h-60 w-fit overflow-y-scroll rounded-lg bg-white shadow-lg">
           {Array.isArray(options) ? (
             <ul>
-              {options.map((option, index) => (
-                <li
-                  key={`${option}-${index}`}
-                  onClick={() => onSelect(option)}
-                  className={optionClassName}
+              {options.map((option) => (
+                <div
+                  key={option}
+                  onClick={() => handleSelected(option)}
+                  className={`${optionClassName} ${
+                    selectedValue === option
+                      ? 'rounded-lg bg-black text-white hover:bg-black hover:text-white'
+                      : 'hover:bg-gray-100 hover:text-black'
+                  } cursor-pointer rounded-lg`}
                 >
                   {option}
-                </li>
+                </div>
               ))}
             </ul>
           ) : (

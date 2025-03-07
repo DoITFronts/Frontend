@@ -9,7 +9,7 @@ export default function ChipInfo({ datetime }: ChipInfoProps) {
 
   return (
     <div className="inline-flex h-[22px] w-fit items-center justify-center gap-[4px]">
-      <span className="font-pretendard text-[16px] font-semibold leading-[22px] text-[#BFBFBF]">
+      <span className="font-pretandard text-base font-semibold leading-snug text-[#bfbfbf]">
         {formattedDateTime}
       </span>
     </div>

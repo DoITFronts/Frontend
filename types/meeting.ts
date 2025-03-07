@@ -1,38 +1,75 @@
-export type MeetingInfo = {
-  id: string;
-  title: string;
-  imageUrl: string;
-  location: string;
-  datetime: string;
-  summary: string;
-  isLiked: boolean;
-  maxParticipants: number;
-  currentParticipants: number;
+export enum MeetingCategory {
+  GOURMET = "GOURMET",
+  CAFE = "CAFE",
+  BOARD_GAME = "BOARD_GAME",
+  ALCOHOL = "ALCOHOL",
+}
+
+export const categoryMap: Record<string, MeetingCategory> = {
+  맛집: MeetingCategory.GOURMET,
+  카페: MeetingCategory.CAFE,
+  보드게임: MeetingCategory.BOARD_GAME,
+  술: MeetingCategory.ALCOHOL,
 };
 
-export type Participant = {
+export interface Participant {
+  lighteningId: number;
+  userId: number;
+  name: string;
+  profileImage?: string;
+  isHost: boolean;
+}
+
+export interface Host {
   id: string;
   name: string;
+  email: string;
   profileImage: string;
-};
+  userBio: string;
+}
 
-export type Detail = {
+export interface Description {
+  id: string;
   title: string;
   description: string;
-};
+}
 
-export type Review = {
+export interface Meeting {
   id: string;
-  writer: string;
-  profileImage: string;
-  content: string;
-  date: string;
-  count: number;
-};
-
-export type MeetingDetail = {
-  info: MeetingInfo;
+  category: MeetingCategory;
+  title: string;
+  summary: string;
+  imageUrl: string;
+  targetAt: string;
+  city: string;
+  town: string;
+  participantCount: number;
+  capacity: number;
+  isLiked: boolean;
+  isJoined: boolean;
+  isConfirmed: boolean;
+  isCompleted: boolean;
   participants: Participant[];
-  details: Detail;
-  reviews: Review[];
-};
+}
+
+export interface MeetingDetail extends Meeting {
+  address: string;
+  latitude: number;
+  longitude: number;
+  host: Host;
+  description: Description;
+}
+
+export interface CreateMeetingParams {
+  title: string;
+  summary: string;
+  address: string;
+  city: string;
+  town: string;
+  category: MeetingCategory;
+  targetAt: string;
+  endAt: string;
+  capacity: number;
+  minCapacity: number;
+  image?: File;
+}
