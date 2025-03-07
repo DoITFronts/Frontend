@@ -17,6 +17,8 @@ import { Review } from '@/types/review';
 
 import ReviewItem from './ReviewItem';
 import ReviewStatus from './ReviewStatus';
+import SmallReviewSkeleton from './skeleton/ReviewSkeleton';
+import ReviewSkeleton from './skeleton/ReviewSkeleton';
 
 // Reviews 사용
 export interface ReviewListProps {
@@ -319,6 +321,8 @@ export default function ReviewList() {
       </div>
 
       {/* 무한 스크롤 트리거 */}
+      {/* TODO: isLoading에 따른 스켈레톤 처리 */}
+      <ReviewSkeleton />
       <div ref={observerRef} className="h-10" />
       {/* TODO: 무한 스크롤 처리 */}
       {/* {isFetchingNextPage && <MeetingCardLoading />} */}
