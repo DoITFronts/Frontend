@@ -6,8 +6,8 @@ import {
   HostInfoSkeleton,
   HostInfoError,
 } from '@/app/meeting/detail/components/skeleton/HostInfoSkeleton';
-import ProfileIcon from '@/components/shared/BaseProfile';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
+import ProfileIcon from "@/components/shared/BaseProfile";
 
 export default function MeetingHostInfo() {
   const { data: meeting, isLoading, error, refetch } = useMeetingDetail();
@@ -34,7 +34,7 @@ export default function MeetingHostInfo() {
                 className="rounded-full"
               />
             ) : (
-              <ProfileIcon theme="light" size={42} />
+              <ProfileIcon id={meeting.host?.id} size={42} />
             )}
           </div>
           <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-0.5">

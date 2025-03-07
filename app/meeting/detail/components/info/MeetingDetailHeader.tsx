@@ -1,6 +1,5 @@
-import Card from '../../../list/components/Card';
-
 import Tag from '@/components/ui/Tag';
+import Card from '../../../list/components/Card';
 
 interface MeetingDetailHeaderProps {
   title: string;
@@ -15,7 +14,7 @@ export default function MeetingDetailHeader({
 }: MeetingDetailHeaderProps) {
   return (
     <div className="flex flex-col gap-2">
-      <Tag />
+      <Tag deadline={datetime} />
       <Card.Title name={title} location={location} />
       <Card.ChipInfo datetime={datetime} />
     </div>

@@ -21,7 +21,7 @@ export interface Participant {
 }
 
 export interface Host {
-  id: string;
+  id: number;
   name: string;
   email: string;
   profileImage: string;
@@ -53,9 +53,8 @@ export interface Meeting {
 }
 
 export interface MeetingDetail extends Meeting {
+  placeName: string;
   address: string;
-  latitude: number;
-  longitude: number;
   host: Host;
   description: Description;
 }
