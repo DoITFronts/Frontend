@@ -23,7 +23,7 @@ export default function Page() {
       >
         <EditingIcon status={iconStatus} />
       </div>
-      <ProfileIcon theme="light" size={102} />
+      <ProfileIcon size={102} />
 
       <div className="w-auto h-auto flex flex-col gap-[2px]">
         <div className="w-auto h-auto flex justify-start gap-2.5">

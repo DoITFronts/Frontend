@@ -11,6 +11,12 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 const meetingCategories = Object.values(MeetingCategory);
+const categoryKoreanMap = {
+  [MeetingCategory.GOURMET]: '맛집',
+  [MeetingCategory.CAFE]: '카페',
+  [MeetingCategory.BOARD_GAME]: '보드게임',
+  [MeetingCategory.ALCOHOL]: '술',
+};
 
 export default function CreateMeetingModal() {
   const { closeModal } = useModalStore();
@@ -258,7 +264,7 @@ export default function CreateMeetingModal() {
                     <div
                       className={`text-sm ${meetingType === type ? 'text-white' : 'text-black-6'}`}
                     >
-                      {type}
+                      {categoryKoreanMap[type]}
                     </div>
                   </div>
                 </div>
