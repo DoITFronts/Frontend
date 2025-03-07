@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <link rel="preconnect" href="/" />
         <RootLayout>{children}</RootLayout>
-        <ToastContainer />
+        <ToastContainer limit={1} />
       </body>
     </html>
   );

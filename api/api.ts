@@ -1,5 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
-import { toast } from 'react-toastify';
+import { Bounce, toast } from 'react-toastify';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -46,6 +46,7 @@ axiosInstance.interceptors.response.use(
       position: 'top-center',
       theme: 'colored',
     });
+    toast.clearWaitingQueue(); //toast 여러번 눌렀을때, 뒤에 대기중인 toast 지우기 (1번만 실행되게)
 
     if (!error.response) {
       console.error('No response from server');
