@@ -1,27 +1,50 @@
 import Icon from '@/components/shared/Icon';
+import { useEffect, useState } from 'react';
 
-export default function ButonBox({
+export default function ButtonBox({
   isJoined,
   onClick,
   chatIconDisabled,
 }: {
   isJoined?: boolean;
-  onClick?: () => void;
+  onClick?: () => Promise<boolean>;
   chatIconDisabled?: boolean;
 }) {
+  const [localIsJoined, setLocalIsJoined] = useState(isJoined);
+
+  useEffect(() => {
+    setLocalIsJoined(isJoined);
+  }, [isJoined]);
+
+  const handleClick = async () => {
+    setLocalIsJoined(!localIsJoined);
+
+    if (onClick) {
+      try {
+        const success = await onClick();
+
+        if (!success) {
+          setLocalIsJoined(localIsJoined);
+        }
+      } catch {
+        setLocalIsJoined(localIsJoined);
+      }
+    }
+  };
+
   return (
     <div className="w-auto h-auto flex gap-3">
-      {isJoined ? (
+      {localIsJoined ? (
         <button
           className="px-5 py-2.5 bg-white text-black text-base font-semibold rounded-[12px] w-[100px] border border-black whitespace-nowrap"
-          onClick={onClick}
+          onClick={handleClick}
         >
           번개 취소
         </button>
       ) : (
         <button
           className="px-5 py-2.5 bg-black text-white text-base rounded-[12px] w-[100px] flex"
-          onClick={onClick}
+          onClick={handleClick}
         >
           번개 참여
         </button>

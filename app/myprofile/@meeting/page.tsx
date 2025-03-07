@@ -3,11 +3,8 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
-// import mockMeetings from '@/api/data/mockMeetings.md';
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
 import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
