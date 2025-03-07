@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import ProfileIcon from '@/components/shared/BaseProfile';
 import { useSignout } from '@/hooks/useAuth';
+import { useSetUser } from '@/hooks/useUserInfo';
 import Logo from '@/public/assets/mainLogo/logoYW.svg';
+import userStore from '@/store/userStore';
 
-import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
 
 function NavItem({
@@ -35,6 +37,8 @@ function NavItem({
 }
 
 export default function GNB() {
+  useSetUser();
+  const { userId } = userStore();
   const pathname = usePathname();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
@@ -82,7 +86,7 @@ export default function GNB() {
           {isLoggedIn ? (
             // TODO: user 개인 프로필 이미지 분기처리
             <DropDown
-              trigger={<Icon path="profile/userProfileDefault" width="37px" height="37px" />}
+              trigger={<ProfileIcon id={userId ? Number(userId) : undefined} />}
               options={['마이페이지', '로그아웃']}
               onSelect={handleDropDownItem}
               optionClassName="w-[110px] px-5 py-3 font-['Pretendard'] text-md font-semibold text-center hover:bg-yellow-5"

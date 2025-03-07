@@ -3,7 +3,7 @@ import ProfileIcon from '@/components/shared/BaseProfile';
 export default function Page() {
   return (
     <div className="w-full h-auto flex gap-6 items-center">
-      <ProfileIcon theme="light" size={102} />
+      <ProfileIcon size={102} />
       <div className="w-auto h-auto flex flex-col gap-[2px]">
         <div className="w-auto h-auto flex justify-start gap-2.5">
           <span className="text-black font-pretandard font-bold text-2xl">수줍은 펭귄</span>

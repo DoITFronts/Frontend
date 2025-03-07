@@ -21,7 +21,7 @@ export default function ReviewItem({ count, content, username, date }: ReviewIte
         </div>
         <div className="inline-flex h-5 items-center justify-start gap-1.5">
           <div className="flex items-center justify-start gap-1.5">
-            <ProfileIcon theme="dark" size="small" />
+            <ProfileIcon size="small" />
             <div className="font-['Pretendard'] text-xs font-semibold leading-none text-[#bfbfbf]">
               {username}
             </div>
