@@ -11,7 +11,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const baseStyle =
-  "flex items-center justify-center rounded-xl font-semibold font-['Pretendard'] overflow-hidden gap-2.5 text-center transition-all";
+  "cursor-pointer flex items-center justify-center rounded-xl font-semibold font-['Pretendard'] overflow-hidden gap-2.5 text-center transition-all";
 
 const styleByColor: Record<ButtonColor, string> = {
   filled: 'text-white bg-black hover:bg-black-11 active:bg-black-8 disabled:bg-black-6',

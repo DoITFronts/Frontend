@@ -1,3 +1,8 @@
+import {
+  MeetingCardError,
+  MeetingCardLoading,
+} from '../meeting/list/components/skeleton/MeetingCardSkeleton';
+
 export default function Liked() {
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
@@ -12,6 +17,18 @@ export default function Liked() {
           </div>
         </div>
       </div>
+      {/* 임시 화면 (스켈레톤) */}
+      <div className="grid grid-cols-3 gap-4">
+        {Array.from({ length: 6 }).map((_, index) => (
+          <MeetingCardLoading key={index} />
+        ))}
+      </div>
+      {/* {isLoading && <MeetingCardLoading />}
+        {isError && <MeetingCardError />}
+        {!isLoading && !isError && meetings.length === 0 && (
+          <EmptyMessage firstLine="아직 찜한 번개가 없어요" secondLine="참여하고 싶은 번개를 찜해보세요!" />
+        )}
+        {!isLoading && !isError && ()} */}
     </div>
   );
 }
