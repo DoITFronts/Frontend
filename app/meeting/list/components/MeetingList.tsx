@@ -1,18 +1,18 @@
 'use client';
 
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import toggleLike from '@/api/meeting/toggleLike';
 import Icon from '@/components/shared/Icon';
 import Button from '@/components/ui/Button';
 import FilterDropdown from '@/components/ui/card/FilterDropdown';
 import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
+import useLikeMutation from '@/hooks/useLikeMutation';
 import useMeeting from '@/hooks/useMeeting';
 import {
   defaultFilter,
@@ -33,7 +33,6 @@ interface InitialMeetingsProps {
 }
 
 export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
-  const queryClient = useQueryClient();
   const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -128,40 +127,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     updateSearchParams('filter', selected);
   };
 
-  // 좋아요 Mutation
-  const likeMutation = useMutation({
-    mutationFn: (meetingId: string) => toggleLike(meetingId),
-    onMutate: async (meetingId: string) => {
-      await queryClient.cancelQueries({ queryKey: ['meetings'] });
-
-      // 기존 데이터 가져오기
-      const prevData = queryClient.getQueryData<InfiniteData<Meeting[]>>(['meetings']);
-
-      // 새로운 좋아요 상태 적용 (낙관적 업데이트)
-      queryClient.setQueryData(['meetings'], (oldData: any) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: Meeting[]) =>
-            page.map((meeting) =>
-              meeting.id === meetingId ? { ...meeting, isLiked: !meeting.isLiked } : meeting,
-            ),
-          ),
-        };
-      });
-
-      return { prevData };
-    },
-    onError: (_err, _meetingId, context) => {
-      if (context?.prevData) {
-        queryClient.setQueryData(['meetings'], context.prevData);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
-    },
-  });
-
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeeting({
     category: selectedCategory,
@@ -204,21 +169,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     [selectedFirstLocation],
   );
 
-  // 번개 생성 모달 핸들러
-  const handleClickCreateMeeting = () => {
-    openModal('create');
-  };
-
-  // 캘린더 모달 핸들러
-  const handleClickCalendar = () => {
-    openModal('calender');
-  };
-
-  // 좋아요 버튼 클릭 핸들러
-  const handleClickLike = (meetingId: string) => {
-    likeMutation.mutate(meetingId);
-  };
-
   // 날짜 필터링 초기화 클릭 핸들러
   const handleResetDate = () => {
     setSelectedDate(null);
@@ -243,7 +193,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
             맛집 탐방 같이 갈 사람, 누구 없나요?
           </div>
         </div>
-        <Button color="white" size="sm" type="submit" onClick={handleClickCreateMeeting}>
+        <Button color="white" size="sm" type="submit" onClick={() => openModal('create')}>
           번개 만들기
         </Button>
       </div>
@@ -309,7 +259,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
                 </div>
               </div>
             }
-            onSelect={handleClickCalendar}
+            onSelect={() => openModal('calender')}
           />
         </div>
         <DropDown
@@ -341,7 +291,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <MeetingItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => handleClickLike(meeting.id)}
+                onClick={() => useLikeMutation}
               />
             ))}
           </div>
