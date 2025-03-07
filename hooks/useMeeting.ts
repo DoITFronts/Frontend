@@ -33,13 +33,16 @@ const useMeeting = ({
       };
     },
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages, lastPageParam) =>
-      lastPage?.lighteningResponses.length === per_page ? lastPageParam + 1 : undefined,
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      const lighteningResponses = lastPage?.lighteningResponses ?? []; // `null`일 경우 빈 배열로 처리
+      const hasMore = lighteningResponses.length === per_page; // `per_page` 비교
+      return hasMore ? lastPageParam + 1 : undefined;
+    },
 
     initialData: {
       pages: [
         {
-          lighteningResponses: initialMeetings,
+          lighteningResponses: initialMeetings ?? [],
         },
       ],
       pageParams: [1],

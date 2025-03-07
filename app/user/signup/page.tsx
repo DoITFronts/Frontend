@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { useSignup } from '@/hooks/useAuth';
 
 export default function Signup() {
-  const { mutate } = useSignup();
+  const { mutate, errorMessage } = useSignup();
 
   const handleSignup = (data: SignUpRequestData) => {
     mutate(data);
@@ -39,6 +39,9 @@ export default function Signup() {
               autoComplete="email"
               required
             />
+            {errorMessage && (
+              <Form.ErrorMessage className="mt-1 pl-2">{errorMessage}</Form.ErrorMessage>
+            )}
           </Form.Label>
           <Form.Label className="pb-6">
             <Form.LabelHeader className="pb-2">닉네임</Form.LabelHeader>
