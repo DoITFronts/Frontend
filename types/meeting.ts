@@ -63,7 +63,6 @@ export interface CreateMeetingParams {
   title: string;
   summary: string;
   address: string;
-  placeName: string;
   city: string;
   town: string;
   category: MeetingCategory;
