@@ -1,4 +1,5 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
+import { toast } from 'react-toastify';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -38,6 +39,14 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
+    //error Toast 띄우기
+    toast.error(error.response?.data?.message || '알 수 없는 오류', {
+      hideProgressBar: true,
+      autoClose: 900,
+      position: 'top-center',
+      theme: 'colored',
+    });
+
     if (!error.response) {
       console.error('No response from server');
       return Promise.reject(error);
