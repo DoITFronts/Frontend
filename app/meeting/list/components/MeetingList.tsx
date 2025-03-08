@@ -151,7 +151,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       (entries) => {
         if (entries[0].isIntersecting) fetchNextPage();
       },
-      { threshold: 1.0 },
+      { rootMargin: '150px', threshold: 0.3 },
     );
 
     observer.observe(observerRef.current);
@@ -289,6 +289,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
                 onClick={() => useLikeMutation}
+                priority={index < 10}
               />
             ))}
           </div>
