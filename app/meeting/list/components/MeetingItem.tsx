@@ -15,7 +15,7 @@ interface Props {
 export default function MeetingItem({ meeting, onClick }: Props) {
   const { ref, inView } = useInView({
     threshold: 0.1,
-    triggerOnce: false,
+    triggerOnce: true,
   });
 
   return (
