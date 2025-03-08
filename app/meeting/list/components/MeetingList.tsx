@@ -55,9 +55,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     setSelectedCategory(searchParams.get('category') || '전체');
     setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
     setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
-    setSelectedDate(
-      searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
-    );
+
+    const targetAtParam = searchParams.get('targetAt');
+    setSelectedDate(targetAtParam ? new Date(targetAtParam) : null);
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
@@ -107,15 +107,12 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   // 날짜 변경 핸들러
   const handleDateChange = (date: Date | null) => {
     if (date?.toDateString() === selectedDate?.toDateString()) {
-      setSelectedDate(null);
       updateSearchParams('targetAt', '');
     } else if (date) {
       const fixedDate = new Date(date);
-      fixedDate.setHours(12, 0, 0, 0); // **12시로 고정** (UTC 보정용)
-      setSelectedDate(fixedDate);
-      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`); // ISO 포맷 유지
+      fixedDate.setHours(12, 0, 0, 0); // **12시로 고정** (UTC 보정)
+      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`);
     } else {
-      setSelectedDate(null);
       updateSearchParams('targetAt', '');
     }
   };
