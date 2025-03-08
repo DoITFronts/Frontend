@@ -48,7 +48,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
       <Card>
         <div className="relative">
           <div className="transition-shadow duration-300 hover:shadow-lg">
-            <Link href={`/meeting/detail/${meeting.id}`} className="block">
+            <Link href={`/meeting/detail/${meeting.id}`} className="block" prefetch={false}>
               <div className="flex h-[430px] flex-col justify-between overflow-hidden">
                 {/* 이미지 */}
                 <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
@@ -105,7 +105,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
                 isConfirmed={meeting.isConfirmed}
                 isCompleted={meeting.isCompleted}
               />
-              <Link href={`/meeting/detail/${meeting.id}`} passHref>
+              <Link href={`/meeting/detail/${meeting.id}`} passHref prefetch={false}>
                 <Button className="ml-6" disabled={meeting.isCompleted}>
                   {meeting.isCompleted ? '마감' : '번개 참여'}
                 </Button>
