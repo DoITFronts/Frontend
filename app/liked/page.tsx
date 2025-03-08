@@ -18,7 +18,7 @@ export default function Liked() {
         </div>
       </div>
       {/* 임시 화면 (스켈레톤) */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid  xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-4">
         {Array.from({ length: 6 }).map((_, index) => (
           <MeetingCardLoading key={index} />
         ))}
