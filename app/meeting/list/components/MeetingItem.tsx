@@ -53,6 +53,8 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
                 {/* 이미지 */}
                 <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
                   <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                  <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
+                  <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
                   <Image
                     src={meeting.imageUrl || '/assets/card/example_image.png'}
                     width={384}
