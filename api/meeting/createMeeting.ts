@@ -8,13 +8,14 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
     title: meetingData.title,
     summary: meetingData.summary,
     address: meetingData.address,
+    placeName: meetingData.placeName,
     city: meetingData.city,
     town: meetingData.town,
     category: meetingData.category,
     targetAt: meetingData.targetAt,
     endAt: meetingData.endAt,
     capacity: meetingData.capacity,
-    // minCapacity: meetingData.minCapacity,
+    minCapacity: meetingData.minCapacity,
   };
   const blob = new Blob([JSON.stringify(lightening)], { type: 'application/json' });
   formData.append('lightening', blob);

@@ -9,6 +9,8 @@ interface PlaceSearchProps {
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   }) => void;
 }
 
@@ -18,6 +20,8 @@ interface PlaceResult {
   address_name: string;
   road_address_name: string;
   category_name: string;
+  x: string;
+  y: string;
 }
 
 const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
@@ -75,6 +79,8 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
       address: place.address_name,
       city: addressParts[0] || '',
       town: addressParts[1] || '',
+      latitude: place.y,
+      longitude: place.x,
     });
 
     setKeyword(place.place_name);
