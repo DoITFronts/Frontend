@@ -11,6 +11,8 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
     placeName: meetingData.placeName,
     city: meetingData.city,
     town: meetingData.town,
+    latitude: meetingData.latitude,
+    longitude: meetingData.longitude,
     category: meetingData.category,
     targetAt: meetingData.targetAt,
     endAt: meetingData.endAt,
