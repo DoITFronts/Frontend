@@ -12,8 +12,8 @@ import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import useLikeToggle from '@/hooks/useLikeToggle';
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
 import { Meeting } from '@/types/meeting';
+import { cityMap } from '@/types/regions';
 
 import HostInfo from '../../components/HostInfo';
 

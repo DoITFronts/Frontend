@@ -1,5 +1,5 @@
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
+import { cityMap } from '@/types/regions';
 
 const fetchMeeting = async ({
   category,
@@ -7,14 +7,16 @@ const fetchMeeting = async ({
   town,
   targetAt,
   page,
-  per_page,
+  size,
+  order,
 }: {
   category: string;
   city: string;
   town: string;
   targetAt: Date | null;
   page?: number;
-  per_page?: number;
+  size?: number;
+  order?: string;
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -38,6 +40,10 @@ const fetchMeeting = async ({
 
   if (page) {
     queryParams.append('page', page.toString());
+  }
+
+  if (order) {
+    queryParams.append('order', order);
   }
 
   try {
