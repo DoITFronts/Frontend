@@ -1,17 +1,22 @@
 'use client';
 
+import { fetchProfile } from '@/api/myPage/myPage';
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
 import ProfileIcon from '@/components/shared/BaseProfile';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
 import { hover } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
   const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
-
-  const { nickname, email, userBio, profileImage } = useProfileStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const { nickname, email, description, imageUrl } = useProfileStore();
   const { openModal } = useModalStore();
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
   return (
     <div className="w-full h-auto flex gap-6 items-center relative">
@@ -30,7 +35,7 @@ export default function Page() {
           <span className="text-black font-pretandard font-bold text-2xl">{nickname}</span>
           <span className="text-black-6 font-pretandard font-medium text-lg">{email}</span>
         </div>
-        <div className="w-auto h-auto text-black-10 font-pretandard text-xl">{userBio}</div>
+        <div className="w-auto h-auto text-black-10 font-pretandard text-xl">{description}</div>
       </div>
     </div>
   );
