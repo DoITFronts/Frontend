@@ -48,7 +48,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
-  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('filter') || '');
+  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -58,6 +58,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
     const targetAtParam = searchParams.get('targetAt');
     setSelectedDate(targetAtParam ? new Date(targetAtParam) : null);
+    setSelectedFilter(searchParams.get('order') || '');
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
@@ -118,10 +119,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   };
 
   // 마감 임박, 참여 인원 필터링 클릭 핸들러
-  // TODO: 실제 api에 맞는 params 참조
   const handleSelectFilter = (selected: string) => {
     setSelectedFilter(selected);
-    updateSearchParams('filter', selected);
+    updateSearchParams('order', selected);
   };
 
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
@@ -130,8 +130,9 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     city: selectedFirstLocation,
     town: selectedSecondLocation,
     targetAt: selectedDate,
-    per_page: 10,
+    size: 10,
     initialMeetings,
+    order: selectedFilter,
   });
 
   // 번개 데이터 통합
@@ -175,7 +176,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   // 마감 임박, 참여 인원 필터링 초기화 클릭 핸들러
   const handleResetFilter = () => {
     setSelectedFilter('');
-    updateSearchParams('filter', '');
+    updateSearchParams('order', '');
   };
 
   return (
@@ -252,7 +253,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
                 {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
                 <div onClick={handleResetDate}>
-                  <Icon path={selectedDate ? 'x' : 'chevron_down'} />
+                  <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
                 </div>
               </div>
             }
@@ -267,7 +268,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
             <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
               {selectedFilter || defaultFilter}
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
-                <Icon path={selectedFilter ? 'x' : 'chevron_down'} />
+                <Icon path={selectedFilter ? 'exit' : 'chevron_down'} />
               </div>
             </div>
           }

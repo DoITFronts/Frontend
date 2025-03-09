@@ -1,4 +1,5 @@
 import categoryMap from '@/types/categoryMap';
+import orderMap from '@/types/orderMap';
 import { cityMap } from '@/types/regions';
 
 const fetchMeeting = async ({
@@ -43,7 +44,7 @@ const fetchMeeting = async ({
   }
 
   if (order) {
-    queryParams.append('order', order);
+    queryParams.append('order', orderMap[order] ?? order);
   }
 
   try {

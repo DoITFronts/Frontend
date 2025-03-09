@@ -12,12 +12,14 @@ export default async function Page({ searchParams }: PageProps) {
   const city = params?.location_1 ?? '';
   const town = params?.location_2 ?? '';
   const targetAt = params?.targetAt ? new Date(params.targetAt) : null;
+  const order = params?.order ?? '';
 
   const initialMeetings = await fetchMeeting({
     category,
     city,
     town,
     targetAt,
+    order,
   });
 
   return <MeetingList initialMeetings={initialMeetings} />;

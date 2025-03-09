@@ -1,5 +1,5 @@
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
+import { cityMap } from '@/types/regions';
 
 const fetchReviews = async ({
   category,
