@@ -11,6 +11,12 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 const meetingCategories = Object.values(MeetingCategory);
+const categoryKoreanMap = {
+  [MeetingCategory.GOURMET]: '맛집',
+  [MeetingCategory.CAFE]: '카페',
+  [MeetingCategory.BOARD_GAME]: '보드게임',
+  [MeetingCategory.ALCOHOL]: '술',
+};
 
 export default function CreateMeetingModal() {
   const { closeModal } = useModalStore();
@@ -28,6 +34,8 @@ export default function CreateMeetingModal() {
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   } | null>(null);
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
@@ -56,6 +64,8 @@ export default function CreateMeetingModal() {
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   }) => {
     setSelectedPlace(place);
     setMeetingPlace(place.placeName); // 기존 상태 업데이트
@@ -118,8 +128,11 @@ export default function CreateMeetingModal() {
       title: meetingName,
       summary: meetingSummary,
       address: selectedPlace.address,
+      placeName: selectedPlace.placeName,
       city: selectedPlace.city,
       town: selectedPlace.town,
+      latitude: selectedPlace.latitude,
+      longitude: selectedPlace.longitude,
       category: meetingType,
       targetAt: meetingDate.toISOString(),
       endAt: deadlineDate.toISOString(),
@@ -129,6 +142,7 @@ export default function CreateMeetingModal() {
     };
 
     try {
+      console.log(meetingData);
       const response = await createMeeting(meetingData);
 
       if (response.id) {
@@ -258,7 +272,7 @@ export default function CreateMeetingModal() {
                     <div
                       className={`text-sm ${meetingType === type ? 'text-white' : 'text-black-6'}`}
                     >
-                      {type}
+                      {categoryKoreanMap[type]}
                     </div>
                   </div>
                 </div>

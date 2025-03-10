@@ -1,5 +1,6 @@
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
+import orderMap from '@/types/orderMap';
+import { cityMap } from '@/types/regions';
 
 const fetchMeeting = async ({
   category,
@@ -7,14 +8,16 @@ const fetchMeeting = async ({
   town,
   targetAt,
   page,
-  per_page,
+  size,
+  order,
 }: {
   category: string;
   city: string;
   town: string;
   targetAt: Date | null;
   page?: number;
-  per_page?: number;
+  size?: number;
+  order?: string;
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -47,6 +50,10 @@ const fetchMeeting = async ({
   //로그인 된 상태 -> 토큰이랑 같이 보내기
   if (token) {
     headers['Authorization'] = `${token}`;
+  }
+
+  if (order) {
+    queryParams.append('order', orderMap[order] ?? order);
   }
 
   try {

@@ -1,5 +1,3 @@
-import { MeetingCategory } from "@/types/meeting";
-
 export interface Review {
   id: string;
   writer: string;
@@ -12,13 +10,17 @@ export interface Review {
 export type ReviewList = Review[];
 
 export interface Reviews {
-  id: string;
-  category: MeetingCategory;
-  summary: string;
-  imageUrl: string;
-  targetAt: string;
+  reviewId: number;
+  reviewContent: string;
+  rating: number;
+  createdAt: string;
+  lighteningId: number;
+  title: string;
   city: string;
   town: string;
-  participantCount: number;
-  review: Review;
+  lighteningImageUrl: string;
+  targetAt: string;
+  userId: number;
+  nickname: string;
+  userImageUrl: string;
 }

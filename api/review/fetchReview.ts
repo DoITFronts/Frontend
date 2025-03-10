@@ -1,26 +1,30 @@
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
+import orderMap from '@/types/orderMap';
+import { cityMap } from '@/types/regions';
 
-const fetchReviews = async ({
-  category,
+const fetchReview = async ({
+  category = '술',
   city,
   town,
   targetAt,
   page,
   size,
+  order,
 }: {
-  category: string;
+  category?: string;
   city: string;
   town: string;
   targetAt: Date | null;
   page?: number;
   size?: number;
+  order?: string;
 }) => {
   const queryParams = new URLSearchParams();
 
-  if (category && category !== '전체') {
-    queryParams.append('category', categoryMap[category] ?? category);
-  }
+  // category가 빈 문자열인 경우 기본값으로 설정
+  const finalCategory = !category || category.trim() === '' ? '술' : category;
+
+  queryParams.append('category', categoryMap[finalCategory] ?? finalCategory);
 
   if (city && city !== '지역 전체') {
     queryParams.append('city', cityMap[city] ?? city);
@@ -40,10 +44,13 @@ const fetchReviews = async ({
     queryParams.append('page', page.toString());
   }
 
+  if (order) {
+    queryParams.append('order', orderMap[order] ?? order);
+  }
+
   try {
-    // TODO: 실제 api 주소로 변경
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings?${queryParams.toString()}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/reviews/all?${queryParams.toString()}`,
     );
 
     if (!response.ok) {
@@ -57,4 +64,4 @@ const fetchReviews = async ({
   }
 };
 
-export default fetchReviews;
+export default fetchReview;

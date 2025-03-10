@@ -7,18 +7,20 @@ const useMeeting = ({
   city,
   town,
   targetAt,
-  per_page,
+  size,
   initialMeetings,
+  order,
 }: {
   category: string;
   city: string;
   town: string;
   targetAt: Date | null;
-  per_page: number;
+  size: number;
   initialMeetings: any[];
+  order?: string;
 }) =>
   useInfiniteQuery({
-    queryKey: ['meetings', category, city, town, targetAt],
+    queryKey: ['meetings', category, city, town, targetAt, size, order],
     queryFn: async ({ pageParam = 1 }) => {
       const response = await fetchMeeting({
         category,
@@ -26,16 +28,17 @@ const useMeeting = ({
         town,
         targetAt,
         page: pageParam, // ✅ 페이지 번호 추가
-        per_page,
+        size,
+        order,
       });
       return {
-        lighteningResponses: response.lighteningResponses,
+        lighteningResponses: response?.lighteningResponses ?? [],
       };
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
       const lighteningResponses = lastPage?.lighteningResponses ?? []; // `null`일 경우 빈 배열로 처리
-      const hasMore = lighteningResponses.length === per_page; // `per_page` 비교
+      const hasMore = lighteningResponses.length === size; // `size` 비교
       return hasMore ? lastPageParam + 1 : undefined;
     },
 
