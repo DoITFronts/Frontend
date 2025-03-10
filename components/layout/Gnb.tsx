@@ -11,6 +11,7 @@ import Logo from '@/public/assets/mainLogo/logoYW.svg';
 import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
 import useLikeCountStore from '@/store/useLikeCountStore';
+import useLikedCount from '@/hooks/useLikeCount';
 
 function NavItem({
   href,
@@ -40,6 +41,7 @@ export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { mutate: logout } = useSignout();
+  useLikedCount(); //좋아요 개수 동기화
 
   // 로그인 여부 체크하기
   useEffect(() => {

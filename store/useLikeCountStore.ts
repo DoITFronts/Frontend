@@ -3,6 +3,7 @@ import { create } from 'zustand';
 interface LikeStore {
   likedMeetings: Set<string>;
   toggleLike: (meetingId: string) => void;
+  setLikedMeetings: (meetingIds: string[]) => void;
   likedCount: () => number;
 }
 
@@ -17,7 +18,9 @@ const useLikeCountStore = create<LikeStore>((set, get) => ({
       return { likedMeetings: newLikes };
     }),
 
-  likedCount: () => get().likedMeetings.size, // 좋아요 개수 반환
+  setLikedMeetings: (meetingIds) => set({ likedMeetings: new Set(meetingIds) }), // 서버 데이터 동기화
+
+  likedCount: () => get().likedMeetings.size,
 }));
 
 export default useLikeCountStore;
