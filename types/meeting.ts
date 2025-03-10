@@ -1,8 +1,8 @@
 export enum MeetingCategory {
-  GOURMET = "GOURMET",
-  CAFE = "CAFE",
-  BOARD_GAME = "BOARD_GAME",
-  ALCOHOL = "ALCOHOL",
+  GOURMET = 'GOURMET',
+  CAFE = 'CAFE',
+  BOARD_GAME = 'BOARD_GAME',
+  ALCOHOL = 'ALCOHOL',
 }
 
 export const categoryMap: Record<string, MeetingCategory> = {
@@ -21,7 +21,7 @@ export interface Participant {
 }
 
 export interface Host {
-  id: string;
+  id: number;
   name: string;
   email: string;
   profileImage: string;
@@ -53,9 +53,8 @@ export interface Meeting {
 }
 
 export interface MeetingDetail extends Meeting {
+  placeName: string;
   address: string;
-  latitude: number;
-  longitude: number;
   host: Host;
   description: Description;
 }
@@ -66,6 +65,9 @@ export interface CreateMeetingParams {
   address: string;
   city: string;
   town: string;
+  placeName: string;
+  latitude: string;
+  longitude: string;
   category: MeetingCategory;
   targetAt: string;
   endAt: string;

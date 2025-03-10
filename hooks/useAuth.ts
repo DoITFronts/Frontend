@@ -28,7 +28,16 @@ export const useSignin = () => {
         // 토큰 디코딩
         const decodedToken: any = jwtDecode(accessToken);
         console.log('디코딩된 유저 정보:', decodedToken);
-        localStorage.setItem('유저 정보', JSON.stringify(decodedToken));
+        const userInfo = {
+          email: decodedToken.email,
+          exp: decodedToken.exp,
+          iat: decodedToken.iat,
+          nickname: decodedToken.nickname,
+          sub: decodedToken.sub,
+        };
+        localStorage.setItem('email', userInfo.email);
+        localStorage.setItem('nickname', userInfo.nickname);
+        localStorage.setItem('sub', userInfo.sub);
 
         toast.success('성공적으로 로그인 되었습니다 :)', { hideProgressBar: true, autoClose: 900 });
         setErrorMessage(null);
@@ -37,7 +46,6 @@ export const useSignin = () => {
     },
     onError: (error: any) => {
       console.error('로그인 실패:', error.response?.data || error.message);
-      toast.error('로그인에 실패했습니다.');
       if (error.response?.status === 401) {
         setErrorMessage('이메일 또는 비밀번호가 올바르지 않습니다.');
       } else {
@@ -66,7 +74,7 @@ export const useSignup = () => {
     },
     onError: (error: any) => {
       console.error('회원가입 실패:', error);
-      toast.error('회원가입에 실패했습니다.');
+      toast.error('회원가입에 실패했습니다.', { hideProgressBar: true, autoClose: 900 });
       if (error.response?.status === 400) {
         setErrorMessage('이미 가입되어있는 이메일입니다.');
       }
@@ -87,11 +95,11 @@ export const useSignout = () => {
       // localStorage.removeItem('accessToken');
       Cookies.remove('accessToken');
 
-      toast.success('로그아웃 되었습니다.', { autoClose: 900 });
+      toast.success('로그아웃 되었습니다.', { hideProgressBar: true, autoClose: 900 });
       router.push('/');
     },
     onError: () => {
-      toast.error('로그아웃 실패', { autoClose: 900 });
+      toast.error('로그아웃 실패', { hideProgressBar: true, autoClose: 900 });
     },
   });
 };

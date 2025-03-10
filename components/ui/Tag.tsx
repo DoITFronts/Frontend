@@ -1,4 +1,27 @@
-export default function Tag({ text = '오늘 마감!' }: { text?: string }) {
+import { differenceInDays } from 'date-fns';
+import { useEffect, useState } from 'react';
+
+interface TagProps {
+  deadline: string;
+}
+
+export default function Tag({ deadline }: TagProps) {
+  const [tagText, setTagText] = useState<string>('오늘 마감!');
+
+  useEffect(() => {
+    const now = new Date();
+    const endDate = new Date(deadline);
+    const daysLeft = differenceInDays(endDate, now);
+
+    if (daysLeft < 0) {
+      setTagText('마감 종료');
+    } else if (daysLeft === 0) {
+      setTagText('오늘 마감!');
+    } else {
+      setTagText(`${daysLeft}일 후 마감!`);
+    }
+  }, [deadline]);
+
   return (
     <div className="inline-flex h-[28px] w-fit items-center justify-center gap-[10px] overflow-hidden rounded-[24px] bg-[#ff5e76] px-[10px] py-[4px]">
       <div className="flex items-center gap-[4px]">
@@ -19,7 +42,7 @@ export default function Tag({ text = '오늘 마감!' }: { text?: string }) {
             />
           </svg>
         </div>
-        <div className="font-pretendard text-[12px] leading-[20px] text-white">{text}</div>
+        <div className="font-pretendard text-[12px] leading-[20px] text-white">{tagText}</div>
       </div>
     </div>
   );

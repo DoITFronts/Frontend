@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
         hostname: 'codeit-doit.s3.ap-northeast-2.amazonaws.com',
       },
     ],
+    minimumCacheTTL: 86400,
   },
   headers: async () => [
     {

@@ -4,12 +4,19 @@ import { useEffect, useState } from 'react';
 import CustomDatePicker from '../datePicker';
 import Button from '@/components/ui/Button';
 import Icon from '@/components/shared/Icon';
-import {CreateMeetingParams, MeetingCategory} from '@/types/meeting';
+import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 import createMeeting from '@/api/meeting/createMeeting';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const meetingCategories = Object.values(MeetingCategory);
+const categoryKoreanMap = {
+  [MeetingCategory.GOURMET]: '맛집',
+  [MeetingCategory.CAFE]: '카페',
+  [MeetingCategory.BOARD_GAME]: '보드게임',
+  [MeetingCategory.ALCOHOL]: '술',
+};
 
 export default function CreateMeetingModal() {
   const { closeModal } = useModalStore();
@@ -27,11 +34,14 @@ export default function CreateMeetingModal() {
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   } | null>(null);
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
     console.log(selectedPlace);
     console.log(deadlineDate);
+    console.log(imageFile?.size);
   }, [selectedPlace]);
 
   const router = useRouter();
@@ -54,6 +64,8 @@ export default function CreateMeetingModal() {
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   }) => {
     setSelectedPlace(place);
     setMeetingPlace(place.placeName); // 기존 상태 업데이트
@@ -107,14 +119,20 @@ export default function CreateMeetingModal() {
       return;
     }
 
-    // const apiType = typeMapping[meetingType];
+    if (imageFile && imageFile.size > 5 * 1024 * 1024) {
+      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 900 });
+      return;
+    }
 
     const meetingData: CreateMeetingParams = {
       title: meetingName,
       summary: meetingSummary,
       address: selectedPlace.address,
+      placeName: selectedPlace.placeName,
       city: selectedPlace.city,
       town: selectedPlace.town,
+      latitude: selectedPlace.latitude,
+      longitude: selectedPlace.longitude,
       category: meetingType,
       targetAt: meetingDate.toISOString(),
       endAt: deadlineDate.toISOString(),
@@ -124,14 +142,16 @@ export default function CreateMeetingModal() {
     };
 
     try {
+      console.log(meetingData);
       const response = await createMeeting(meetingData);
 
       if (response.id) {
-        router.push(`/api/v1/lightenings/${response.id}`);
-
+        router.push(`/meeting/detail/${response.id}`);
+        toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
         closeModal();
       }
     } catch (error) {
+      toast.error('에러가 발생했습니다.', { autoClose: 900 });
       console.error('Error: ', error);
     }
   };
@@ -252,7 +272,7 @@ export default function CreateMeetingModal() {
                     <div
                       className={`text-sm ${meetingType === type ? 'text-white' : 'text-black-6'}`}
                     >
-                      {type}
+                      {categoryKoreanMap[type]}
                     </div>
                   </div>
                 </div>

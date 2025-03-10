@@ -3,21 +3,20 @@
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
-// import mockMeetings from '@/api/data/mockMeetings.md';
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
 import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
 import { Meeting } from '@/types/meeting';
+import categoryMap from '@/types/categoryMap';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
+
 export default function Page() {
   const [selectedMenuTab, setSelecetedMenuTab] = useState('');
-  const [selectedActivityTab, setSelectedActivityTab] = useState('');
+  const [selectedActivityTab, setSelectedActivityTab] = useState('술');
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,11 +29,21 @@ export default function Page() {
           const data = await fetchMyPageReviews();
           setReviews(data);
         } else {
+          const categoryInEnglish = selectedActivityTab
+            ? categoryMap[selectedActivityTab]
+            : 'ALCOHOL';
+          console.log('원본 카테고리:', selectedActivityTab);
+          console.log('변환된 카테고리:', categoryInEnglish);
           const data = await fetchMyPageMeetings({
             type: selectedMenuTab,
             category: selectedActivityTab || undefined,
           });
-          setMeetings(data.meetings);
+          console.log(data);
+          if (data && data.lighteningResponses) {
+            setMeetings(data.lighteningResponses);
+          } else {
+            setMeetings([]);
+          }
         }
       } catch (error) {
         console.error('데이터 불러오기 실패: ', error);
@@ -53,6 +62,7 @@ export default function Page() {
     }
   };
   const handleActivityClick = (tab: string) => {
+    console.log(tab);
     if (tab === selectedActivityTab) {
       setSelectedActivityTab('');
     } else {

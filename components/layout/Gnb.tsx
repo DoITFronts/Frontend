@@ -40,6 +40,8 @@ export default function GNB() {
   const router = useRouter();
   const { mutate: logout } = useSignout();
 
+  const likeCount = 3;
+
   // 로그인 여부 체크하기
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -59,7 +61,7 @@ export default function GNB() {
   };
 
   return (
-    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black px-3 shadow-md md:h-[60px] md:px-6 xl:px-[360px]">
+    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black shadow-md md:h-[60px] px-[15%]">
       <div className="flex w-full justify-between">
         <div className="flex items-center justify-between gap-x-[31px] md:gap-x-[78px]">
           <Link href="/meeting/list" className="flex h-[17px] w-[75px] md:h-5 md:w-20">
@@ -74,7 +76,15 @@ export default function GNB() {
           </Link>
           <div className="mr-5 flex gap-x-3 md:gap-x-6">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
-            <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
+            <div className="flex justify-center items-center gap-1">
+              <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
+              {/* TODO: 좋아요 count 받아야함 */}
+              {likeCount && (
+                <span className="bg-yellow-6 rounded-full text-black font-bold text-center h-fit px-[5px] mb-[1.5px] text-[12px]">
+                  {likeCount}
+                </span>
+              )}
+            </div>
             <NavItem href="/review" label="리뷰" currentPath={pathname} />
           </div>
         </div>

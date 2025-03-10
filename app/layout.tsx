@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { ToastContainer } from 'react-toastify';
 
 import '@/styles/global.css';
 import RootLayout from '@/components/layout/RootLayout';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: '번개팅',
@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <link rel="preconnect" href="/" />
         <RootLayout>{children}</RootLayout>
-        <ToastContainer />
+        <ToastContainer limit={1} />
       </body>
     </html>
   );

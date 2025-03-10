@@ -1,10 +1,23 @@
+import { useThemeStore } from '@/store/themeStore';
+import userStore from '@/store/userStore';
+
 interface ProfileIconProps {
-  theme: 'light' | 'dark';
   size?: number | 'small' | 'medium' | 'large';
+  id?: number;
 }
 
-function ProfileIcon({ theme, size = 'medium' }: ProfileIconProps) {
-  const backgroundColor = theme === 'dark' ? '#BFBFBF' : '#F0F0F0';
+function ProfileIcon({ size = 'medium', id }: ProfileIconProps) {
+  const { profileImage } = userStore();
+  const userTheme = useThemeStore((state) => state.theme);
+
+  const isOdd = id ? Number(id) % 2 !== 0 : userTheme === 'light';
+  const theme = isOdd ? 'light' : 'dark';
+
+  if (profileImage) {
+    return <img src={profileImage} alt="User Profile" className="rounded-full object-cover" />;
+  }
+
+  const backgroundColor = theme === 'dark' ? '#595959' : '#F0F0F0';
   const pathColor = theme === 'dark' ? '#F0F0F0' : '#BFBFBF';
 
   const predefinedSizes = {
@@ -12,19 +25,17 @@ function ProfileIcon({ theme, size = 'medium' }: ProfileIconProps) {
     medium: 30,
     large: 102,
   };
-
   const dimensions = typeof size === 'number' ? size : predefinedSizes[size];
 
   return (
     <svg
       width={dimensions}
       height={dimensions}
-      viewBox="0 0 30 30 "
+      viewBox="0 0 30 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <rect width="30" height="30" rx="15" fill={backgroundColor} />
-
       <path
         fillRule="evenodd"
         clipRule="evenodd"

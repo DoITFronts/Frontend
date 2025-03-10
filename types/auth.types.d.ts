@@ -11,3 +11,11 @@ interface SignInRequestData {
   username: string;
   password: string;
 }
+
+interface User {
+  id: number;
+  email: string;
+  nickname: string;
+  description: string | null;
+  imageUrl: string;
+}
