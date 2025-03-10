@@ -1,6 +1,6 @@
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
 import orderMap from '@/types/orderMap';
+import { cityMap } from '@/types/regions';
 
 const fetchReview = async ({
   category = '술',
