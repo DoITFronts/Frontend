@@ -6,6 +6,7 @@ import ProfileIcon from '@/components/shared/BaseProfile';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
 import { hover } from 'framer-motion';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 export default function Page() {
@@ -28,7 +29,17 @@ export default function Page() {
       >
         <EditingIcon status={iconStatus} />
       </div>
-      <ProfileIcon size={102} />
+      {imageUrl ? (
+        <div className="w-[102px] h-[102px] rounded-full overflow-hidden">
+          <img
+            src={`${imageUrl}?timestamp=${new Date().getTime()}`}
+            alt="프로필 이미지"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <ProfileIcon size={102} />
+      )}
 
       <div className="w-auto h-auto flex flex-col gap-[2px]">
         <div className="w-auto h-auto flex justify-start gap-2.5">

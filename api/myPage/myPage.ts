@@ -7,13 +7,6 @@ interface FetchMyPageMeetingsParams {
   category?: string; // '술' | '카페' | '보드 게임' | '맛집'
 }
 
-const CATEGORY_MAP = {
-  술: 'ALCOHOL',
-  카페: 'CAFE',
-  '보드 게임': 'BOARD_GAME',
-  맛집: 'RESTAURANT',
-};
-
 export const fetchProfile = async () => {
   try {
     const response = await axiosInstance.get('/api/v1/my-page/user');
@@ -21,6 +14,30 @@ export const fetchProfile = async () => {
     return response.data;
   } catch (error) {
     console.error('프로필 정보를 불러오는데 실패했습니다.: ', error);
+  }
+};
+
+export const updateProfile = async (
+  data: { nickname?: string; description?: string },
+  imageFile?: File | null,
+) => {
+  try {
+    const formData = new FormData();
+    if (data.nickname) formData.append('nickname', data.nickname);
+    if (data.description) formData.append('description', data.description);
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+    const response = await axiosInstance.post('/api/v1/my-page/user', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    const profileResponse = await axiosInstance.get('/api/v1/my-page/user');
+    useProfileStore.getState().setInitialProfile(profileResponse.data);
+    return response.data;
+  } catch (error) {
+    console.error('프로필 정보 수정에 실패했습니다.: ', error);
   }
 };
 
