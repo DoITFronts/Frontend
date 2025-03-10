@@ -1,7 +1,7 @@
 'use client';
 
 import categoryMap from '@/types/categoryMap';
-import cityMap from '@/types/cityMap';
+import { cityMap } from '@/types/regions';
 
 const fetchLikeMeeting = async ({
   category,
@@ -41,9 +41,6 @@ const fetchLikeMeeting = async ({
   if (page) {
     queryParams.append('page', page.toString());
   }
-
-  //토큰 붙이기
-  // if (typeof window === 'undefined') return null; // 서버에서 실행 방지
 
   const token = localStorage.getItem('accessToken');
 
