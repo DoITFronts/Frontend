@@ -39,10 +39,24 @@ const fetchMeeting = async ({
   if (page) {
     queryParams.append('page', page.toString());
   }
+  //토큰 가져오기
+  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  //로그인 된 상태 -> 토큰이랑 같이 보내기
+  if (token) {
+    headers['Authorization'] = `${token}`;
+  }
 
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings?${queryParams.toString()}`,
+      {
+        method: 'GET',
+        headers,
+        credentials: 'include',
+      },
     );
 
     if (!response.ok) {
