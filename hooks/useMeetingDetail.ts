@@ -1,9 +1,10 @@
-import { Description, MeetingDetail } from "@/types/meeting";
-import { useParams } from "next/navigation";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import fetchMeetingById from "@/api/meeting/fetchMeetingById";
-import updateMeetingDescription from "@/api/meeting/updateMeetingDescription";
-import {useState} from "react";
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+
+import fetchMeetingById from '@/api/meeting/fetchMeetingById';
+import updateMeetingDescription from '@/api/meeting/updateMeetingDescription';
+import { Description, MeetingDetail } from '@/types/meeting';
 
 interface UpdateMeetingParams {
   meetingId: string;

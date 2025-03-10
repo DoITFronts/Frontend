@@ -1,6 +1,11 @@
+import withBundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
 
-const nextConfig: NextConfig = {
+const withBundle = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+const nextConfig: NextConfig = withBundle({
   reactStrictMode: true,
   images: {
     domains: process.env.NEXT_PUBLIC_IMAGE_DOMAINS?.split(',') || [],
@@ -23,6 +28,6 @@ const nextConfig: NextConfig = {
       ],
     },
   ],
-};
+});
 
 export default nextConfig;

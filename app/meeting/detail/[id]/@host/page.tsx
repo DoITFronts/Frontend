@@ -6,8 +6,8 @@ import {
   HostInfoSkeleton,
   HostInfoError,
 } from '@/app/meeting/detail/components/skeleton/HostInfoSkeleton';
+import ProfileIcon from '@/components/shared/BaseProfile';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
-import ProfileIcon from "@/components/shared/BaseProfile";
 
 export default function MeetingHostInfo() {
   const { data: meeting, isLoading, error, refetch } = useMeetingDetail();
