@@ -10,6 +10,7 @@ import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
 import { Meeting } from '@/types/meeting';
 import categoryMap from '@/types/categoryMap';
+import ChipInfo from '@/components/ui/chip/ChipInfo';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
@@ -147,11 +148,7 @@ export default function Page() {
                       />
                       <div className="flex h-[22px] flex-row items-center gap-1">
                         <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                          2월 9일
-                        </div>
-                        <div className="size-[3px] rounded-full bg-[#bfbfbf]" />
-                        <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                          18:00
+                          <ChipInfo datetime={meeting.targetAt} />
                         </div>
                       </div>
                     </div>
