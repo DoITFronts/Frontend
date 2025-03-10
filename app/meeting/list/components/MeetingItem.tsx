@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import Button from '@/components/ui/Button';
-import ButtonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
@@ -27,11 +26,10 @@ import Card from './Card';
 interface Props {
   meeting: Meeting;
   onClick: () => void;
-  onJoin: (meeting: Meeting) => Promise<boolean>;
   priority?: boolean;
 }
 
-export default function MeetingItem({ meeting, onClick, onJoin, priority }: Props) {
+export default function MeetingItem({ meeting, onClick, priority }: Props) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { isLiked, handleLikeClick } = useLikeToggle(meeting.id, meeting.isLiked, onClick);
   const [isJoined, setIsJoined] = useState(false);
