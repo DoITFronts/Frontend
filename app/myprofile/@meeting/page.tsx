@@ -13,10 +13,10 @@ import categoryMap from '@/types/categoryMap';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
-const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
+const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];
 
 export default function Page() {
-  const [selectedMenuTab, setSelecetedMenuTab] = useState('');
+  const [selectedMenuTab, setSelecetedMenuTab] = useState('나의 번개');
   const [selectedActivityTab, setSelectedActivityTab] = useState('술');
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [reviews, setReviews] = useState([]);
