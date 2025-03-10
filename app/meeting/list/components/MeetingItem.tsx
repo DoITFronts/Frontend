@@ -3,17 +3,22 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { toast } from 'react-toastify';
 
+import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import Button from '@/components/ui/Button';
 import ButtonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import useLikeToggle from '@/hooks/useLikeToggle';
+import useModalStore from '@/store/useModalStore';
 import categoryMap from '@/types/categoryMap';
 import { Meeting } from '@/types/meeting';
 import { cityMap } from '@/types/regions';
+import isUserLoggedIn from '@/utils/authUtils';
 
 import HostInfo from '../../components/HostInfo';
 
@@ -29,6 +34,8 @@ interface Props {
 export default function MeetingItem({ meeting, onClick, onJoin, priority }: Props) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { isLiked, handleLikeClick } = useLikeToggle(meeting.id, meeting.isLiked, onClick);
+  const [isJoined, setIsJoined] = useState(false);
+  const { openModal } = useModalStore();
 
   const reverseCityMap: Record<string, string> = Object.fromEntries(
     Object.entries(cityMap).map(([kor, eng]) => [eng, kor]),
@@ -37,6 +44,37 @@ export default function MeetingItem({ meeting, onClick, onJoin, priority }: Prop
   const reverseCategoryMap: Record<string, string> = Object.fromEntries(
     Object.entries(categoryMap).map(([kor, eng]) => [eng, kor]),
   );
+
+  const handleJoinToggle = async () => {
+    if (!isUserLoggedIn()) {
+      openModal('loginCheck');
+      return;
+    }
+
+    if (isJoined) {
+      await leaveLightning(meeting?.id as string);
+      toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+    } else {
+      await joinLightning(meeting?.id as string);
+      toast.success('모임에 참여했습니다.', { autoClose: 900 });
+    }
+    setIsJoined(!isJoined);
+  };
+
+  const buttonTextMap = {
+    completed: '마감',
+    joined: '참여 취소하기',
+    default: '참여하기',
+  };
+
+  let buttonText;
+  if (meeting.isCompleted) {
+    buttonText = buttonTextMap.completed;
+  } else if (meeting.isJoined) {
+    buttonText = buttonTextMap.joined;
+  } else {
+    buttonText = buttonTextMap.default;
+  }
 
   return (
     <motion.div
@@ -107,11 +145,14 @@ export default function MeetingItem({ meeting, onClick, onJoin, priority }: Prop
               isConfirmed={meeting.isConfirmed}
               isCompleted={meeting.isCompleted}
             />
-            <ButtonBox
-              chatIconDisabled
-              isJoined={meeting.isJoined}
-              onClick={() => onJoin(meeting)}
-            />
+            <Button
+              color={isJoined ? 'white' : 'filled'}
+              type="button"
+              onClick={handleJoinToggle}
+              disabled={meeting.isCompleted}
+            >
+              {buttonText}
+            </Button>
           </div>
         </div>
       </Card>
