@@ -1,6 +1,5 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
@@ -196,8 +195,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       borderRadius: '5px',
       color: '#8c8c8c',
 
-      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
       ...(isToday && { fontWeight: 'bold', color: 'black' }),
+      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
     };
   };
 
