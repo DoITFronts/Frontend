@@ -80,7 +80,7 @@ export default function GNB() {
             <div className="flex justify-center items-center gap-1">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
               {/* TODO: 좋아요 count 받아야함 */}
-              {likedCount && (
+              {likedCount() > 0 && (
                 <span className="bg-yellow-6 rounded-full text-black font-bold text-center h-fit px-[5px] mb-[1.5px] text-[12px]">
                   {likedCount()}
                 </span>
