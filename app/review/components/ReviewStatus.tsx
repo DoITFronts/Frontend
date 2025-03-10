@@ -20,7 +20,7 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
 
   const average = totalReviews > 0 ? (totalScore / totalReviews).toFixed(1) : '0';
   const fullHearts = Math.floor(Number(average));
-  const inactiveHearts = 5 - fullHearts;
+  const halfHeartPercentage = (Number(average) - fullHearts) * 100;
 
   const totalPossibleReviews = reviews.length;
 
@@ -36,11 +36,29 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
           </p>
         </div>
         <div className="flex">
-          {[...Array(fullHearts)].map((_, index) => (
-            <HeartIcon key={`full-${index}`} />
-          ))}
-          {[...Array(inactiveHearts)].map((_, index) => (
-            <HeartIcon key={`inactive-${index}`} variant="inactive" />
+          {[...Array(5)].map((_, index) => (
+            <div
+              key={`${average}-${index}`}
+              style={{ position: 'relative', width: '28px', height: '28px' }}
+            >
+              <HeartIcon fillPercentage={0} />
+              <motion.div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '28px',
+                  height: '28px',
+                  overflow: 'hidden',
+                  clipPath: `inset(0 ${100 - (index < fullHearts ? 100 : index === fullHearts ? halfHeartPercentage : 0)}% 0 0)`,
+                }}
+                initial={{ width: 0 }}
+                animate={{ width: '28px' }}
+                transition={{ duration: 0.5, ease: 'easeInOut', delay: index * 0.2 }}
+              >
+                <HeartIcon fillPercentage={100} />
+              </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -54,7 +72,7 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
               // 애니메이션을 framer-motion을 사용하여 추가
               return (
                 <div key={index} className="flex items-center gap-6 font-pretandard">
-                  <span className="font-pretendard relative min-w-5 justify-start text-center text-xs font-medium leading-tight text-neutral-800">
+                  <span className="font-pretendard relative justify-start text-center text-xs font-medium leading-tight text-neutral-800">
                     {5 - index}점
                   </span>
                   <div className="relative h-1 min-w-64 rounded-full bg-[#E5E7EB]">
@@ -62,10 +80,10 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
                       className="absolute left-0 top-0 h-full rounded-full bg-[#111827]"
                       initial={{ width: 0 }}
                       animate={{ width: `${percentage}%` }} // 비율에 맞게 width 애니메이션
-                      transition={{ duration: 0.5, ease: 'easeInOut' }}
+                      transition={{ duration: 1, ease: 'easeInOut' }}
                     />
                   </div>
-                  <span className="font-pretendard relative min-w-1 justify-start text-center text-xs font-medium leading-tight text-[#d9d9d9]">
+                  <span className="font-pretendard relative justify-start text-center text-xs font-medium leading-tight text-[#d9d9d9]">
                     {count}
                   </span>
                 </div>
