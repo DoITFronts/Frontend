@@ -16,8 +16,10 @@ export interface Participant {
   lighteningId: number;
   userId: number;
   name: string;
-  profileImage?: string;
+  image?: string;
   isHost: boolean;
+  email: string;
+  description: string;
 }
 
 export interface Host {
