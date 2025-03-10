@@ -6,7 +6,6 @@ import ConfirmedStatus from '../../components/ConfirmedStatus';
 import Participant from '../../components/Participant';
 import ProgressBar from '../../components/ProgressBar';
 
-import Join from './Join';
 import Like from './Like';
 import Title from './Title';
 
@@ -25,6 +24,5 @@ Card.Like = Like;
 Card.Participant = Participant;
 Card.ConfirmedStatus = ConfirmedStatus;
 Card.ProgressBar = ProgressBar;
-Card.Join = Join;
 
 export default Card;
