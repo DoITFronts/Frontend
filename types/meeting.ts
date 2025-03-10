@@ -30,12 +30,6 @@ export interface Host {
   userBio: string;
 }
 
-export interface Description {
-  id: string;
-  title: string;
-  description: string;
-}
-
 export interface Meeting {
   id: string;
   category: MeetingCategory;
@@ -60,7 +54,7 @@ export interface MeetingDetail extends Meeting {
   longitude: string;
   address: string;
   host: Host;
-  description: Description;
+  description: string;
 }
 
 export interface CreateMeetingParams {

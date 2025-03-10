@@ -12,11 +12,9 @@ const useKakaoMap = (latitude: string, longitude: string, placeName?: string) =>
 
   const createMap = (lat: number, lng: number) => {
     if (!mapContainer.current) {
-      console.error('❌ createMap 실행 중에도 mapContainer가 없음!');
+      console.error('createMap 실행 중에도 mapContainer가 없음!');
       return;
     }
-
-    console.log('🗺️ 지도 렌더링 시작!', { lat, lng });
 
     const mapOptions = {
       center: new window.kakao.maps.LatLng(lat, lng),
@@ -24,19 +22,13 @@ const useKakaoMap = (latitude: string, longitude: string, placeName?: string) =>
     };
 
     const map = new window.kakao.maps.Map(mapContainer.current, mapOptions);
-
-    // 📍 마커 추가
     const marker = new window.kakao.maps.Marker({
       position: new window.kakao.maps.LatLng(lat, lng),
-      map, // 마커를 지도에 추가
+      map,
     });
-
-    // ℹ️ 인포윈도우 추가 (마커 클릭 시 장소명 표시)
     const infoWindow = new window.kakao.maps.InfoWindow({
       content: `<div style="padding:5px;font-size:14px;">📍 ${placeName || '장소'}</div>`,
     });
-
-    // 🎯 마커 클릭 시 인포윈도우 열기 + 카카오맵으로 이동 이벤트 추가
     window.kakao.maps.event.addListener(marker, 'click', () => {
       infoWindow.open(map, marker);
       setTimeout(() => {

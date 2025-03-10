@@ -36,8 +36,6 @@ export default function MeetingLocation() {
 
   return (
     <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
-      <div className="my-8 h-px border-b border-gray-300 opacity-50" />
-
       <div className="mb-7 inline-flex size-full flex-col items-start justify-start gap-6">
         <div className="self-stretch font-['DungGeunMo'] text-2xl font-normal text-black">
           번개 위치

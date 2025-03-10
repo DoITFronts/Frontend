@@ -14,23 +14,17 @@ const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: fals
 
 export default function MeetingDescription() {
   const { meetingId, data, isLoading, error, refetch } = useMeetingDetail();
-  const {
-    isEditing,
-    setIsEditing,
-    status,
-    setStatus,
-    title,
-    setTitle,
-    description,
-    setDescription,
-    tab,
-    setTab,
-  } = useMeetingEditor(data?.description);
+  const userId = typeof window !== 'undefined' ? localStorage.getItem('sub') : null;
+  const { isEditing, setIsEditing, status, setStatus, description, setDescription, tab, setTab } =
+    useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
+
+  const host = data?.participants?.find((participant) => participant.isHost);
+  const isHost = Number(userId) === host?.userId;
 
   const handleSave = async () => {
     if (!meetingId) return;
-    await updateMutation.mutateAsync({ meetingId, title, description });
+    await updateMutation.mutateAsync({ meetingId, description });
     setIsEditing(false);
     setStatus('default');
   };
@@ -55,72 +49,59 @@ export default function MeetingDescription() {
 
     return (
       <ReactMarkdown className="flex flex-col gap-1">
-        {description ?? '설명이 없습니다.'}
+        {data?.description ?? '설명이 없습니다.'}
       </ReactMarkdown>
     );
   };
 
   if (isLoading) return <DescriptionSkeleton />;
   if (error) return <DescriptionError onRetry={() => refetch()} />;
+  if (!data?.description && !isHost) return null;
 
   return (
-    <div className="min-h-[300px] font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
-      <div className="mb-4 flex w-full items-center justify-between">
-        {isEditing ? (
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-2 py-1 text-2xl"
-          />
-        ) : (
+    <div className="flex min-h-[300px] flex-col justify-between font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
+      <div>
+        <div className="mb-4 flex w-full items-center justify-between">
           <h2 className="font-dunggeunmo text-2xl font-normal text-black">
-            {data?.description?.title ?? '제목 없음'}
+            번개에 대해 자세히 알아보세요!
           </h2>
-        )}
-        <div
-          role="button"
-          tabIndex={0}
-          onMouseEnter={() => setStatus('hover')}
-          onMouseLeave={() => setStatus(isEditing ? 'editing' : 'default')}
-          onClick={handleEditToggle}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleEditToggle();
-            }
-          }}
-          className="cursor-pointer"
-        >
-          <EditingIcon status={isEditing ? 'editing' : status} />
-        </div>
-      </div>
-
-      {isEditing && (
-        <div className="flex border-b border-gray-300">
-          {['edit', 'preview'].map((mode) => (
-            <button
-              key={mode}
-              type="button"
-              className={`px-4 py-2 ${tab === mode ? 'border-b-2 border-black' : 'text-gray-600'}`}
-              onClick={() => setTab(mode as 'edit' | 'preview')}
+          {isHost && (
+            <div
+              role="button"
+              tabIndex={0}
+              onMouseEnter={() => setStatus('hover')}
+              onMouseLeave={() => setStatus(isEditing ? 'editing' : 'default')}
+              onClick={handleEditToggle}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleEditToggle();
+                }
+              }}
+              className="cursor-pointer"
             >
-              {mode === 'edit' ? '편집' : '미리보기'}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="mt-4">
-        {data?.description ? (
-          renderContent()
-        ) : (
-          <div className="mb-16 inline-flex h-[500px] w-full items-center justify-center gap-2.5">
-            <div className="text-center font-['Pretendard'] text-base font-medium leading-snug text-[#c0c1c2]">
-              상세 설명이 없어요
+              <EditingIcon status={isEditing ? 'editing' : status} />
             </div>
+          )}
+        </div>
+
+        {isEditing && (
+          <div className="flex border-b border-gray-300">
+            {['edit', 'preview'].map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                className={`px-4 py-2 ${tab === mode ? 'border-b-2 border-black' : 'text-gray-600'}`}
+                onClick={() => setTab(mode as 'edit' | 'preview')}
+              >
+                {mode === 'edit' ? '편집' : '미리보기'}
+              </button>
+            ))}
           </div>
         )}
+
+        <div className="mt-4">{renderContent()}</div>
       </div>
+      <div className="my-8 h-px border-b border-gray-300 opacity-50" />
     </div>
   );
 }
