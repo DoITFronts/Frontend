@@ -1,10 +1,11 @@
 export interface Review {
   id: string;
-  writer: string;
-  profileImage?: string;
+  score: number;
   content: string;
-  date: string;
-  count: number;
+  nickname: string;
+  userId: string;
+  userImageUrl?: string;
+  createdAt: string;
 }
 
 export type ReviewList = Review[];
