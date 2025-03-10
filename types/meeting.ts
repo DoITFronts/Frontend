@@ -70,5 +70,8 @@ export interface CreateMeetingParams {
   endAt: string;
   capacity: number;
   minCapacity: number;
+  placeName: string;
+  latitude: string;
+  longitude: string;
   image?: File;
 }

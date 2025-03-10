@@ -9,10 +9,10 @@ import MeetingInfo from './MeetingInfo';
 
 interface Props {
   meeting: Meeting;
-  onClick: () => void;
+  onClickAction: () => void;
 }
 
-export default function MeetingItem({ meeting, onClick }: Props) {
+export default function MeetingItem({ meeting, onClickAction }: Props) {
   const { ref, inView } = useInView({
     threshold: 0.1,
     triggerOnce: false,
@@ -26,7 +26,7 @@ export default function MeetingItem({ meeting, onClick }: Props) {
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
     >
-      <MeetingInfo meetings={meeting} onClick={onClick} />
+      <MeetingInfo meetings={meeting} onClick={onClickAction} />
     </motion.div>
   );
 }

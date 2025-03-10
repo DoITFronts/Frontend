@@ -1,4 +1,5 @@
 import { CreateMeetingParams } from '@/types/createMeeting';
+
 import axiosInstance from '../api';
 
 const createMeeting = async (meetingData: CreateMeetingParams) => {
@@ -14,7 +15,10 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
     targetAt: meetingData.targetAt,
     endAt: meetingData.endAt,
     capacity: meetingData.capacity,
-    // minCapacity: meetingData.minCapacity,
+    minCapacity: meetingData.minCapacity,
+    placeName: meetingData.placeName,
+    latitude: meetingData.latitude,
+    longitude: meetingData.longitude,
   };
   const blob = new Blob([JSON.stringify(lightening)], { type: 'application/json' });
   formData.append('lightening', blob);

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
@@ -9,7 +9,9 @@ import {
   BottomFloatingBarSkeleton,
 } from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
 import Button from '@/components/ui/Button';
+import ChatModal from '@/components/ui/chatting/ChattingModal';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
+import useChatStore from '@/store/chatStore';
 import useModalStore from '@/store/useModalStore';
 import isUserLoggedIn from '@/utils/authUtils';
 
@@ -36,6 +38,13 @@ export default function BottomFloatingBar() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
   const [isJoined, setIsJoined] = useState(false);
   const { openModal } = useModalStore();
+  const { setOpenChat } = useChatStore();
+
+  useEffect(() => {
+    if (meeting) {
+      setIsJoined(meeting.isJoined ?? false);
+    }
+  }, [meeting]);
 
   const handleJoinToggle = async () => {
     if (!isUserLoggedIn()) {
@@ -49,8 +58,9 @@ export default function BottomFloatingBar() {
     } else {
       await joinLightning(meeting?.id as string);
       toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      setOpenChat(true);
     }
-    setIsJoined(!isJoined);
+    setIsJoined((prev) => !prev);
   };
 
   if (isLoading) return <BottomFloatingBarSkeleton />;
@@ -73,6 +83,7 @@ export default function BottomFloatingBar() {
           {isJoined ? '참여 취소하기' : '참여하기'}
         </Button>
       </div>
+      {ChatModal({ isOpen: false, onClose: () => {} })}
     </div>
   );
 }

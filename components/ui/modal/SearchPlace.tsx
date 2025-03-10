@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface PlaceSearchProps {
   onPlaceSelect: (place: {
@@ -9,6 +9,8 @@ interface PlaceSearchProps {
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   }) => void;
 }
 
@@ -89,14 +91,14 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           placeholder="장소를 검색해주세요"
-          className="flex-1 text-black-8 w-full bg-black-2 px-4 py-2.5 rounded-[12px] placeholder:text-black-6"
+          className="w-full flex-1 rounded-[12px] bg-black-2 px-4 py-2.5 text-black-8 placeholder:text-black-6"
           onFocus={() => setIsOpen(true)}
           onKeyDown={(e) => e.key === 'Enter' && searchPlaces()}
         />
         <button
           type="button"
           onClick={searchPlaces}
-          className="px-4 py-2.5 bg-black-10 text-white rounded-[12px] text-sm"
+          className="rounded-[12px] bg-black-10 px-4 py-2.5 text-sm text-white"
           disabled={isLoading}
         >
           {isLoading ? '검색 중' : '검색'}
@@ -104,11 +106,11 @@ const PlaceSearch: React.FC<PlaceSearchProps> = ({ onPlaceSelect }) => {
       </div>
 
       {isOpen && results.length > 0 && (
-        <div className="absolute z-10 w-full mt-1 max-h-60 overflow-y-auto bg-white border border-black-4 rounded-[12px] shadow-lg">
+        <div className="absolute z-10 mt-1 max-h-60 w-full overflow-y-auto rounded-[12px] border border-black-4 bg-white shadow-lg">
           {results.map((place) => (
             <div
               key={place.id}
-              className="p-3 hover:bg-black-2 cursor-pointer border-b border-black-4 last:border-0"
+              className="cursor-pointer border-b border-black-4 p-3 last:border-0 hover:bg-black-2"
               onClick={() => handleSelectPlace(place)}
             >
               <div className="font-medium">{place.place_name}</div>
