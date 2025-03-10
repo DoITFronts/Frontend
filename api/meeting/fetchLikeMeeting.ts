@@ -1,6 +1,5 @@
-'use client';
-
 import categoryMap from '@/types/categoryMap';
+import orderMap from '@/types/orderMap';
 import { cityMap } from '@/types/regions';
 
 const fetchLikeMeeting = async ({
@@ -9,14 +8,16 @@ const fetchLikeMeeting = async ({
   town,
   targetAt,
   page,
-  per_page,
+  size,
+  order,
 }: {
   category: string;
   city: string;
   town: string;
   targetAt: Date | null;
   page?: number;
-  per_page?: number;
+  size?: number;
+  order?: string;
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -41,18 +42,26 @@ const fetchLikeMeeting = async ({
   if (page) {
     queryParams.append('page', page.toString());
   }
+  //토큰 가져오기
+  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  //로그인 된 상태 -> 토큰이랑 같이 보내기
+  if (token) {
+    headers['Authorization'] = `${token}`;
+  }
 
-  const token = localStorage.getItem('accessToken');
+  if (order) {
+    queryParams.append('order', orderMap[order] ?? order);
+  }
 
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings/like?${queryParams.toString()}`,
       {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token ? `${token}` : '',
-        },
+        headers,
         credentials: 'include',
       },
     );
