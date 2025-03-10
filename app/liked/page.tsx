@@ -33,7 +33,7 @@ interface InitialMeetingsProps {
   initialMeetings: Meeting[];
 }
 
-export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
+export default function Liked({ initialMeetings }: InitialMeetingsProps) {
   const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
