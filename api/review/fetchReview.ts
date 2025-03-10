@@ -1,5 +1,6 @@
 import categoryMap from '@/types/categoryMap';
 import cityMap from '@/types/cityMap';
+import orderMap from '@/types/orderMap';
 
 const fetchReview = async ({
   category = '술',
@@ -8,6 +9,7 @@ const fetchReview = async ({
   targetAt,
   page,
   size,
+  order,
 }: {
   category?: string;
   city: string;
@@ -15,6 +17,7 @@ const fetchReview = async ({
   targetAt: Date | null;
   page?: number;
   size?: number;
+  order?: string;
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -39,6 +42,10 @@ const fetchReview = async ({
 
   if (page) {
     queryParams.append('page', page.toString());
+  }
+
+  if (order) {
+    queryParams.append('order', orderMap[order] ?? order);
   }
 
   try {
