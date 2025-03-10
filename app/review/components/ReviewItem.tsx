@@ -8,7 +8,7 @@ import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import { Reviews } from '@/types/review';
 
-export default function ReviewItem({ review }: { review: Reviews }) {
+export default function ReviewItem({ review, priority }: { review: Reviews; priority: boolean }) {
   const searchParams = useSearchParams();
   const category = searchParams.get('category');
 
@@ -25,6 +25,7 @@ export default function ReviewItem({ review }: { review: Reviews }) {
             height={200}
             alt="썸네일"
             className="h-full object-cover"
+            priority={priority}
           />
           <div className="absolute right-[14px] top-[17.5px]">
             <Category type={!category ? '술' : category} />
