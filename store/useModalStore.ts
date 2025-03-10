@@ -1,7 +1,7 @@
 // 전역 모달 상태 관리
 import { create } from 'zustand';
 
-type ModalType = 'create' | 'calender' | 'signUp' | 'editProfile' | 'loginCheck';
+type ModalType = 'create' | 'calender' | 'signUp' | 'editProfile' | 'loginCheck' | 'createReview';
 
 interface ModalState {
   isOpen: boolean;

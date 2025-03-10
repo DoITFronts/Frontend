@@ -3,9 +3,6 @@ import axiosInstance from '@/api/api';
 const fetchDetailReview = async (meetingId: string) => {
   try {
     const response = await axiosInstance.get(`/api/v1/lightenings/${meetingId}/reviews`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // ✅ 인증 헤더 추가
-      },
     });
 
     if (!response.data || !response.data.reviews) {
