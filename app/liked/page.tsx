@@ -29,11 +29,8 @@ import {
   MeetingCardError,
   MeetingCardLoading,
 } from '../meeting/list/components/skeleton/MeetingCardSkeleton';
-interface InitialMeetingsProps {
-  initialMeetings: Meeting[];
-}
 
-export default function Liked({ initialMeetings }: InitialMeetingsProps) {
+export default function LikedPage() {
   const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -130,7 +127,8 @@ export default function Liked({ initialMeetings }: InitialMeetingsProps) {
       town: selectedSecondLocation,
       targetAt: selectedDate,
       size: 10,
-      initialMeetings,
+      // initialMeetings 제거 또는 기본값으로 빈 배열 설정
+      initialMeetings: [],
       order: selectedFilter,
     });
 
