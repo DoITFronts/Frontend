@@ -19,7 +19,7 @@ const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];
 
 export default function Page() {
   const [selectedMenuTab, setSelecetedMenuTab] = useState('나의 번개');
-  const [selectedActivityTab, setSelectedActivityTab] = useState('술');
+  const [selectedActivityTab, setSelectedActivityTab] = useState('');
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

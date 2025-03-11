@@ -43,8 +43,10 @@ export const updateProfile = async (
 
 export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeetingsParams) => {
   try {
-    const englishCategory = category ? categoryMap[category] || 'ALCOHOL' : 'ALCOHOL';
-    const params = { category: englishCategory };
+    const params: Record<string, string> = {};
+    if (category) {
+      params.category = categoryMap[category] || 'ALCOHOL';
+    }
 
     const basePath = '/api/v1/my-page/lightenings';
     let endPoint;
