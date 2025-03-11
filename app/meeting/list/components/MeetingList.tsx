@@ -11,7 +11,6 @@ import FilterDropdown from '@/components/ui/card/FilterDropdown';
 import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
-import useLikeMutation from '@/hooks/useLikeMutation';
 import useMeeting from '@/hooks/useMeeting';
 import {
   defaultFilter,
@@ -200,8 +199,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     };
   };
 
-  const { likeMutation } = useLikeMutation();
-
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
@@ -325,7 +322,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <MeetingItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => likeMutation.mutate(meeting.id)}
+                onClick={() => {}}
                 priority={index < 10}
               />
             ))}

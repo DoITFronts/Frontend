@@ -1,4 +1,5 @@
 import HeartIcon from '@/components/shared/Icons/HeartIcon';
+import useLikeMutation from '@/hooks/useLikeMutation';
 
 function Like({
   meetingId,
@@ -9,6 +10,7 @@ function Like({
   isLiked: boolean;
   onClick: (meetingId: string) => void;
 }) {
+  const { likeMutation } = useLikeMutation();
   return (
     <button
       type="button"
@@ -17,6 +19,7 @@ function Like({
         event.stopPropagation(); // 부모 이벤트 전파 방지
         event.preventDefault(); // Link의 기본 동작(페이지 이동) 방지
         onClick(meetingId);
+        likeMutation.mutate(meetingId); //좋아요 기능 동작하도록 함
       }}
     >
       <HeartIcon variant={isLiked ? 'active' : 'inactive'} />
