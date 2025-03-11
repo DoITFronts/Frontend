@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
-
+import useMeetingToggle from '@/hooks/useMeetingToggle';
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
 import ButonBox from '@/components/ui/ButtonBox';
@@ -11,6 +11,8 @@ import Chip from '@/components/ui/chip/Chip';
 import { Meeting } from '@/types/meeting';
 import categoryMap from '@/types/categoryMap';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
+import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
+import { toast } from 'react-toastify';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];
@@ -21,6 +23,7 @@ export default function Page() {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [reviews, setReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { toggleMeeting } = useMeetingToggle(setMeetings);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -69,6 +72,10 @@ export default function Page() {
     } else {
       setSelectedActivityTab(tab);
     }
+  };
+
+  const handleMeeting = (meeting: Meeting) => {
+    return toggleMeeting(meeting);
   };
 
   return (
@@ -130,13 +137,23 @@ export default function Page() {
                 <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
                   <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
                   <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-                  <Image
-                    src="/assets/card/example_image.png"
-                    width={384}
-                    height={200}
-                    alt="thumbnail"
-                    className="w-96"
-                  />
+                  {meeting.imageUrl ? (
+                    <Image
+                      src={meeting.imageUrl}
+                      width={384}
+                      height={200}
+                      alt="thumbnail"
+                      className="w-96"
+                    />
+                  ) : (
+                    <Image
+                      src="/assets/card/example_image.png"
+                      width={384}
+                      height={200}
+                      alt="thumbnail"
+                      className="w-96"
+                    />
+                  )}
                 </div>
 
                 <div className="flex h-[206px] flex-col justify-between">
@@ -166,7 +183,7 @@ export default function Page() {
                       isConfirmed={meeting.isConfirmed}
                       isCompleted={meeting.isCompleted}
                     />
-                    <ButonBox isJoined={meeting.isJoined} />
+                    <ButonBox onClick={() => handleMeeting(meeting)} isJoined={meeting.isJoined} />
                   </div>
                 </div>
               </div>
