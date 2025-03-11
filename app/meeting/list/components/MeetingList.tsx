@@ -1,6 +1,5 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
@@ -196,10 +195,12 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       borderRadius: '5px',
       color: '#8c8c8c',
 
-      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
       ...(isToday && { fontWeight: 'bold', color: 'black' }),
+      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
     };
   };
+
+  const { likeMutation } = useLikeMutation();
 
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
@@ -324,7 +325,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <MeetingItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => useLikeMutation}
+                onClick={() => likeMutation.mutate(meeting.id)}
                 priority={index < 10}
               />
             ))}
