@@ -10,6 +10,8 @@ import Logo from '@/public/assets/mainLogo/logoYW.svg';
 
 import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
+import useLikeCountStore from '@/store/useLikeCountStore';
+import useLikedCount from '@/hooks/useLikeCount';
 
 function NavItem({
   href,
@@ -39,8 +41,7 @@ export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { mutate: logout } = useSignout();
-
-  const likeCount = 3;
+  useLikedCount(); //좋아요 개수 동기화
 
   // 로그인 여부 체크하기
   useEffect(() => {
@@ -59,7 +60,7 @@ export default function GNB() {
       setIsLoggedIn(false);
     }
   };
-
+  const { likedCount } = useLikeCountStore();
   return (
     <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black shadow-md md:h-[60px] px-[15%]">
       <div className="flex w-full justify-between">
@@ -79,9 +80,9 @@ export default function GNB() {
             <div className="flex justify-center items-center gap-1">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
               {/* TODO: 좋아요 count 받아야함 */}
-              {likeCount && (
+              {likedCount() > 0 && (
                 <span className="bg-yellow-6 rounded-full text-black font-bold text-center h-fit px-[5px] mb-[1.5px] text-[12px]">
-                  {likeCount}
+                  {likedCount()}
                 </span>
               )}
             </div>

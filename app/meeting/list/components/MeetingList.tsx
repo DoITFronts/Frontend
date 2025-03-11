@@ -200,6 +200,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     };
   };
 
+  const { likeMutation } = useLikeMutation();
+
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
@@ -323,7 +325,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <MeetingItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => useLikeMutation}
+                onClick={() => likeMutation.mutate(meeting.id)}
                 priority={index < 10}
               />
             ))}
