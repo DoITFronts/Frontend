@@ -314,13 +314,18 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 번개 리스트 */}
       <div>
-        {isLoading && <MeetingCardLoading />}
-        {isError && <MeetingCardError />}
+        {isLoading && (
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <MeetingCardLoading key={index} />
+            ))}
+          </div>
+        )}
         {!isLoading && !isError && meetings.length === 0 && (
           <EmptyMessage firstLine="아직 번개가 없어요" secondLine="지금 번개를 만들어 보세요!" />
         )}
         {!isLoading && !isError && (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
               <MeetingItem
                 key={`${meeting.id}-${index}`}
