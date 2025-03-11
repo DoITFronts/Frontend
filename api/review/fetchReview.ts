@@ -21,10 +21,9 @@ const fetchReview = async ({
 }) => {
   const queryParams = new URLSearchParams();
 
-  // category가 빈 문자열인 경우 기본값으로 설정
-  const finalCategory = !category || category.trim() === '' ? '술' : category;
-
-  queryParams.append('category', categoryMap[finalCategory] ?? finalCategory);
+  if (category && category !== '전체') {
+    queryParams.append('category', categoryMap[category] ?? category);
+  }
 
   if (city && city !== '지역 전체') {
     queryParams.append('city', cityMap[city] ?? city);
