@@ -3,15 +3,16 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
+import { joinLightning, leaveLightning, deleteLightning } from '@/api/meeting/joinMeeting';
 import Button from '@/components/ui/Button';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
+import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';
 import useLikeToggle from '@/hooks/useLikeToggle';
 import useModalStore from '@/store/useModalStore';
 import categoryMap from '@/types/categoryMap';
@@ -32,8 +33,18 @@ interface Props {
 export default function MeetingItem({ meeting, onClick, priority }: Props) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { isLiked, handleLikeClick } = useLikeToggle(meeting.id, meeting.isLiked, onClick);
-  const [isJoined, setIsJoined] = useState(false);
-  const { openModal } = useModalStore();
+  const [isConfirmed, setIsConfirmed] = useState(meeting.isConfirmed);
+  const [isCompleted, setIsCompleted] = useState(meeting.isCompleted);
+  const [isJoined, setIsJoined] = useState(meeting.isJoined);
+  const [participantCount, setParticipantCount] = useState(meeting.participantCount);
+  const openModal = useModalStore((state) => state.openModal);
+  const [isHost, setIsHost] = useState(false);
+
+  useEffect(() => {
+    const userId = typeof window !== 'undefined' ? localStorage.getItem('sub') : null;
+    const host = meeting.participants?.find((participant) => participant.isHost);
+    setIsHost(Number(userId) === host?.userId);
+  }, [meeting.participants]);
 
   const reverseCityMap: Record<string, string> = Object.fromEntries(
     Object.entries(cityMap).map(([kor, eng]) => [eng, kor]),
@@ -52,26 +63,45 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
     if (isJoined) {
       await leaveLightning(meeting?.id as string);
       toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+      setParticipantCount(participantCount - 1);
     } else {
       await joinLightning(meeting?.id as string);
       toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      setParticipantCount(participantCount + 1);
     }
     setIsJoined(!isJoined);
   };
 
+  const handleDeleteMeeting = async () => {
+    if (!isUserLoggedIn()) {
+      openModal('loginCheck');
+      return;
+    }
+
+    await deleteLightning(meeting?.id as string);
+    toast.success('모임을 삭제했습니다.', { autoClose: 900 });
+    // 추가적인 삭제 후 처리 로직이 필요할 수 있습니다.
+  };
+
   const buttonTextMap = {
     completed: '마감',
-    joined: '참여 취소하기',
+    joined: isHost ? '번개 삭제하기' : '참여 취소하기',
     default: '참여하기',
   };
 
   let buttonText;
+  let buttonClickHandler;
   if (meeting.isCompleted) {
     buttonText = buttonTextMap.completed;
-  } else if (meeting.isJoined) {
+    buttonClickHandler = () => {};
+  } else if (isJoined) {
     buttonText = buttonTextMap.joined;
+    buttonClickHandler = isHost
+      ? () => openModal('delete', { onConfirm: handleDeleteMeeting })
+      : handleJoinToggle;
   } else {
     buttonText = buttonTextMap.default;
+    buttonClickHandler = handleJoinToggle;
   }
 
   return (
@@ -96,7 +126,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
                   width={384}
                   height={200}
                   alt="thumbnail"
-                  className="w-full"
+                  className="w-full object-cover"
                   priority={priority}
                 />
                 <div className="absolute right-[14px] top-[17.5px]">
@@ -138,22 +168,24 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
           <div className="flex flex-row items-center gap-4 p-4">
             <MeetingProgress
               id={meeting.id}
-              participantCount={meeting.participantCount}
+              participantCount={participantCount}
               capacity={meeting.capacity}
-              isConfirmed={meeting.isConfirmed}
-              isCompleted={meeting.isCompleted}
+              isConfirmed={isConfirmed}
+              isCompleted={isCompleted}
             />
             <Button
               color={isJoined ? 'white' : 'filled'}
               type="button"
-              onClick={handleJoinToggle}
-              disabled={meeting.isCompleted}
+              onClick={buttonClickHandler}
+              disabled={isCompleted}
             >
               {buttonText}
             </Button>
           </div>
         </div>
       </Card>
+
+      <DeleteMeetingModal />
     </motion.div>
   );
 }
