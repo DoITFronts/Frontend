@@ -1,13 +1,13 @@
-import { Description, MeetingDetail } from "@/types/meeting";
-import { useParams } from "next/navigation";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import fetchMeetingById from "@/api/meeting/fetchMeetingById";
-import updateMeetingDescription from "@/api/meeting/updateMeetingDescription";
-import {useState} from "react";
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
+
+import fetchMeetingById from '@/api/meeting/fetchMeetingById';
+import updateMeetingDescription from '@/api/meeting/updateMeetingDescription';
+import { MeetingDetail } from '@/types/meeting';
 
 interface UpdateMeetingParams {
   meetingId: string;
-  title: string;
   description: string;
 }
 
@@ -15,18 +15,14 @@ export function useMeetingDetail(initialMeeting?: MeetingDetail) {
   const params = useParams();
   const meetingId = (params.id as string) || initialMeeting?.id;
 
-  if (!meetingId) {
-    return { meetingId: null, data: null, isLoading: false, error: null, refetch: () => {} };
-  }
-
   const {
     data = initialMeeting,
     isLoading,
     error,
     refetch,
   } = useQuery<MeetingDetail>({
-    queryKey: ['event', meetingId],
-    queryFn: () => fetchMeetingById(meetingId),
+    queryKey: meetingId ? ['event', meetingId] : [],
+    queryFn: () => (meetingId ? fetchMeetingById(meetingId) : Promise.resolve(initialMeeting)),
     initialData: initialMeeting,
     enabled: !!meetingId,
     staleTime: 1000 * 60 * 5,
@@ -34,14 +30,17 @@ export function useMeetingDetail(initialMeeting?: MeetingDetail) {
     retry: 3,
   });
 
+  if (!meetingId) {
+    return { meetingId: null, data: null, isLoading: false, error: null, refetch };
+  }
+
   return { meetingId, data, isLoading, error, refetch };
 }
 
-export function useMeetingEditor(meeting?: Description) {
+export function useMeetingEditor(meetingDescription: string | undefined) {
   const [isEditing, setIsEditing] = useState(false);
   const [status, setStatus] = useState<'default' | 'hover' | 'editing'>('default');
-  const [title, setTitle] = useState(meeting?.title ?? '');
-  const [description, setDescription] = useState(meeting?.description ?? '');
+  const [description, setDescription] = useState(meetingDescription ?? '');
   const [tab, setTab] = useState<'edit' | 'preview'>('edit');
 
   return {
@@ -49,8 +48,6 @@ export function useMeetingEditor(meeting?: Description) {
     setIsEditing,
     status,
     setStatus,
-    title,
-    setTitle,
     description,
     setDescription,
     tab,

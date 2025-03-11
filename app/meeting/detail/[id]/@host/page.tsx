@@ -6,14 +6,15 @@ import {
   HostInfoSkeleton,
   HostInfoError,
 } from '@/app/meeting/detail/components/skeleton/HostInfoSkeleton';
+import ProfileIcon from '@/components/shared/BaseProfile';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
-import ProfileIcon from "@/components/shared/BaseProfile";
 
 export default function MeetingHostInfo() {
   const { data: meeting, isLoading, error, refetch } = useMeetingDetail();
 
   if (isLoading) return <HostInfoSkeleton />;
   if (error || !meeting) return <HostInfoError onRetry={() => refetch()} />;
+  const host = meeting.participants?.find((participant) => participant.isHost);
 
   return (
     <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
@@ -25,29 +26,29 @@ export default function MeetingHostInfo() {
         </div>
         <div className="inline-flex items-start justify-start gap-3.5 self-stretch">
           <div className="relative size-[42px] overflow-hidden rounded-full">
-            {meeting.host?.profileImage ? (
+            {host?.image ? (
               <Image
-                src={meeting.host.profileImage}
-                alt={`${meeting.host.name} 프로필`}
+                src={host.image}
+                alt={`${host.name} 프로필`}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-full"
               />
             ) : (
-              <ProfileIcon id={meeting.host?.id} size={42} />
+              <ProfileIcon id={host?.userId} size={42} />
             )}
           </div>
           <div className="inline-flex shrink grow basis-0 flex-col items-start justify-start gap-0.5">
             <div className="inline-flex items-center justify-start gap-2">
               <div className="font-['Pretendard'] text-xl font-bold text-black">
-                {meeting.host?.name || '알 수 없는 사용자'}
+                {host?.name || '알 수 없는 사용자'}
               </div>
               <div className="font-['Pretendard'] text-base font-medium text-[#bfbfbf]">
-                {meeting.host?.email || 'unknown@example.com'}
+                {host?.email || 'unknown@example.com'}
               </div>
             </div>
             <div className="font-['Pretendard'] text-base font-medium leading-normal text-neutral-800">
-              {meeting.host?.userBio || '사용자 정보가 없습니다.'}
+              {host?.description || '사용자 정보가 없습니다.'}
             </div>
           </div>
         </div>
