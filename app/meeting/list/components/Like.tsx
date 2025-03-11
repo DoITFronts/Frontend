@@ -19,9 +19,7 @@ function Like({
         onClick(meetingId);
       }}
     >
-      <div style={{ position: 'relative', width: '28px', height: '28px' }}>
-        <HeartIcon fillPercentage={isLiked ? 100 : 0} />
-      </div>
+      <HeartIcon variant={isLiked ? 'active' : 'inactive'} />
     </button>
   );
 }
