@@ -61,7 +61,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   const { reviews, totalCount } = initialReviews;
 
   // URL에서 가져온 검색 조건을 상태로 관리
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '술');
+  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '전체');
   const [selectedFirstLocation, setSelectedFirstLocation] = useState(
     searchParams.get('location_1') || defaultFirstOption,
   );
@@ -93,7 +93,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   });
 
   useEffect(() => {
-    setSelectedCategory(searchParams.get('category') || '술');
+    setSelectedCategory(searchParams.get('category') || '전체');
     setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
     setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
     setSelectedFilter(searchParams.get('order') || '');
@@ -209,22 +209,20 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
 
       {/* 번개 카테고리 */}
       <div className="mb-10 flex gap-3">
-        {meetingCategory
-          .filter((category) => category !== '전체') // '제외할 카테고리'를 제외
-          .map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => handleCategoryClick(category)}
-              className="cursor-pointer focus:outline-none"
-            >
-              <Chip
-                text={category}
-                size="lg"
-                mode={selectedCategory === category ? 'dark' : 'light'}
-              />
-            </button>
-          ))}
+        {meetingCategory.map((category) => (
+          <button
+            key={category}
+            type="button"
+            onClick={() => handleCategoryClick(category)}
+            className="cursor-pointer focus:outline-none"
+          >
+            <Chip
+              text={category}
+              size="lg"
+              mode={selectedCategory === category ? 'dark' : 'light'}
+            />
+          </button>
+        ))}
       </div>
 
       {/* 리뷰 점수 */}
