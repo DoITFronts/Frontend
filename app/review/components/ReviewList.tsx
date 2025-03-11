@@ -254,7 +254,6 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
                   inline
                   selected={tempDate}
                   onChange={setTempDate}
-                  minDate={new Date()}
                   calendarClassName="custom-calendar"
                   renderDayContents={(day, date) => <div style={getDayStyle(date)}>{day}</div>}
                 />
