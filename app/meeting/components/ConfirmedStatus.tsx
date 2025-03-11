@@ -1,7 +1,7 @@
 import CheckIcon from '@/components/shared/Icons/CheckIcon';
 
 function ConfirmedStatus({ isConfirmed }: { isConfirmed: boolean }) {
-  if (isConfirmed) return null;
+  if (!isConfirmed) return null;
 
   return (
     <div className="inline-flex h-6 items-center justify-start gap-1">
