@@ -13,6 +13,7 @@ import categoryMap from '@/types/categoryMap';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];
@@ -133,60 +134,65 @@ export default function Page() {
         ) : (
           meetings.map((meeting) => (
             <Card key={meeting.id} mode="list">
-              <div className="flex h-[430px] flex-col justify-between overflow-hidden">
-                <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
-                  <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-                  <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-                  {meeting.imageUrl ? (
-                    <Image
-                      src={meeting.imageUrl}
-                      width={384}
-                      height={200}
-                      alt="thumbnail"
-                      className="w-96"
-                    />
-                  ) : (
-                    <Image
-                      src="/assets/card/example_image.png"
-                      width={384}
-                      height={200}
-                      alt="thumbnail"
-                      className="w-96"
-                    />
-                  )}
-                </div>
-
-                <div className="flex h-[206px] flex-col justify-between">
-                  <div className="flex flex-col gap-[10px]">
-                    <div className="flex flex-col gap-2">
-                      <Card.Title
-                        name={meeting.title}
-                        location={`${meeting.city} ${meeting.town}`}
+              <Link href={`/meeting/detail/${meeting.id}`} className="block" prefetch={false}>
+                <div className="flex h-[430px] flex-col justify-between overflow-hidden">
+                  <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
+                    <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
+                    <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
+                    {meeting.imageUrl ? (
+                      <Image
+                        src={meeting.imageUrl}
+                        width={384}
+                        height={200}
+                        alt="thumbnail"
+                        className="w-96"
                       />
-                      <div className="flex h-[22px] flex-row items-center gap-1">
-                        <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                          <ChipInfo datetime={meeting.targetAt} />
+                    ) : (
+                      <Image
+                        src="/assets/card/example_image.png"
+                        width={384}
+                        height={200}
+                        alt="thumbnail"
+                        className="w-96"
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex h-[206px] flex-col justify-between">
+                    <div className="flex flex-col gap-[10px]">
+                      <div className="flex flex-col gap-2">
+                        <Card.Title
+                          name={meeting.title}
+                          location={`${meeting.city} ${meeting.town}`}
+                        />
+                        <div className="flex h-[22px] flex-row items-center gap-1">
+                          <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
+                            <ChipInfo datetime={meeting.targetAt} />
+                          </div>
                         </div>
+                      </div>
+
+                      <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
+                        {meeting.summary}
                       </div>
                     </div>
 
-                    <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
-                      {meeting.summary}
+                    <div className="flex h-auto w-full gap-6">
+                      <MeetingProgress
+                        id={meeting.id}
+                        participantCount={meeting.participantCount}
+                        capacity={meeting.capacity}
+                        isConfirmed={meeting.isConfirmed}
+                        isCompleted={meeting.isCompleted}
+                      />
+                      <ButonBox
+                        onClick={() => handleMeeting(meeting)}
+                        isJoined={meeting.isJoined}
+                      />
                     </div>
                   </div>
-
-                  <div className="flex h-auto w-full gap-6">
-                    <MeetingProgress
-                      id={meeting.id}
-                      participantCount={meeting.participantCount}
-                      capacity={meeting.capacity}
-                      isConfirmed={meeting.isConfirmed}
-                      isCompleted={meeting.isCompleted}
-                    />
-                    <ButonBox onClick={() => handleMeeting(meeting)} isJoined={meeting.isJoined} />
-                  </div>
                 </div>
-              </div>
+              </Link>
             </Card>
           ))
         )}
