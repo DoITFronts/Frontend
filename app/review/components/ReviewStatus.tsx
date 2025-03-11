@@ -1,6 +1,6 @@
-import { motion } from 'framer-motion'; // framer-motion 임포트
+import { motion } from 'framer-motion';
 
-import HeartIcon from '@/components/shared/Icons/HeartIcon';
+import ReviewHeart from '@/components/ui/review/ReviewHeart';
 import { Reviews } from '@/types/review';
 
 export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
@@ -41,7 +41,7 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
               key={`${average}-${index}`}
               style={{ position: 'relative', width: '28px', height: '28px' }}
             >
-              <HeartIcon fillPercentage={0} />
+              <ReviewHeart fillPercentage={0} />
               <motion.div
                 style={{
                   position: 'absolute',
@@ -56,7 +56,7 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
                 animate={{ width: '28px' }}
                 transition={{ duration: 0.5, ease: 'easeInOut', delay: index * 0.2 }}
               >
-                <HeartIcon fillPercentage={100} />
+                <ReviewHeart fillPercentage={100} />
               </motion.div>
             </div>
           ))}

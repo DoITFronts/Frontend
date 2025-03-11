@@ -6,9 +6,9 @@ import { useInView } from 'react-intersection-observer';
 
 import HostInfo from '@/app/meeting/components/HostInfo';
 import Card from '@/app/meeting/list/components/Card';
-import HeartIcon from '@/components/shared/Icons/HeartIcon';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
+import ReviewHeart from '@/components/ui/review/ReviewHeart';
 import { Reviews } from '@/types/review';
 
 export default function ReviewItem({ review, priority }: { review: Reviews; priority: boolean }) {
@@ -55,7 +55,7 @@ export default function ReviewItem({ review, priority }: { review: Reviews; prio
             <div className="inline-flex items-start justify-start gap-0.5">
               {Array.from({ length: 5 }).map((_, index) => (
                 <div key={index} style={{ position: 'relative', width: '28px', height: '28px' }}>
-                  <HeartIcon fillPercentage={0} />
+                  <ReviewHeart fillPercentage={0} />
                   <div
                     style={{
                       position: 'absolute',
@@ -67,7 +67,7 @@ export default function ReviewItem({ review, priority }: { review: Reviews; prio
                       clipPath: `inset(0 ${100 - (index < review.rating ? 100 : 0)}% 0 0)`,
                     }}
                   >
-                    <HeartIcon fillPercentage={100} />
+                    <ReviewHeart fillPercentage={100} />
                   </div>
                 </div>
               ))}
