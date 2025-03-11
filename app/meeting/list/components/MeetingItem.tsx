@@ -115,18 +115,17 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
       <Card>
         <div className="relative">
           <Link href={`/meeting/detail/${meeting.id}`} className="block" prefetch={false}>
-            <div className="flex h-[430px] flex-col justify-between overflow-hidden">
+            <div className="flex flex-col justify-between gap-4 overflow-hidden">
               {/* 이미지 */}
-              <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
+              <div className="relative flex h-[172px] w-full items-center justify-center overflow-hidden md:h-[367px] lg:h-[200px]">
                 <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
                 <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
                 <Image
                   src={meeting.imageUrl || '/assets/card/example_image.png'}
-                  width={384}
-                  height={200}
+                  fill
                   alt="thumbnail"
-                  className="w-full object-cover"
+                  className="object-cover"
                   priority={priority}
                 />
                 <div className="absolute right-[14px] top-[17.5px]">
