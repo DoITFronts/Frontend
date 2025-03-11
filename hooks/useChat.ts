@@ -18,7 +18,7 @@ export const useCreateChatRoom = () => {
   return useMutation<void, Error, void>({
     mutationFn: createChatRoom,
     onSuccess: () => {
-      queryClient.invalidateQueries(['chatRooms']);
+      queryClient.invalidateQueries({ queryKey: ['chatRooms'] });
     },
   });
 };
@@ -27,8 +27,10 @@ export const useChatMessages = (roomId: string) =>
   useQuery({
     queryKey: ['chatMessages', roomId],
     queryFn: () => fetchChatMessages(roomId),
-    enabled: !!roomId, // roomId가 있을 때만 실행
+    enabled: !!roomId,
   });
 
-export const useJoinChatRoom = () => useMutation(joinChatRoom);
-
+export const useJoinChatRoom = () =>
+  useMutation<void, Error, string>({
+    mutationFn: joinChatRoom,
+  });
