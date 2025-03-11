@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 
 interface UserState {
-  userId: string | null;
+  userId: number | null;
   profileImage: string | null;
   isLoggedIn: boolean;
-  setUser: (user: { sub: string; profileImage: string | null }) => void;
+  setUser: (user: { sub: number; profileImage: string | null }) => void;
   logout: () => void;
 }
 
@@ -18,8 +18,7 @@ const useUserStore = create<UserState>((set) => ({
       profileImage: user.profileImage,
       isLoggedIn: true,
     }),
-  logout: () =>
-    set({ userId: null, profileImage: null, isLoggedIn: false }),
+  logout: () => set({ userId: null, profileImage: null, isLoggedIn: false }),
 }));
 
 export default useUserStore;

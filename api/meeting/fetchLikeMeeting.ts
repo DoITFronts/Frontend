@@ -2,7 +2,7 @@ import categoryMap from '@/types/categoryMap';
 import orderMap from '@/types/orderMap';
 import { cityMap } from '@/types/regions';
 
-const fetchMeeting = async ({
+const fetchLikeMeeting = async ({
   category,
   city,
   town,
@@ -58,7 +58,7 @@ const fetchMeeting = async ({
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings?${queryParams.toString()}`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings/like?${queryParams.toString()}`,
       {
         method: 'GET',
         headers,
@@ -77,4 +77,4 @@ const fetchMeeting = async ({
   }
 };
 
-export default fetchMeeting;
+export default fetchLikeMeeting;

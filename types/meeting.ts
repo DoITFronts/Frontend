@@ -16,8 +16,10 @@ export interface Participant {
   lighteningId: number;
   userId: number;
   name: string;
-  profileImage?: string;
+  image?: string;
   isHost: boolean;
+  email: string;
+  description: string;
 }
 
 export interface Host {
@@ -26,12 +28,6 @@ export interface Host {
   email: string;
   profileImage: string;
   userBio: string;
-}
-
-export interface Description {
-  id: string;
-  title: string;
-  description: string;
 }
 
 export interface Meeting {
@@ -54,9 +50,11 @@ export interface Meeting {
 
 export interface MeetingDetail extends Meeting {
   placeName: string;
+  latitude: string;
+  longitude: string;
   address: string;
   host: Host;
-  description: Description;
+  description: string;
 }
 
 export interface CreateMeetingParams {

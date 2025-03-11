@@ -1,15 +1,13 @@
 import categoryMap from '@/types/categoryMap';
-import orderMap from '@/types/orderMap';
-import { cityMap } from '@/types/regions';
+import cityMap from '@/types/cityMap';
 
-const fetchMeeting = async ({
+const fetchReviews = async ({
   category,
   city,
   town,
   targetAt,
   page,
   size,
-  order,
 }: {
   category: string;
   city: string;
@@ -17,7 +15,6 @@ const fetchMeeting = async ({
   targetAt: Date | null;
   page?: number;
   size?: number;
-  order?: string;
 }) => {
   const queryParams = new URLSearchParams();
 
@@ -42,28 +39,11 @@ const fetchMeeting = async ({
   if (page) {
     queryParams.append('page', page.toString());
   }
-  //토큰 가져오기
-  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-  };
-  //로그인 된 상태 -> 토큰이랑 같이 보내기
-  if (token) {
-    headers['Authorization'] = `${token}`;
-  }
-
-  if (order) {
-    queryParams.append('order', orderMap[order] ?? order);
-  }
 
   try {
+    // TODO: 실제 api 주소로 변경
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/lightenings?${queryParams.toString()}`,
-      {
-        method: 'GET',
-        headers,
-        credentials: 'include',
-      },
     );
 
     if (!response.ok) {
@@ -77,4 +57,4 @@ const fetchMeeting = async ({
   }
 };
 
-export default fetchMeeting;
+export default fetchReviews;

@@ -118,7 +118,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
                         <HostInfo
                           key={participant.userId}
                           name={participant.name}
-                          profileImage={participant.profileImage}
+                          profileImage={participant.image}
                         />
                       ))}
 
