@@ -53,7 +53,9 @@ export default function GNB() {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('accessToken');
       setIsLoggedIn(!!token);
-      fetchProfile();
+      if (token) {
+        fetchProfile();
+      }
     }
   }, []);
 
