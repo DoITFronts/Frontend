@@ -293,7 +293,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
                 </div>
               </div>
             }
-            onSelect={() => openModal('calender')}
+            onSelect={() => openModal('calendar')}
           />
         </div>
         <DropDown
