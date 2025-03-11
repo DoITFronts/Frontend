@@ -288,7 +288,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
                 </div>
               </div>
             }
-            onSelect={() => openModal('calender')}
+            onSelect={() => openModal('calendar')}
           />
         </div>
         <DropDown

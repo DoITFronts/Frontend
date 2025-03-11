@@ -291,7 +291,7 @@ export default function LikedPage() {
                 </div>
               </div>
             }
-            onSelect={() => openModal('calender')}
+            onSelect={() => openModal('calendar')}
           />
         </div>
         <DropDown
