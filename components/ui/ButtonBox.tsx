@@ -16,7 +16,9 @@ export default function ButtonBox({
     setLocalIsJoined(isJoined);
   }, [isJoined]);
 
-  const handleClick = async () => {
+  const handleClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     setLocalIsJoined(!localIsJoined);
 
     if (onClick) {

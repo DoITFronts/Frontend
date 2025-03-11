@@ -1,58 +1,18 @@
 'use client';
 
-import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
-
-import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
-import Card from '@/app/meeting/list/components/Card';
-import ButonBox from '@/components/ui/ButtonBox';
-import MeetingProgress from '@/components/ui/card/MeetingProgress';
+import { Suspense, useState } from 'react';
 import Chip from '@/components/ui/chip/Chip';
-import { Meeting } from '@/types/meeting';
-import categoryMap from '@/types/categoryMap';
+import { GridSkeleton } from '../components/GridSkeleton';
+import { ErrorBoundary } from 'react-error-boundary';
+import MeetingTabs from '../components/MeetingTab';
+import { MeetingCardError } from '../components/MeetingCardSkeleton';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
-const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];
+const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];
 
-export default function Page() {
-  const [selectedMenuTab, setSelecetedMenuTab] = useState('');
-  const [selectedActivityTab, setSelectedActivityTab] = useState('술');
-  const [meetings, setMeetings] = useState<Meeting[]>([]);
-  const [reviews, setReviews] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        if (selectedMenuTab === '리뷰') {
-          const data = await fetchMyPageReviews();
-          setReviews(data);
-        } else {
-          const categoryInEnglish = selectedActivityTab
-            ? categoryMap[selectedActivityTab]
-            : 'ALCOHOL';
-          console.log('원본 카테고리:', selectedActivityTab);
-          console.log('변환된 카테고리:', categoryInEnglish);
-          const data = await fetchMyPageMeetings({
-            type: selectedMenuTab,
-            category: selectedActivityTab || undefined,
-          });
-          console.log(data);
-          if (data && data.lighteningResponses) {
-            setMeetings(data.lighteningResponses);
-          } else {
-            setMeetings([]);
-          }
-        }
-      } catch (error) {
-        console.error('데이터 불러오기 실패: ', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, [selectedMenuTab, selectedActivityTab]);
+export default function MyPage() {
+  const [selectedMenuTab, setSelecetedMenuTab] = useState('나의 번개');
+  const [selectedActivityTab, setSelectedActivityTab] = useState('');
 
   const handleMenuClick = (tab: string) => {
     if (tab === selectedMenuTab) {
@@ -61,8 +21,8 @@ export default function Page() {
       setSelecetedMenuTab(tab);
     }
   };
+
   const handleActivityClick = (tab: string) => {
-    console.log(tab);
     if (tab === selectedActivityTab) {
       setSelectedActivityTab('');
     } else {
@@ -72,6 +32,7 @@ export default function Page() {
 
   return (
     <div className="flex h-auto w-full flex-col gap-10">
+      {/* 헤더 및 필터 영역 */}
       <div className="flex size-auto flex-col gap-5">
         <div className="flex size-auto items-center gap-3">
           {MENU_TABS.map((tab) => (
@@ -117,65 +78,21 @@ export default function Page() {
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-x-6 gap-y-10">
-        {selectedMenuTab === '리뷰' ? (
-          <div>리뷰 기능 준비 중</div>
-        ) : selectedMenuTab === '채팅' ? (
-          <div>채팅 기능 준비 중</div>
-        ) : (
-          meetings.map((meeting) => (
-            <Card key={meeting.id} mode="list">
-              <div className="flex h-[430px] flex-col justify-between overflow-hidden">
-                <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
-                  <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-                  <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-                  <Image
-                    src="/assets/card/example_image.png"
-                    width={384}
-                    height={200}
-                    alt="thumbnail"
-                    className="w-96"
-                  />
-                </div>
 
-                <div className="flex h-[206px] flex-col justify-between">
-                  <div className="flex flex-col gap-[10px]">
-                    <div className="flex flex-col gap-2">
-                      <Card.Title
-                        name={meeting.title}
-                        location={`${meeting.city} ${meeting.town}`}
-                      />
-                      <div className="flex h-[22px] flex-row items-center gap-1">
-                        <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                          2월 9일
-                        </div>
-                        <div className="size-[3px] rounded-full bg-[#bfbfbf]" />
-                        <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                          18:00
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
-                      {meeting.summary}
-                    </div>
-                  </div>
-
-                  <div className="flex h-auto w-full gap-6">
-                    <MeetingProgress
-                      id={meeting.id}
-                      participantCount={meeting.participantCount}
-                      capacity={meeting.capacity}
-                      isConfirmed={meeting.isConfirmed}
-                      isCompleted={meeting.isCompleted}
-                    />
-                    <ButonBox isJoined={meeting.isJoined} />
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))
-        )}
+      {/* 컨텐츠 영역 - ErrorBoundary와 Suspense 활용 */}
+      <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+        <ErrorBoundary
+          FallbackComponent={({ error }) => (
+            <div className="col-span-3">
+              <MeetingCardError />
+              <div className="mt-4 text-center text-red-500">{error.message}</div>
+            </div>
+          )}
+        >
+          <Suspense fallback={<GridSkeleton />}>
+            <MeetingTabs menuTab={selectedMenuTab} activityTab={selectedActivityTab} />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   );
