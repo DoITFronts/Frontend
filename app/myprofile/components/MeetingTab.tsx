@@ -3,109 +3,35 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { use, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import ReviewTab from './ReviewTab';
-import { fetchMyPageMeetings, fetchMyPageReviews, FetchParams } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
-import ButonBox from '@/components/ui/ButtonBox';
+import ButtonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import useMeetingToggle from '@/hooks/useMeetingToggle';
 import { Meeting } from '@/types/meeting';
-
-// 응답 타입 정의
-interface MeetingsResponse {
-  lighteningResponses?: Meeting[];
-  [key: string]: any;
-}
-
-interface ReviewResponse {
-  [key: string]: any;
-}
-
-// 미팅 데이터를 가져오는 함수를 Promise로 캐싱
-const meetingsCache = new Map<string, Promise<MeetingsResponse>>();
-
-function getMeetingsData(menuTab: string, activityTab: string): Promise<MeetingsResponse> {
-  const cacheKey = `${menuTab}-${activityTab}`;
-
-  if (!meetingsCache.has(cacheKey)) {
-    // Promise를 생성하고 캐시에 저장
-    const promise = fetchMyPageMeetings({
-      type: menuTab,
-      category: activityTab || undefined,
-    }) as Promise<MeetingsResponse>;
-
-    meetingsCache.set(cacheKey, promise);
-
-    // 5분 후 캐시 삭제 (선택적)
-    setTimeout(
-      () => {
-        meetingsCache.delete(cacheKey);
-      },
-      5 * 60 * 1000,
-    );
-  }
-
-  return meetingsCache.get(cacheKey) as Promise<MeetingsResponse>;
-}
-
-// 리뷰 데이터를 가져오는 함수를 Promise로 캐싱
-// let reviewsCache: Promise<ReviewResponse> | null = null;
-
-// function getReviewsData(category?: string): Promise<ReviewResponse> {
-//   if (!reviewsCache) {
-//     const params: FetchParams = category ? { category } : {};
-//     reviewsCache = fetchMyPageReviews(params) as Promise<ReviewResponse>;
-
-//     // 5분 후 캐시 삭제 (선택적)
-//     setTimeout(
-//       () => {
-//         reviewsCache = null;
-//       },
-//       5 * 60 * 1000,
-//     );
-//   }
-
-//   return reviewsCache;
-// }
+import { useToggleJoinMutation } from '@/hooks/useOptimisticQuery';
+import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
+import { useMyPageMeetings } from '@/hooks/useMyPage';
 
 interface MeetingTabsProps {
   menuTab: string;
   activityTab: string;
 }
 
-// 리뷰 탭 컴포넌트
-// function ReviewTab() {
-//   // try/catch 없이 use 직접 호출
-//   const reviewsData = use(getReviewsData());
-
-//   // 리뷰 데이터가 비어있는 경우
-//   if (
-//     !reviewsData ||
-//     Object.keys(reviewsData).length === 0 ||
-//     (Array.isArray(reviewsData) && reviewsData.length === 0)
-//   ) {
-//     return (
-//       <div className="col-span-3 flex h-40 items-center justify-center rounded-md bg-black-3 p-4">
-//         <p className="text-lg text-black-8">작성한 리뷰가 없어요.</p>
-//       </div>
-//     );
-//   }
-
-// 실제 리뷰 데이터가 있는 경우 (현재는 준비 중 메시지 표시)
-//   return (
-//     <div className="col-span-3 flex h-40 items-center justify-center">
-//       <p className="text-lg">리뷰 기능 준비 중</p>
-//     </div>
-//   );
-// }
-
 // 미팅 리스트 컴포넌트
 function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: string }) {
-  // try/catch 없이 use 직접 호출
-  const meetingsData = use(getMeetingsData(menuTab, activityTab));
+  // useMyPageMeetings 훅 사용
+  const {
+    data: meetingsData,
+    isLoading,
+    error,
+  } = useMyPageMeetings({
+    type: menuTab,
+    category: activityTab || undefined,
+  });
 
   // 토글 관련 훅 사용
   const [meetings, setMeetings] = useState<Meeting[]>([]);
@@ -120,6 +46,39 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
       setMeetings([]);
     }
   }, [meetingsData]);
+
+  const joinMutation = useToggleJoinMutation(joinLightning);
+  const leaveMutation = useToggleJoinMutation(leaveLightning);
+
+  const handleJoin = (meetingId: string) => {
+    joinMutation.mutate(meetingId);
+  };
+
+  const handleCancel = (meetingId: string) => {
+    leaveMutation.mutate(meetingId);
+  };
+
+  const currentUserId = 3;
+
+  // 로딩 중인 경우
+  if (isLoading) {
+    return (
+      <div className="col-span-3 flex h-[435px] items-center justify-center">
+        <p className="text-center text-base font-medium text-[#C0C1C2]">로딩 중...</p>
+      </div>
+    );
+  }
+
+  // 에러가 발생한 경우
+  if (error) {
+    return (
+      <div className="col-span-3 flex h-[435px] items-center justify-center">
+        <p className="text-center text-base font-medium text-[#C0C1C2]">
+          데이터를 불러오는데 문제가 발생했습니다.
+        </p>
+      </div>
+    );
+  }
 
   // 데이터가 없는 경우 처리
   if (!meetings || meetings.length === 0) {
@@ -137,7 +96,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
   // 데이터가 있는 경우 렌더링
   return (
     <>
-      {meetings.map((meeting, index) => (
+      {meetings.map((meeting) => (
         <motion.div
           ref={ref}
           key={meeting.id}
@@ -195,7 +154,13 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
                   isConfirmed={meeting.isConfirmed}
                   isCompleted={meeting.isCompleted}
                 />
-                <ButonBox onClick={() => toggleMeeting(meeting)} isJoined={meeting.isJoined} />
+                <ButtonBox
+                  isJoined={meeting.isJoined}
+                  isCompleted={meeting.isCompleted}
+                  isHost={meeting.participants?.some((p) => p.isHost && p.userId === currentUserId)}
+                  onJoin={() => handleJoin(meeting.id)}
+                  onCancel={() => handleCancel(meeting.id)}
+                />
               </div>
             </div>
           </Card>
@@ -218,7 +183,7 @@ export default function MeetingTabs({ menuTab, activityTab }: MeetingTabsProps) 
 
   // 리뷰 탭인 경우
   if (menuTab === '리뷰') {
-    return <ReviewTab />;
+    return <ReviewTab activityTab={activityTab} />;
   }
 
   // 번개 목록 (나의 번개 또는 내가 만든 번개) 표시

@@ -22,6 +22,8 @@ import isUserLoggedIn from '@/utils/authUtils';
 import HostInfo from '../../components/HostInfo';
 
 import Card from './Card';
+import ButtonBox from '@/components/ui/ButtonBox';
+import { useToggleJoinMutation } from '@/hooks/useOptimisticQuery';
 
 interface Props {
   meeting: Meeting;
@@ -63,6 +65,17 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
     completed: '마감',
     joined: '참여 취소하기',
     default: '참여하기',
+  };
+
+  const joinMutation = useToggleJoinMutation(joinLightning);
+  const leaveMutation = useToggleJoinMutation(leaveLightning);
+
+  const handleJoin = (meetingId: string) => {
+    joinMutation.mutate(meetingId);
+  };
+
+  const handleCancel = (meetingId: string) => {
+    leaveMutation.mutate(meetingId);
   };
 
   let buttonText;
@@ -143,14 +156,21 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
               isConfirmed={meeting.isConfirmed}
               isCompleted={meeting.isCompleted}
             />
-            <Button
+            {/* <Button
               color={isJoined ? 'white' : 'filled'}
               type="button"
               onClick={handleJoinToggle}
               disabled={meeting.isCompleted}
             >
               {buttonText}
-            </Button>
+            </Button> */}
+            <ButtonBox
+              isJoined={meeting.isJoined}
+              isCompleted={meeting.isCompleted}
+              onJoin={() => handleJoin(meeting.id)}
+              onCancel={() => handleCancel(meeting.id)}
+              chatIconDisabled={true}
+            />
           </div>
         </div>
       </Card>

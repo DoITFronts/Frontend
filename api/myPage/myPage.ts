@@ -2,9 +2,10 @@ import useProfileStore from '@/store/useProfileStore';
 import axiosInstance from '../api';
 import categoryMap from '@/types/categoryMap';
 
-interface FetchMyPageMeetingsParams {
+export interface FetchMyPageMeetingsParams {
   type: string; // '나의 번개' | '내가 만든 번개'
   category?: string; // '술' | '카페' | '보드 게임' | '맛집'
+  size?: number;
 }
 
 export interface FetchParams {
@@ -45,9 +46,9 @@ export const updateProfile = async (
   }
 };
 
-export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeetingsParams) => {
+export const fetchMyPageMeetings = async ({ type, category, size }: FetchMyPageMeetingsParams) => {
   try {
-    const params: Record<string, string> = {};
+    const params: Record<string, string | number> = {};
     if (category) {
       params.category = categoryMap[category] || 'ALCOHOL';
     }

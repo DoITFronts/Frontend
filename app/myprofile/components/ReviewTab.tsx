@@ -1,16 +1,14 @@
-// components/ReviewTab.tsx
 'use client';
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { use } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { fetchMyPageReviews, FetchParams } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
+import { useMyPageReviews } from '@/hooks/useMyPage';
 
 // 응답 타입 정의
 export interface Review {
@@ -29,40 +27,44 @@ export interface Review {
   userImageUrl: string;
 }
 
-// 응답 타입 정의
-interface ReviewResponse {
-  reviews?: Review[];
-  totalCount: number;
-  [key: string]: any;
-}
-
-// 리뷰 데이터를 가져오는 함수를 Promise로 캐싱
-let reviewsCache: Promise<ReviewResponse> | null = null;
-
-function getReviewsData(category?: string): Promise<ReviewResponse> {
-  if (!reviewsCache) {
-    const params: FetchParams = category ? { category } : {};
-    reviewsCache = fetchMyPageReviews(params) as Promise<ReviewResponse>;
-
-    // 5분 후 캐시 삭제 (선택적)
-    setTimeout(
-      () => {
-        reviewsCache = null;
-      },
-      5 * 60 * 1000,
-    );
-  }
-
-  return reviewsCache;
+interface ReviewTabProps {
+  activityTab?: string;
 }
 
 // 리뷰 탭 컴포넌트
-export default function ReviewTab() {
-  // use 훅으로 리뷰 데이터 로드
-  const reviewsData = use(getReviewsData());
+export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
+  // useMyPageReviews 훅 사용
+  const {
+    data: reviewsData,
+    isLoading,
+    error,
+  } = useMyPageReviews({
+    category: activityTab || undefined,
+  });
+
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
 
-  // 리뷰 데이터 추출 - 필요에 따라 수정
+  // 로딩 중인 경우
+  if (isLoading) {
+    return (
+      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+        <p className="text-center text-base font-medium text-[#C0C1C2]">로딩 중...</p>
+      </div>
+    );
+  }
+
+  // 에러가 발생한 경우
+  if (error) {
+    return (
+      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+        <p className="text-center text-base font-medium text-[#C0C1C2]">
+          데이터를 불러오는데 문제가 발생했습니다.
+        </p>
+      </div>
+    );
+  }
+
+  // 리뷰 데이터 추출
   const reviews: Review[] = reviewsData?.reviews || [];
 
   // 리뷰 데이터가 비어있는 경우

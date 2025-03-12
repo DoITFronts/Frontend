@@ -1,5 +1,7 @@
+import toggleLike from '@/api/meeting/toggleLike';
 import HeartIcon from '@/components/shared/Icons/HeartIcon';
 import useLikeMutation from '@/hooks/useLikeMutation';
+import { useToggleLikeMutation } from '@/hooks/useOptimisticQuery';
 
 function Like({
   meetingId,
@@ -10,7 +12,7 @@ function Like({
   isLiked: boolean;
   onClick: (meetingId: string) => void;
 }) {
-  const { likeMutation } = useLikeMutation();
+  const likeMutation = useToggleLikeMutation(toggleLike);
   return (
     <button
       type="button"
