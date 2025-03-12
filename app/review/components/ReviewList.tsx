@@ -1,7 +1,6 @@
 'use client';
 
 import { ko } from 'date-fns/locale';
-import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
@@ -58,7 +57,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { reviews, totalCount } = initialReviews;
+  const { reviews } = initialReviews;
 
   // URL에서 가져온 검색 조건을 상태로 관리
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '전체');
@@ -84,7 +83,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
 
   // useInfiniteQuery를 사용해 모든 리뷰 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useReview({
+  const { isLoading, isError, isFetchingNextPage } = useReview({
     category: selectedCategory,
     city: selectedFirstLocation,
     town: selectedSecondLocation,
@@ -197,16 +196,6 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
 
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[50px] inline-flex flex-col items-start justify-start gap-3">
-        <div className="relative justify-center text-center font-['DungGeunMo'] text-3xl font-normal text-black">
-          모든 리뷰
-        </div>
-        <div className="relative justify-center text-center font-['Pretendard'] text-[22px] font-normal text-black">
-          번개의 모든 리뷰를 살펴보세요:)
-        </div>
-      </div>
-
       {/* 번개 카테고리 */}
       <div className="mb-10 flex gap-3">
         {meetingCategory.map((category) => (

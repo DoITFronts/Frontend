@@ -1,6 +1,6 @@
-import { fetchReviewMeetingList } from '@/api/meeting/fetchMeeting';
+import ReviewList from '../components/ReviewList';
 
-import ReviewList from './components/ReviewList';
+import { fetchReviewMeetingList } from '@/api/meeting/fetchMeeting';
 
 interface PageProps {
   searchParams: Promise<Record<string, string | undefined>>;

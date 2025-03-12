@@ -1,17 +1,15 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { fetchProfile } from '@/api/myPage/myPage';
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
 import ProfileIcon from '@/components/shared/BaseProfile';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
-import { hover } from 'framer-motion';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 export default function Page() {
   const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
-  const [isLoading, setIsLoading] = useState(true);
   const { nickname, email, description, imageUrl } = useProfileStore();
   const { openModal } = useModalStore();
 
@@ -20,9 +18,9 @@ export default function Page() {
   }, []);
 
   return (
-    <div className="w-full h-auto flex gap-6 items-center relative">
+    <div className="relative flex h-auto w-full items-center gap-6">
       <div
-        className="cursor-pointer absolute top-3 right-0"
+        className="absolute right-0 top-3 cursor-pointer"
         onMouseEnter={() => setIconStatus('hover')}
         onMouseLeave={() => setIconStatus('default')}
         onClick={() => openModal('editProfile')}
@@ -30,23 +28,23 @@ export default function Page() {
         <EditingIcon status={iconStatus} />
       </div>
       {imageUrl ? (
-        <div className="w-[102px] h-[102px] rounded-full overflow-hidden">
+        <div className="size-[102px] overflow-hidden rounded-full">
           <img
             src={`${imageUrl}?timestamp=${new Date().getTime()}`}
             alt="프로필 이미지"
-            className="w-full h-full object-cover"
+            className="size-full object-cover"
           />
         </div>
       ) : (
         <ProfileIcon size={102} />
       )}
 
-      <div className="w-auto h-auto flex flex-col gap-[2px]">
-        <div className="w-auto h-auto flex justify-start gap-2.5">
-          <span className="text-black font-pretandard font-bold text-2xl">{nickname}</span>
-          <span className="text-black-6 font-pretandard font-medium text-lg">{email}</span>
+      <div className="flex size-auto flex-col gap-[2px]">
+        <div className="flex size-auto justify-start gap-2.5">
+          <span className="font-pretandard text-2xl font-bold text-black">{nickname}</span>
+          <span className="font-pretandard text-lg font-medium text-black-6">{email}</span>
         </div>
-        <div className="w-auto h-auto text-black-10 font-pretandard text-xl">{description}</div>
+        <div className="size-auto font-pretandard text-xl text-black-10">{description}</div>
       </div>
     </div>
   );

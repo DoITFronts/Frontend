@@ -4,14 +4,14 @@ import React from 'react';
 
 interface MeetingLayoutProps {
   title: React.ReactNode;
-  children: React.ReactNode;
+  meetingList: React.ReactNode;
 }
 
-export default function MeetingLayout({ title, children }: MeetingLayoutProps) {
+export default function MeetingLayout({ title, meetingList }: MeetingLayoutProps) {
   return (
     <div className="mx-auto flex max-w-5xl flex-col">
       {title && <div>{title}</div>}
-      {children && <div>{children}</div>}
+      {meetingList && <div>{meetingList}</div>}
     </div>
   );
 }

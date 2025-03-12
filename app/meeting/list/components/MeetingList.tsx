@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 
 import Icon from '@/components/shared/Icon';
 import FilterDropdown from '@/components/ui/card/component/FilterDropdown';
+import MeetingItem from '@/components/ui/card/component/MeetingItem';
 import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
@@ -19,11 +20,9 @@ import {
   participantFilter,
 } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
-import MeetingItem from '../../../../components/ui/card/component/MeetingItem';
 import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
 interface InitialMeetingsProps {

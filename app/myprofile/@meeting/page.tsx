@@ -1,15 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
-import Card from '@/components/ui/card/Card';
 import ButonBox from '@/components/ui/ButtonBox';
+import Card from '@/components/ui/card/Card';
 import MeetingProgress from '@/components/ui/card/component/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
-import { Meeting } from '@/types/meeting';
 import categoryMap from '@/types/categoryMap';
+import { Meeting } from '@/types/meeting';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드 게임', '맛집'];

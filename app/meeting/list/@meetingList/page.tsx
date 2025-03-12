@@ -1,6 +1,5 @@
 import { fetchMeetingList } from '@/api/meeting/fetchMeeting';
-
-import MeetingList from './components/MeetingList';
+import MeetingList from '@/app/meeting/list/components/MeetingList';
 
 interface PageProps {
   searchParams: Promise<Record<string, string | undefined>>;

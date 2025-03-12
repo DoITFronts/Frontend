@@ -5,7 +5,7 @@ interface HeartIconProps {
   variant?: 'active' | 'inactive';
 }
 
-const HeartIcon = ({ variant = 'active' }: HeartIconProps) => {
+function HeartIcon({ variant = 'active' }: HeartIconProps) {
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {
@@ -52,6 +52,6 @@ const HeartIcon = ({ variant = 'active' }: HeartIconProps) => {
       )}
     </motion.svg>
   );
-};
+}
 
 export default HeartIcon;

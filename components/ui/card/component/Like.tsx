@@ -1,4 +1,4 @@
-import HeartIcon from '@/'
+import HeartIcon from '@/components/shared/Icons/HeartIcon';
 
 function Like({
   meetingId,
