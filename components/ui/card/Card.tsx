@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import ChipInfo from '@/components/ui/chip/ChipInfo';
+import ChipDate from '@/components/ui/chip/ChipDate';
 
 import ConfirmedStatus from './component/ConfirmedStatus';
 import Participant from './component/Participant';
@@ -19,7 +19,7 @@ function Card({ children, mode = 'list' }: CardProps) {
 }
 
 Card.Title = Title;
-Card.ChipInfo = ChipInfo;
+Card.ChipInfo = ChipDate;
 Card.Like = Like;
 Card.Participant = Participant;
 Card.ConfirmedStatus = ConfirmedStatus;

@@ -1,4 +1,4 @@
-import Icon from '@/components/shared/Icon';
+import Icon from '@/components/utils/Icon';
 
 function Title({ name, location }: { name: string; location: string }) {
   return (

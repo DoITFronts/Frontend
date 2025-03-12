@@ -1,11 +1,6 @@
-import Link from 'next/link';
-
 import Card from '@/components/ui/card/Card';
 
-import Button from '../../Button';
-
-interface MeetingProgressProps {
-  id: string;
+interface MeetingStatusProps {
   participantCount: number;
   capacity: number;
   isConfirmed: boolean;
@@ -14,15 +9,14 @@ interface MeetingProgressProps {
   optionClass?: string;
 }
 
-export default function MeetingProgress({
-  id,
+export default function MeetingStatus({
   participantCount,
   capacity,
   isConfirmed,
   isCompleted,
   children,
   optionClass,
-}: MeetingProgressProps) {
+}: MeetingStatusProps) {
   return (
     <div className="flex w-full flex-row items-center">
       <div className="flex grow flex-col gap-3">

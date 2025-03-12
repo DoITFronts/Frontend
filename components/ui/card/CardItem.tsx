@@ -7,16 +7,16 @@ import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { toast } from 'react-toastify';
 
-import Card from '../Card';
+import Card from './Card';
 
-import HostInfo from './HostInfo';
+import HostInfo from './component/HostInfo';
 
-import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
-import Button from '@/components/ui/Button';
-import MeetingProgress from '@/components/ui/card/component/MeetingProgress';
-import Category from '@/components/ui/chip/Category';
-import ChipInfo from '@/components/ui/chip/ChipInfo';
-import useLikeToggle from '@/hooks/useLikeToggle';
+import { joinLightning, leaveLightning } from '@/api/client/meeting/joinMeeting';
+import Button from '@/components/ui/button/Button';
+import MeetingProgress from '@/components/ui/card/component/MeetingStatus';
+import Category from '@/components/ui/card/component/Category';
+import ChipDate from '@/components/ui/chip/ChipDate';
+import useLikeToggle from '@/hooks/like/useLikeToggle';
 import useModalStore from '@/store/useModalStore';
 import categoryMap from '@/types/categoryMap';
 import { Meeting } from '@/types/meeting';
@@ -29,7 +29,7 @@ interface Props {
   priority?: boolean;
 }
 
-export default function MeetingItem({ meeting, onClick, priority }: Props) {
+export default function CardItem({ meeting, onClick, priority }: Props) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { isLiked, handleLikeClick } = useLikeToggle(meeting.id, meeting.isLiked, onClick);
   const [isJoined, setIsJoined] = useState(false);
@@ -123,7 +123,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
                       ))}
 
                     <div className="flex h-[22px] flex-row items-center gap-1">
-                      <ChipInfo datetime={meeting.targetAt} />
+                      <ChipDate datetime={meeting.targetAt} />
                     </div>
                   </div>
                   <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">

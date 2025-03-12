@@ -8,7 +8,7 @@ interface ChipProps {
   disabled?: boolean;
 }
 
-export default function Chip({
+export default function CategoryFilter({
   text,
   size = 'sm',
   mode = 'light',

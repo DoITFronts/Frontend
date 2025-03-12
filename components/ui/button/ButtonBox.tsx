@@ -1,4 +1,4 @@
-import Icon from '@/components/shared/Icon';
+import Icon from '@/components/utils/Icon';
 import { useEffect, useState } from 'react';
 
 export default function ButtonBox({

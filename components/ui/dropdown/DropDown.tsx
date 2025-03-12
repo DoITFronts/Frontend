@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-import Icon from '../shared/Icon';
+import Icon from '../../utils/Icon';
 
 interface DropDownProps {
   /** 트리거를 컴포넌트로 받음.  */

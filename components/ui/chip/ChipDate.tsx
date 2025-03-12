@@ -4,7 +4,7 @@ interface ChipInfoProps {
   datetime: string;
 }
 
-export default function ChipInfo({ datetime }: ChipInfoProps) {
+export default function ChipDate({ datetime }: ChipInfoProps) {
   const formattedDateTime = formatDateTime(datetime);
 
   return (
