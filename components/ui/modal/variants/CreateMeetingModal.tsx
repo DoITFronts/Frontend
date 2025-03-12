@@ -43,8 +43,8 @@ export default function CreateMeetingModal() {
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
     console.log(selectedPlace);
-    console.log(deadlineDate.toISOString());
-    console.log(meetingDate.toISOString());
+    console.log(formatDateToString(deadlineDate));
+    console.log(formatDateToString(meetingDate));
     console.log(imageFile?.size);
   }, [selectedPlace]);
 
@@ -96,6 +96,17 @@ export default function CreateMeetingModal() {
     }
   };
 
+  const formatDateToString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+  };
+
   const handleParticipantChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     // 숫자만 입력되도록
@@ -138,8 +149,8 @@ export default function CreateMeetingModal() {
       latitude: selectedPlace.latitude,
       longitude: selectedPlace.longitude,
       category: meetingType,
-      targetAt: meetingDate.toString(),
-      endAt: deadlineDate.toString(),
+      targetAt: formatDateToString(meetingDate),
+      endAt: formatDateToString(deadlineDate),
       capacity: parseInt(participantCount),
       minCapacity: parseInt(minParticipants) || 1,
       ...(imageFile && { image: imageFile }),
