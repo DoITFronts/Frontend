@@ -9,7 +9,7 @@ export default function ReviewHeartSelectable({ count, onSelect }: ReviewHeartSe
   };
 
   return (
-    <div className="flex cursor-pointer gap-1">
+    <div className="flex gap-1 cursor-pointer">
       {[1, 2, 3, 4, 5].map((value) => (
         <svg
           key={value}

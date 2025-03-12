@@ -1,5 +1,5 @@
-import { josa } from 'es-hangul';
 import { RegisterOptions } from 'react-hook-form';
+import { josa } from 'es-hangul';
 
 export type Field =
   | 'name'

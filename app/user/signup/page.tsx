@@ -1,11 +1,10 @@
 'use client';
 
+import Form from '@/components/form/Form';
+import Logo from '@/public/assets/logo.svg';
 import Image from 'next/image';
 import Link from 'next/link';
-
-import Form from '@/app/user/component/Form';
-import { useSignup } from '@/hooks/user/useAuth';
-import Logo from '@/public/assets/logo/logo.svg';
+import { useSignup } from '@/hooks/useAuth';
 
 export default function Signup() {
   const { mutate, errorMessage } = useSignup();
@@ -15,9 +14,9 @@ export default function Signup() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white py-[5%]">
+    <div className="min-h-screen py-[5%] bg-white flex justify-center items-center">
       <div className="w-[402px]">
-        <div className="mb-[50px] flex items-center justify-center">
+        <div className="flex justify-center items-center mb-[50px]">
           <Link href="/">
             <Image src={Logo} alt="번개팅 로고" width={148} height={33} />
           </Link>
@@ -82,7 +81,7 @@ export default function Signup() {
           </Form.Label>
           <Form.Submit className="w-full">회원가입</Form.Submit>
         </Form>
-        <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-[15px] font-bold text-neutral-800">
+        <div className="flex justify-center items-center gap-2 font-['Pretendard'] text-[15px] text-neutral-800 font-bold mt-3">
           이미 회원이신가요?{' '}
           <Link className="text-gray-300 underline" href="/user/signin">
             로그인하기

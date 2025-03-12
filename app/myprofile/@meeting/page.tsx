@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import Chip from '@/components/ui/chip/Chip';
 import { GridSkeleton } from '../components/GridSkeleton';
 import { ErrorBoundary } from 'react-error-boundary';
 import MeetingTabs from '../components/MeetingTab';
@@ -37,7 +37,7 @@ export default function MyPage() {
         <div className="flex size-auto items-center gap-3">
           {MENU_TABS.map((tab) => (
             <button className="cursor-pointer" key={tab} onClick={() => handleMenuClick(tab)}>
-              <CategoryFilter text={tab} size="lg" mode={tab === selectedMenuTab ? 'dark' : 'light'} />
+              <Chip text={tab} size="lg" mode={tab === selectedMenuTab ? 'dark' : 'light'} />
             </button>
           ))}
         </div>

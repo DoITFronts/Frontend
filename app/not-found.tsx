@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 
-import Button from '@/components/ui/button/Button';
+import Button from '@/components/ui/Button';
 
 const fadeInVariant = {
   hidden: { opacity: 0, y: 50 },

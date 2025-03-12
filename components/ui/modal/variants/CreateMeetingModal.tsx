@@ -2,10 +2,10 @@
 import useModalStore from '@/store/useModalStore';
 import { useEffect, useState } from 'react';
 import CustomDatePicker from '../datePicker';
-import Button from '@/components/ui/button/Button';
-import Icon from '@/components/utils/Icon';
+import Button from '@/components/ui/Button';
+import Icon from '@/components/shared/Icon';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
-import createMeeting from '@/api/client/meeting/createMeeting';
+import createMeeting from '@/api/meeting/createMeeting';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';

@@ -22,6 +22,15 @@ export default function SplashScreen({ onCompleteAction }: { onCompleteAction: (
         transition={{ duration: 1 }}
       >
         <motion.div
+          className="mt-4 text-center text-2xl font-bold"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+        >
+          <p className="text-white">즉흥적인 만남은</p>
+          <p className="text-yellow-400">여기서 시작!</p>
+        </motion.div>
+        <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, ease: 'easeOut' }}
