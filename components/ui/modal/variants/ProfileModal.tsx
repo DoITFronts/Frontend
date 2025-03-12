@@ -1,12 +1,12 @@
-import Icon from '@/components/shared/Icon';
+import Icon from '@/components/utils/Icon';
 import useModalStore from '@/store/useModalStore';
 import { ChangeEvent, useEffect, useState } from 'react';
-import Button from '../../Button';
+import Button from '@/components/ui/button/Button';
 import Image from 'next/image';
 import userProfile from '@/public/userProfile.svg';
 import useUserStore from '@/store/userStore';
 import useProfileStore from '@/store/useProfileStore';
-import { fetchProfile, updateProfile } from '@/api/myPage/myPage';
+import { fetchProfile, updateProfile } from '@/api/client/myPage/myPage';
 import { toast } from 'react-toastify';
 
 const MAX_NICKNAME_LENGTH = 8;

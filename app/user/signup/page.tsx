@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Form from '@/app/user/component/Form';
-import { useSignup } from '@/hooks/useAuth';
+import { useSignup } from '@/hooks/user/useAuth';
 import Logo from '@/public/assets/logo/logo.svg';
 
 export default function Signup() {

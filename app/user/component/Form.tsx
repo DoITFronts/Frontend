@@ -10,8 +10,8 @@ import {
 } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
+import Icon from '@/components/utils/Icon';
+import Button from '@/components/ui/button/Button';
 import VALIDATION_RULES, { type Field, PASSWORD_CONFIRM_RULES } from '@/lib/formValidation';
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {

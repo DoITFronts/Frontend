@@ -82,4 +82,5 @@ export interface FetchMeetingListParams {
   page?: number;
   size?: number;
   order?: string;
+  initialMeetings?: Meeting[]
 }

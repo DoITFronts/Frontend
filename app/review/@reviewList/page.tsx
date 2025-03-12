@@ -1,6 +1,6 @@
 import ReviewList from '../components/ReviewList';
 
-import { fetchReviewMeetingList } from '@/api/meeting/fetchMeeting';
+import { fetchReviewMeetingList } from '@/api/server/fetchMeeting';
 
 interface PageProps {
   searchParams: Promise<Record<string, string | undefined>>;

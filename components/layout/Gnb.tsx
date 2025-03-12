@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { useSignout } from '@/hooks/useAuth';
-import useLikedCount from '@/hooks/useLikeCount';
+import { useSignout } from '@/hooks/user/useAuth';
+import useLikedCount from '@/hooks/like/useLikeCount';
 import Logo from '@/public/assets/logo/logoWhite.svg';
 import useLikeCountStore from '@/store/useLikeCountStore';
 
-import Icon from '../shared/Icon';
-import DropDown from '../ui/DropDown';
+import Icon from '@/components/utils/Icon';
+import DropDown from '@/components/ui/dropdown/DropDown';
 
-import { fetchProfile } from '@/api/myPage/myPage';
+import { fetchProfile } from '@/api/client/myPage/myPage';
 import useProfileStore from '@/store/useProfileStore';
 
 function NavItem({

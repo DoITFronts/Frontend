@@ -6,8 +6,8 @@ import { useInView } from 'react-intersection-observer';
 
 import HostInfo from '@/components/ui/card/component/HostInfo';
 import Card from '@/components/ui/card/Card';
-import Category from '@/components/ui/chip/Category';
-import ChipInfo from '@/components/ui/chip/ChipInfo';
+import Category from '@/components/ui/card/component/Category';
+import ChipDate from '@/components/ui/chip/ChipDate';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
 import { Reviews } from '@/types/review';
 
@@ -82,7 +82,7 @@ export default function ReviewItem({ review, priority }: { review: Reviews; prio
                 <HostInfo name={review.nickname} />
               </div>
               <div className="font-['Pretendard'] text-xs font-medium leading-none text-gray-500">
-                <ChipInfo datetime={review.createdAt} />
+                <ChipDate datetime={review.createdAt} />
               </div>
             </div>
           </div>
