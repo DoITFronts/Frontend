@@ -1,6 +1,7 @@
 import useProfileStore from '@/store/useProfileStore';
-import axiosInstance from '../api';
 import categoryMap from '@/types/categoryMap';
+
+import axiosInstance from '../api';
 
 interface FetchMyPageMeetingsParams {
   type: string; // '나의 번개' | '내가 만든 번개'
@@ -41,7 +42,7 @@ export const updateProfile = async (
   }
 };
 
-export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeetingsParams) => {
+export const fetchMyPageMeetings = async ({ category }: FetchMyPageMeetingsParams) => {
   try {
     const englishCategory = category ? categoryMap[category] || 'ALCOHOL' : 'ALCOHOL';
     const params = { category: englishCategory };

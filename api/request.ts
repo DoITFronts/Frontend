@@ -1,7 +1,7 @@
 import { getAuthHeaders } from '@/utils/authUtils';
-import { buildQueryParams } from '@/utils/queryParams';
+import buildQueryParams from '@/utils/queryParams';
 
-export const fetchData = async (endpoint: string, params: any) => {
+const fetchData = async (endpoint: string, params: any) => {
   try {
     const queryParams = buildQueryParams(params);
     const headers = getAuthHeaders();
@@ -25,3 +25,5 @@ export const fetchData = async (endpoint: string, params: any) => {
     return null;
   }
 };
+
+export default fetchData;

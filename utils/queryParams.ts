@@ -2,7 +2,7 @@ import categoryMap from '@/types/categoryMap';
 import orderMap from '@/types/orderMap';
 import { cityMap } from '@/types/regions';
 
-export const buildQueryParams = ({
+const buildQueryParams = ({
   category,
   city,
   town,
@@ -52,3 +52,5 @@ export const buildQueryParams = ({
 
   return queryParams;
 };
+
+export default buildQueryParams;

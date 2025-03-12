@@ -1,4 +1,4 @@
-import fetchMeeting from '@/api/meeting/fetchMeeting';
+import fetchMeetingList from '@/api/meeting/fetchMeeting';
 
 import MeetingList from './components/MeetingList';
 
@@ -14,7 +14,7 @@ export default async function Page({ searchParams }: PageProps) {
   const targetAt = params?.targetAt ? new Date(params.targetAt) : null;
   const order = params?.order ?? '';
 
-  const initialMeetings = await fetchMeeting({
+  const initialMeetings = await fetchMeetingList({
     category,
     city,
     town,

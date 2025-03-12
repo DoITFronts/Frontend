@@ -1,5 +1,6 @@
 import axiosInstance from '@/api/api';
 
+// TODO fetchmeetingbyid 에다가 옮기세요
 const fetchDetailReview = async (meetingId: string) => {
   try {
     const response = await axiosInstance.get(`/api/v1/lightenings/${meetingId}/reviews`, {

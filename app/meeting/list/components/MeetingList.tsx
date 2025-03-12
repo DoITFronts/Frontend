@@ -12,7 +12,7 @@ import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
 import useLikeMutation from '@/hooks/useLikeMutation';
-import useMeeting from '@/hooks/useMeeting';
+import useMeetingList from '@/hooks/useMeetingList';
 import {
   defaultFilter,
   defaultFirstOption,
@@ -121,7 +121,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   };
 
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeeting({
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeetingList({
     category: selectedCategory,
     city: selectedFirstLocation,
     town: selectedSecondLocation,

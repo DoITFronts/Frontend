@@ -1,4 +1,4 @@
-import fetchReview from '@/api/review/fetchReview';
+import { fetchReviewMeetingList } from '@/api/meeting/fetchMeeting';
 
 import ReviewList from './components/ReviewList';
 
@@ -14,7 +14,7 @@ export default async function Page({ searchParams }: PageProps) {
   const targetAt = params?.targetAt ? new Date(params.targetAt) : null;
   const order = params?.order ?? '';
 
-  const initialReviews = await fetchReview({
+  const initialReviews = await fetchReviewMeetingList({
     category,
     city,
     town,
