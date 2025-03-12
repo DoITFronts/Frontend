@@ -1,18 +1,20 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
+// TODO 단일 책임 원리 적용해주세용
+// 카테고리 필터, 드롭다운 필터, 무한 스크롤
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import FilterDropdown from '@/components/ui/card/FilterDropdown';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
-import useLikeMutation from '@/hooks/useLikeMutation';
-import useLikeMeeting from '@/hooks/useLikeMeeting';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import Icon from '@/components/utils/Icon';
+import { MeetingCardError, MeetingCardLoading } from '@/components/skeleton/CardSkeleton';
+import CardItem from '@/components/ui/card/CardItem';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import useListQuery from '@/hooks/list/useListQuery';
 import {
   defaultFilter,
   defaultFirstOption,
@@ -23,12 +25,6 @@ import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
-
-import MeetingItem from '../meeting/list/components/MeetingItem';
-import {
-  MeetingCardError,
-  MeetingCardLoading,
-} from '../meeting/list/components/skeleton/MeetingCardSkeleton';
 
 export default function LikedPage() {
   const { openModal } = useModalStore();
@@ -121,7 +117,7 @@ export default function LikedPage() {
 
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useLikeMeeting({
+    useListQuery({
       category: selectedCategory,
       city: selectedFirstLocation,
       town: selectedSecondLocation,
@@ -201,8 +197,6 @@ export default function LikedPage() {
     };
   };
 
-  const { likeMutation } = useLikeMutation();
-
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
@@ -226,7 +220,7 @@ export default function LikedPage() {
             onClick={() => handleCategoryClick(category)}
             className="cursor-pointer focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -326,10 +320,10 @@ export default function LikedPage() {
         {!isLoading && !isError && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
-              <MeetingItem
+              <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => likeMutation.mutate(meeting.id)}
+                onClick={() => {}}
                 priority={index < 10}
               />
             ))}

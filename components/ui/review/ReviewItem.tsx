@@ -1,4 +1,4 @@
-import ProfileIcon from '@/components/shared/BaseProfile';
+import ProfileIcon from '@/components/utils/BaseProfile';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
 import { formatDate } from '@/utils/formatDateTime';
 
