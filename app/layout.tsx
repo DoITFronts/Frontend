@@ -7,7 +7,7 @@ import RootLayout from '@/components/layout/RootLayout';
 export const metadata: Metadata = {
   title: '번개팅',
   description: '번개팅은 모임을 위한 서비스입니다.',
-  keywords: '모임, 번개팅, 소셜, 네트워킹',
+  keywords: '모임, 번개팅, 소셜, 네트워킹, 번개',
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
