@@ -1,6 +1,8 @@
+@import url('https://fonts.cdnfonts.com/css/dunggeunmo');
+
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
+  --background: #ffffff;
+  --foreground: #171717;
 
   --font-xs: 12px;
   --line-xs: 16px;
@@ -29,21 +31,112 @@
   --font-semibold: 600;
   --font-bold: 700;
 
-  --font-family-pretandard: "Pretendard", sans-serif;
+  --font-family-pretandard: 'Pretendard', sans-serif;
 }
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background: #0a0a0a;
-        --foreground: #ededed;
-    }
+body,
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
-body {
-    color: var(--foreground);
-    background: var(--background);
-    font-family: Arial, Helvetica, sans-serif;
+.react-datepicker {
+  @apply p-3 !important;
+  font-family: 'Pretendard', serif !important;
+}
+
+.react-datepicker__month-container {
+  @apply float-none !important;
+}
+
+.react-datepicker__header {
+  @apply bg-white border-none !important;
+}
+
+.react-datepicker__current-month {
+  @apply text-gray-800 text-sm font-medium !important;
+}
+
+.react-datepicker__day-names {
+  @apply flex justify-between px-2.5 !important;
+}
+
+.react-datepicker__day-name {
+  @apply text-gray-800 text-sm font-semibold w-8 !important;
+}
+
+.react-datepicker__month {
+  @apply m-0 !important;
+}
+
+.react-datepicker__week {
+  @apply flex justify-between !important;
+}
+
+.react-datepicker__day {
+  @apply text-sm font-medium p-2.5 m-0 w-8 h-8 flex items-center justify-center !important;
+}
+
+.react-datepicker__day--selected {
+  @apply bg-black rounded-lg text-white !important;
+}
+
+.react-datepicker__time-container {
+  @apply border-l border-gray-200 !important;
+  width: 100px !important;
+}
+
+.react-datepicker__time-box {
+  width: 100% !important;
+}
+
+.react-datepicker__time-list-item {
+  @apply text-sm font-medium text-gray-900 !important;
+  height: 33px !important;
+}
+
+.react-datepicker__time-list-item--selected {
+  @apply bg-black text-white !important;
+}
+
+.react-datepicker__navigation {
+  @apply top-4 !important;
+}
+/* 기본 time picker UI를 숨기는 CSS */
+.hide-time-select .react-datepicker__time-container {
+  display: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-selected {
+  background-color: #000000 !important; /* 검정 배경 */
+  color: #ffffff !important; /* 흰 글씨 */
+  border-radius: 9999px; /* 둥글게 */
+}
+
+.custom-today {
+  color: #000000 !important; /* 오늘 날짜 검정 글씨 */
+}
+
+.custom-default {
+  color: #8c8c8c !important; /* 기본 날짜 회색 */
+  cursor: pointer;
+}
+
+.custom-default:hover {
+  background-color: #595959 !important; /* hover 시 회색 배경 */
+  color: #ffffff !important; /* hover 시 흰 글씨 */
+  border-radius: 9999px;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background: transparent !important; /* 기본 파란색 배경 제거 */
 }

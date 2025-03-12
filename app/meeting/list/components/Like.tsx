@@ -1,11 +1,27 @@
-import Image from 'next/image';
+import HeartIcon from '@/components/shared/Icons/HeartIcon';
 
-const Like = () => {
+function Like({
+  meetingId,
+  isLiked,
+  onClick,
+}: {
+  meetingId: string;
+  isLiked: boolean;
+  onClick: (meetingId: string) => void;
+}) {
   return (
-    <div className="w-12 h-12 bg-white rounded-full border-2 border-gray-200 flex justify-center">
-      <Image src="" width={24} height={24} alt="ic_heart" />
-    </div>
+    <button
+      type="button"
+      className="absolute left-[14px] top-[14px] flex justify-center"
+      onClick={(event) => {
+        event.stopPropagation(); // 부모 이벤트 전파 방지
+        event.preventDefault(); // Link의 기본 동작(페이지 이동) 방지
+        onClick(meetingId);
+      }}
+    >
+      <HeartIcon variant={isLiked ? 'active' : 'inactive'} />
+    </button>
   );
-};
+}
 
 export default Like;

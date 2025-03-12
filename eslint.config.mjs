@@ -39,6 +39,7 @@ export default [
     },
     rules: {
       "react/require-default-props": "off",
+      "no-param-reassign": ["error", { "props": false }],
       'import/order': [
         'error',
         {

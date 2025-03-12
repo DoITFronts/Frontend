@@ -17,7 +17,7 @@ export default function Chip({
 }: ChipProps) {
   const baseClasses = 'inline-flex items-center justify-center w-fit';
   const sizeClasses = size === 'sm' ? 'h-8 px-3 py-1.5 text-xs' : 'h-10 px-4 py-2.5 text-sm';
-  const modeClasses = mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900';
+  const modeClasses = mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-[#f0f0f0] text-[#595959]';
   const timeModeClasses = mode === 'dark' ? 'bg-gray-900 text-white' : 'bg-gray-200 text-gray-900';
   const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : '';
 
@@ -29,6 +29,7 @@ export default function Chip({
         type === 'time' ? timeModeClasses : modeClasses,
         disabled && disabledClasses,
         sizeClasses,
+        mode !== 'dark' && 'hover:bg-[#595959] hover:text-white',
       )}
     >
       <div className="font-['Pretendard'] text-sm font-medium leading-tight">{text}</div>

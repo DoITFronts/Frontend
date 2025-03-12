@@ -1,25 +1,17 @@
-import clsx from 'clsx';
+import { formatDateTime } from '@/utils/formatDateTime';
 
 interface ChipInfoProps {
-  text: string;
-  colorMode?: 'white' | 'orange';
+  datetime: string;
 }
 
-export default function ChipInfo({ text, colorMode = 'white' }: ChipInfoProps) {
+export default function ChipInfo({ datetime }: ChipInfoProps) {
+  const formattedDateTime = formatDateTime(datetime);
+
   return (
-    <div
-      className={clsx(
-        'inline-flex h-6 w-fit min-w-max items-center justify-center gap-2.5 overflow-hidden rounded bg-gray-900 px-2 py-0.5',
-      )}
-    >
-      <div
-        className={clsx(
-          "font-['Pretendard'] text-sm font-medium leading-tight",
-          colorMode === 'white' ? 'text-white' : 'text-orange-600',
-        )}
-      >
-        {text}
-      </div>
+    <div className="inline-flex h-[22px] w-fit items-center justify-center gap-[4px]">
+      <span className="font-pretandard text-base font-semibold leading-snug text-[#bfbfbf]">
+        {formattedDateTime}
+      </span>
     </div>
   );
 }

@@ -23,11 +23,7 @@ export default function Icon({
         backgroundColor,
       }}
     >
-      <img
-        src={`/assets/${path}.svg`} // Next.js에서는 public 폴더 사용
-        alt={`${path} icon`}
-        className="size-full object-contain"
-      />
+      <img src={`/assets/${path}.svg`} alt={`${path} icon`} className="size-full object-contain" />
     </div>
   );
 }
