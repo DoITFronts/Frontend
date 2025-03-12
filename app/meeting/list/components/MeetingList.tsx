@@ -5,13 +5,14 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
-import FilterDropdown from '@/components/ui/card/FilterDropdown';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
-import useMeeting from '@/hooks/useMeeting';
+import Icon from '@/components/utils/Icon';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import CardItem from '@/components/ui/card/CardItem';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import useLikeMutation from '@/hooks/like/useLikeMutation';
+import useList from '@/hooks/list/useListQuery;
 import {
   defaultFilter,
   defaultFirstOption,
@@ -19,19 +20,16 @@ import {
   participantFilter,
 } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
-import MeetingItem from './MeetingItem';
-import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
+import { MeetingCardError, MeetingCardLoading } from '@/components/skeleton/CardSkeleton';
 
 interface InitialMeetingsProps {
   initialMeetings: Meeting[];
 }
 
 export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
-  const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -120,15 +118,16 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   };
 
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeeting({
-    category: selectedCategory,
-    city: selectedFirstLocation,
-    town: selectedSecondLocation,
-    targetAt: selectedDate,
-    size: 10,
-    initialMeetings,
-    order: selectedFilter,
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMeetingList({
+      category: selectedCategory,
+      city: selectedFirstLocation,
+      town: selectedSecondLocation,
+      targetAt: selectedDate,
+      size: 10,
+      initialMeetings,
+      order: selectedFilter,
+    });
 
   // 번개 데이터 통합
   const meetings = useMemo(
@@ -199,23 +198,10 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     };
   };
 
+  const { likeMutation } = useLikeMutation();
+
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[52px] flex items-center justify-between">
-        <div className="inline-flex h-[68px] flex-col items-start justify-start gap-[9px]">
-          <div className="text-center font-dunggeunmo text-3xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-          <div className="text-center font-pretandard text-2xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-        </div>
-        <Button color="white" size="sm" type="submit" onClick={() => openModal('create')}>
-          번개 만들기
-        </Button>
-      </div>
-
       {/* 번개 카테고리 */}
       <div className="mb-10 flex gap-3">
         {meetingCategory.map((category) => (
@@ -225,7 +211,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
             onClick={() => handleCategoryClick(category)}
             className="cursor-pointer focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -319,10 +305,10 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
         {!isLoading && !isError && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
-              <MeetingItem
+              <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => {}}
+                onClick={() => likeMutation.mutate(meeting.id)}
                 priority={index < 10}
               />
             ))}
