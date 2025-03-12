@@ -119,8 +119,8 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
               {/* 이미지 */}
               <div className="relative flex h-[172px] w-full items-center justify-center overflow-hidden md:h-[367px] lg:h-[200px]">
                 <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
-                <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-                <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
+                <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
+                <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
                 <Image
                   src={meeting.imageUrl || '/assets/card/example_image.png'}
                   fill
@@ -134,7 +134,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
               </div>
 
               {/* 상세 정보 */}
-              <div className="flex h-[206px] flex-col justify-between p-4 pt-0">
+              <div className="flex h-[152px] flex-col justify-between p-4 pt-0 md:h-[145px]">
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
                     <Card.Title
@@ -155,7 +155,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
                       <ChipInfo datetime={meeting.targetAt} />
                     </div>
                   </div>
-                  <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
+                  <div className="line-clamp-1 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
                     {meeting.summary}
                   </div>
                 </div>
