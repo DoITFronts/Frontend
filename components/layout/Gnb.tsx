@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import { useSignout } from '@/hooks/user/useAuth';
-import useLikedCount from '@/hooks/like/useLikeCount';
-import Logo from '@/public/assets/logo/logoWhite.svg';
+import { useSignout } from '@/hooks/useAuth';
+import Logo from '@/public/assets/mainLogo/logoYW.svg';
+
+import Icon from '../shared/Icon';
+import DropDown from '../ui/DropDown';
 import useLikeCountStore from '@/store/useLikeCountStore';
+import useLikedCount from '@/hooks/useLikeCount';
 
-import Icon from '@/components/utils/Icon';
-import DropDown from '@/components/ui/dropdown/DropDown';
-
-import { fetchProfile } from '@/api/client/myPage/myPage';
+import { fetchProfile } from '@/api/myPage/myPage';
 import useProfileStore from '@/store/useProfileStore';
 
 function NavItem({
@@ -70,20 +70,26 @@ export default function GNB() {
   };
   const { likedCount } = useLikeCountStore();
   return (
-    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black px-[15%] shadow-md md:h-[60px]">
+    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black shadow-md md:h-[60px] px-[15%]">
       <div className="flex w-full justify-between">
         <div className="flex items-center justify-between gap-x-[31px] md:gap-x-[78px]">
           <Link href="/meeting/list" className="flex h-[17px] w-[75px] md:h-5 md:w-20">
-            {/* TODO 이거 priority만 있어도 되는거 맞나? */}
-            <Image src={Logo} alt="번개팅 메인 로고" width={80} height={20} priority />
+            <Image
+              src={Logo}
+              alt="번개팅 메인 로고"
+              width={80}
+              height={20}
+              priority
+              loading="eager"
+            />
           </Link>
           <div className="mr-5 flex gap-x-3 md:gap-x-6">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
-            <div className="flex items-center justify-center gap-1">
+            <div className="flex justify-center items-center gap-1">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
               {/* TODO: 좋아요 count 받아야함 */}
               {likedCount() > 0 && (
-                <span className="mb-[1.5px] h-fit rounded-full bg-yellow-6 px-[5px] text-center text-[12px] font-bold text-black">
+                <span className="bg-yellow-6 rounded-full text-black font-bold text-center h-fit px-[5px] mb-[1.5px] text-[12px]">
                   {likedCount()}
                 </span>
               )}

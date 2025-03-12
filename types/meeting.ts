@@ -73,14 +73,3 @@ export interface CreateMeetingParams {
   minCapacity: number;
   image?: File;
 }
-
-export interface FetchMeetingListParams {
-  category: string;
-  city: string;
-  town: string;
-  targetAt: Date | null;
-  page?: number;
-  size?: number;
-  order?: string;
-  initialMeetings?: Meeting[]
-}

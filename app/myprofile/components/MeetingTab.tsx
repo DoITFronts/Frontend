@@ -5,13 +5,13 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import Card from '@/app/meeting/list/components/Card';
-import ButonBox from '@/components/ui/button/ButtonBox';
+import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
-import ChipDate from '@/components/ui/chip/ChipDate';
-import useMeetingToggle from '@/hooks/meeting/useMeetingToggle';
+import ChipInfo from '@/components/ui/chip/ChipInfo';
+import useMeetingToggle from '@/hooks/useMeetingToggle';
 import { useState, useEffect } from 'react';
 import { Meeting } from '@/types/meeting';
-import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/client/myPage/myPage';
+import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
 import { useInView } from 'react-intersection-observer';
 
 // 응답 타입 정의
@@ -175,7 +175,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
                     <Card.Title name={meeting.title} location={`${meeting.city} ${meeting.town}`} />
                     <div className="flex h-[22px] flex-row items-center gap-1">
                       <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                        <ChipDate datetime={meeting.targetAt} />
+                        <ChipInfo datetime={meeting.targetAt} />
                       </div>
                     </div>
                   </div>

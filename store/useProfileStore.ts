@@ -1,4 +1,4 @@
-import mockMyProfile from '@/api/mock/mockMyProfile';
+import mockMyProfile from '@/api/data/mockMyProfile';
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
