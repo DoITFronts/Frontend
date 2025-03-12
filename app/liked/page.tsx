@@ -1,18 +1,19 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
+// TODO 단일 책임 원리 적용해주세용
+// 카테고리 필터, 드롭다운 필터, 무한 스크롤
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Icon from '@/components/shared/Icon';
-import FilterDropdown from '@/components/ui/card/FilterDropdown';
+import FilterDropdown from '@/components/ui/card/component/FilterDropdown';
 import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
-import useLikeMutation from '@/hooks/useLikeMutation';
 import useLikeMeeting from '@/hooks/useLikeMeeting';
+import useLikeMutation from '@/hooks/useLikeMutation';
 import {
   defaultFilter,
   defaultFirstOption,
@@ -24,7 +25,7 @@ import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
-import MeetingItem from '../meeting/list/components/MeetingItem';
+import MeetingItem from '../../components/ui/card/component/MeetingItem';
 import {
   MeetingCardError,
   MeetingCardLoading,

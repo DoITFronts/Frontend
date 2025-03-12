@@ -4,8 +4,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useInView } from 'react-intersection-observer';
 
-import HostInfo from '@/app/meeting/components/HostInfo';
-import Card from '@/app/meeting/list/components/Card';
+import HostInfo from '@/components/ui/card/component/HostInfo';
+import Card from '@/components/ui/card/Card';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';

@@ -11,7 +11,7 @@ import {
 import Button from '@/components/ui/Button';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import useModalStore from '@/store/useModalStore';
-import isUserLoggedIn from '@/utils/authUtils';
+import { isUserLoggedIn } from '@/utils/authUtils';
 
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
   ALCOHOL: {

@@ -7,9 +7,13 @@ import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { toast } from 'react-toastify';
 
+import Card from '../Card';
+
+import HostInfo from './HostInfo';
+
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import Button from '@/components/ui/Button';
-import MeetingProgress from '@/components/ui/card/MeetingProgress';
+import MeetingProgress from '@/components/ui/card/component/MeetingProgress';
 import Category from '@/components/ui/chip/Category';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import useLikeToggle from '@/hooks/useLikeToggle';
@@ -17,11 +21,7 @@ import useModalStore from '@/store/useModalStore';
 import categoryMap from '@/types/categoryMap';
 import { Meeting } from '@/types/meeting';
 import { cityMap } from '@/types/regions';
-import isUserLoggedIn from '@/utils/authUtils';
-
-import HostInfo from '../../components/HostInfo';
-
-import Card from './Card';
+import { isUserLoggedIn } from '@/utils/authUtils';
 
 interface Props {
   meeting: Meeting;

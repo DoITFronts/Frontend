@@ -6,8 +6,7 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
 import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
-import FilterDropdown from '@/components/ui/card/FilterDropdown';
+import FilterDropdown from '@/components/ui/card/component/FilterDropdown';
 import Chip from '@/components/ui/chip/Chip';
 import DropDown from '@/components/ui/DropDown';
 import EmptyMessage from '@/components/ui/EmptyMessage';
@@ -24,7 +23,7 @@ import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
-import MeetingItem from './MeetingItem';
+import MeetingItem from '../../../../components/ui/card/component/MeetingItem';
 import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
 interface InitialMeetingsProps {
@@ -32,7 +31,6 @@ interface InitialMeetingsProps {
 }
 
 export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
-  const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -121,15 +119,16 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   };
 
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeetingList({
-    category: selectedCategory,
-    city: selectedFirstLocation,
-    town: selectedSecondLocation,
-    targetAt: selectedDate,
-    size: 10,
-    initialMeetings,
-    order: selectedFilter,
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMeetingList({
+      category: selectedCategory,
+      city: selectedFirstLocation,
+      town: selectedSecondLocation,
+      targetAt: selectedDate,
+      size: 10,
+      initialMeetings,
+      order: selectedFilter,
+    });
 
   // 번개 데이터 통합
   const meetings = useMemo(
@@ -204,21 +203,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[52px] flex items-center justify-between">
-        <div className="inline-flex h-[68px] flex-col items-start justify-start gap-[9px]">
-          <div className="text-center font-dunggeunmo text-3xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-          <div className="text-center font-pretandard text-2xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-        </div>
-        <Button color="white" size="sm" type="submit" onClick={() => openModal('create')}>
-          번개 만들기
-        </Button>
-      </div>
-
       {/* 번개 카테고리 */}
       <div className="mb-10 flex gap-3">
         {meetingCategory.map((category) => (

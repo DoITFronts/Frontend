@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
-import Card from '@/app/meeting/list/components/Card';
+import Card from '@/components/ui/card/Card';
 
-import Button from '../Button';
+import Button from '../../Button';
 
 interface MeetingProgressProps {
   id: string;

@@ -1,5 +1,5 @@
 import AvatarGroup from '@/app/meeting/detail/components/AvatarGroup';
-import MeetingProgress from '@/components/ui/card/MeetingProgress';
+import MeetingProgress from '@/components/ui/card/component/MeetingProgress';
 
 interface MeetingDetailFooterProps {
   participantCount: number;

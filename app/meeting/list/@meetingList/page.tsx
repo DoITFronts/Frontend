@@ -1,4 +1,4 @@
-import fetchMeetingList from '@/api/meeting/fetchMeeting';
+import { fetchMeetingList } from '@/api/meeting/fetchMeeting';
 
 import MeetingList from './components/MeetingList';
 

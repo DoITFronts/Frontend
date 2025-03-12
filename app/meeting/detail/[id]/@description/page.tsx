@@ -37,7 +37,11 @@ export default function MeetingDescription() {
   const renderContent = () => {
     if (isEditing) {
       return tab === 'edit' ? (
-        <MarkdownEditor value={description} onChange={(value) => setDescription(value || '')} />
+        <MarkdownEditor
+          value={description}
+          // TODO 새로고침 했을 떄 값왜 날라가는지
+          onChange={(value) => setDescription(value || description)}
+        />
       ) : (
         <div className="rounded-md border bg-gray-50 p-4">
           <ReactMarkdown className="flex flex-col gap-1">

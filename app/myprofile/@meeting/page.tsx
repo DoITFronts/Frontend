@@ -4,9 +4,9 @@ import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 
 import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
-import Card from '@/app/meeting/list/components/Card';
+import Card from '@/components/ui/card/Card';
 import ButonBox from '@/components/ui/ButtonBox';
-import MeetingProgress from '@/components/ui/card/MeetingProgress';
+import MeetingProgress from '@/components/ui/card/component/MeetingProgress';
 import Chip from '@/components/ui/chip/Chip';
 import { Meeting } from '@/types/meeting';
 import categoryMap from '@/types/categoryMap';

@@ -2,12 +2,12 @@ import { ReactNode } from 'react';
 
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 
-import ConfirmedStatus from '../../components/ConfirmedStatus';
-import Participant from '../../components/Participant';
-import ProgressBar from '../../components/ProgressBar';
+import ConfirmedStatus from './component/ConfirmedStatus';
+import Participant from './component/Participant';
+import ProgressBar from './component/ProgressBar';
 
-import Like from './Like';
-import Title from './Title';
+import Like from './component/Like';
+import Title from './component/Title';
 
 interface CardProps {
   children: ReactNode;
