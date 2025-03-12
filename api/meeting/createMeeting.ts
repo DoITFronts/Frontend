@@ -19,6 +19,7 @@ const createMeeting = async (meetingData: CreateMeetingParams) => {
     capacity: meetingData.capacity,
     minCapacity: meetingData.minCapacity,
   };
+
   const blob = new Blob([JSON.stringify(lightening)], { type: 'application/json' });
   formData.append('lightening', blob);
 

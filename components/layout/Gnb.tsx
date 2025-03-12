@@ -5,16 +5,15 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { fetchProfile } from '@/api/myPage/myPage';
 import { useSignout } from '@/hooks/useAuth';
+import useLikedCount from '@/hooks/useLikeCount';
 import Logo from '@/public/assets/mainLogo/logoYW.svg';
+import useLikeCountStore from '@/store/useLikeCountStore';
+import useProfileStore from '@/store/useProfileStore';
 
 import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
-import useLikeCountStore from '@/store/useLikeCountStore';
-import useLikedCount from '@/hooks/useLikeCount';
-
-import { fetchProfile } from '@/api/myPage/myPage';
-import useProfileStore from '@/store/useProfileStore';
 
 function NavItem({
   href,
@@ -44,9 +43,9 @@ export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { mutate: logout } = useSignout();
-  const { nickname, imageUrl } = useProfileStore(); //유저정보
+  const { nickname, imageUrl } = useProfileStore(); // 유저정보
 
-  useLikedCount(); //좋아요 개수 동기화
+  useLikedCount(); // 좋아요 개수 동기화
 
   // 로그인 여부 체크하기
   useEffect(() => {
@@ -70,7 +69,7 @@ export default function GNB() {
   };
   const { likedCount } = useLikeCountStore();
   return (
-    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black shadow-md md:h-[60px] px-[15%]">
+    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black px-[15%] shadow-md md:h-[60px]">
       <div className="flex w-full justify-between">
         <div className="flex items-center justify-between gap-x-[31px] md:gap-x-[78px]">
           <Link href="/meeting/list" className="flex h-[17px] w-[75px] md:h-5 md:w-20">
@@ -85,11 +84,11 @@ export default function GNB() {
           </Link>
           <div className="mr-5 flex gap-x-3 md:gap-x-6">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
-            <div className="flex justify-center items-center gap-1">
+            <div className="flex items-center justify-center gap-1">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
               {/* TODO: 좋아요 count 받아야함 */}
               {likedCount() > 0 && (
-                <span className="bg-yellow-6 rounded-full text-black font-bold text-center h-fit px-[5px] mb-[1.5px] text-[12px]">
+                <span className="mb-[1.5px] h-fit rounded-full bg-yellow-6 px-[5px] text-center text-[12px] font-bold text-black">
                   {likedCount()}
                 </span>
               )}
@@ -103,16 +102,16 @@ export default function GNB() {
             <DropDown
               trigger={
                 imageUrl ? (
-                  <div className="flex items-center gap-3 overflow-hidden mt-2">
+                  <div className="mt-2 flex items-center gap-3 overflow-hidden">
                     <img
                       src={`${imageUrl}?timestamp=${new Date().getTime()}`}
                       alt="프로필 이미지"
-                      className="object-cover w-[37px] h-[37px] rounded-full"
+                      className="size-[37px] rounded-full object-cover"
                     />
                     <div className="font-semibold text-white">{nickname}</div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 overflow-hidden mt-2">
+                  <div className="mt-2 flex items-center gap-3 overflow-hidden">
                     <Icon path="profile/userProfileDefault" width="37px" height="37px" />
                     <div className="font-semibold text-white">{nickname}</div>
                   </div>

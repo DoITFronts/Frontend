@@ -1,14 +1,14 @@
 'use client';
 
-import Form from '@/components/form/Form';
-import Logo from '@/public/assets/logo.svg';
 import Image from 'next/image';
-import Button from '@/components/ui/Button';
-import Icon from '@/components/shared/Icon';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
+import Form from '@/components/form/Form';
+import Icon from '@/components/shared/Icon';
+import Button from '@/components/ui/Button';
 import { useSignin } from '@/hooks/useAuth';
+import Logo from '@/public/assets/logo.svg';
 
 export default function Signin() {
   const { mutate, errorMessage } = useSignin();
@@ -18,7 +18,7 @@ export default function Signin() {
     mutate(data);
   };
 
-  //테스트 계정 버튼 handler
+  // 테스트 계정 버튼 handler
   const handleTestAccountClick = () => {
     // 테스트 계정 자동 입력 처리
     setValue('username', 'guest@gmail.com');
@@ -29,9 +29,9 @@ export default function Signin() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex justify-center items-center">
+    <div className="flex min-h-screen items-center justify-center bg-white">
       <div className="w-[402px]">
-        <div className="flex justify-center items-center mb-[50px]">
+        <div className="mb-[50px] flex items-center justify-center">
           <Link href="/">
             <Image src={Logo} alt="번개팅 로고" width={147.6} height={32.4} />
           </Link>
@@ -55,22 +55,22 @@ export default function Signin() {
               required
             />
             {errorMessage && (
-              <Form.ErrorMessage className="pt-3 pl-2">{errorMessage}</Form.ErrorMessage>
+              <Form.ErrorMessage className="pl-2 pt-3">{errorMessage}</Form.ErrorMessage>
             )}
           </Form.Label>
           <Form.Submit className="w-full">로그인</Form.Submit>
           <Button
-            className="py-[10px] px-3 bg-gradient-to-r from-black to-cyan-800 w-full mt-[18px] text-white text-base font-bold text-center"
+            className="mt-[18px] w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-[10px] text-center text-base font-bold text-white"
             onClick={handleTestAccountClick}
           >
             ⚡️ 게스트 로그인 ⚡️
           </Button>
-          <Button className="py-[10px] px-3 bg-[#fee500] hover:bg-[#fee500] active:bg-[#fee500] w-full mt-[18px] text-black text-base font-bold text-center">
+          <Button className="mt-[18px] w-full bg-[#fee500] px-3 py-[10px] text-center text-base font-bold text-black hover:bg-[#fee500] active:bg-[#fee500]">
             <Icon path="user/kakaoLogo" width="22px" height="22px" />
             카카오로 로그인하기
           </Button>
         </Form>
-        <div className="flex justify-center items-center gap-2 font-['Pretendard'] text-[15px] text-neutral-800 font-bold mt-3">
+        <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-[15px] font-bold text-neutral-800">
           처음이신가요?
           <Link className="text-gray-300 underline" href="/user/signup">
             회원가입 하기

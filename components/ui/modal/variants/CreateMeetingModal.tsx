@@ -1,14 +1,17 @@
 'use client';
-import useModalStore from '@/store/useModalStore';
-import { useEffect, useState } from 'react';
-import CustomDatePicker from '../datePicker';
-import Button from '@/components/ui/Button';
-import Icon from '@/components/shared/Icon';
-import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
-import createMeeting from '@/api/meeting/createMeeting';
-import PlaceSearch from '@/components/ui/modal/SearchPlace';
+
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+
+import createMeeting from '@/api/meeting/createMeeting';
+import Icon from '@/components/shared/Icon';
+import Button from '@/components/ui/Button';
+import PlaceSearch from '@/components/ui/modal/SearchPlace';
+import useModalStore from '@/store/useModalStore';
+import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
+
+import CustomDatePicker from '../datePicker';
 
 const meetingCategories = Object.values(MeetingCategory);
 const categoryKoreanMap = {
@@ -40,21 +43,22 @@ export default function CreateMeetingModal() {
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
     console.log(selectedPlace);
-    console.log(deadlineDate);
+    console.log(deadlineDate.toISOString());
+    console.log(meetingDate.toISOString());
     console.log(imageFile?.size);
   }, [selectedPlace]);
 
   const router = useRouter();
 
   const handleMeetingName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { value } = e.target;
     if (/^[가-힣a-zA-Z0-9\s]*$/.test(value)) {
       setMeetingName(value);
     }
   };
 
   const handleMeetingSummary = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { value } = e.target;
     setMeetingSummary(value);
   };
 
@@ -93,7 +97,7 @@ export default function CreateMeetingModal() {
   };
 
   const handleParticipantChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { value } = e.target;
     // 숫자만 입력되도록
     if (/^\d*$/.test(value)) {
       setParticipantCount(value);
@@ -101,7 +105,7 @@ export default function CreateMeetingModal() {
   };
 
   const handleMinParticipantsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const { value } = e.target;
     if (/^\d*$/.test(value)) {
       setMinParticipants(value);
     }
@@ -134,8 +138,8 @@ export default function CreateMeetingModal() {
       latitude: selectedPlace.latitude,
       longitude: selectedPlace.longitude,
       category: meetingType,
-      targetAt: meetingDate.toISOString(),
-      endAt: deadlineDate.toISOString(),
+      targetAt: meetingDate.toString(),
+      endAt: deadlineDate.toString(),
       capacity: parseInt(participantCount),
       minCapacity: parseInt(minParticipants) || 1,
       ...(imageFile && { image: imageFile }),
@@ -169,16 +173,16 @@ export default function CreateMeetingModal() {
     !!participantCount;
 
   return (
-    <div className="w-[520px] max-h-[95vh] p-6 bg-white rounded-xl shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border border-black flex-col justify-start items-start gap-2.5 inline-flex oveflow-hidden">
-      <div className="flex flex-col gap-6 w-full h-auto overflow-y-auto [&::-webkit-scrollbar]:hidden">
-        <div className="w-full flex justify-between ">
-          <span className="text-xl text-black font-dunggeunmo">{'< 모임 만들기 >'}</span>
+    <div className="oveflow-hidden inline-flex max-h-[95vh] w-[520px] flex-col items-start justify-start gap-2.5 rounded-xl border border-black bg-white p-6 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+      <div className="flex h-auto w-full flex-col gap-6 overflow-y-auto [&::-webkit-scrollbar]:hidden">
+        <div className="flex w-full justify-between ">
+          <span className="font-dunggeunmo text-xl text-black">{'< 모임 만들기 >'}</span>
           <button onClick={closeModal}>
             <Icon path="X" width="24" height="24" />
           </button>
         </div>
-        <form className="w-full h-auto flex flex-col gap-6" onSubmit={handleSubmit}>
-          <div className="flex flex-col gap-3 w-full">
+        <form className="flex h-auto w-full flex-col gap-6" onSubmit={handleSubmit}>
+          <div className="flex w-full flex-col gap-3">
             <label htmlFor="meetingName" className="font-dunggeunmo text-base text-black-11">
               모임 이름
             </label>
@@ -186,10 +190,10 @@ export default function CreateMeetingModal() {
               type="text"
               placeholder="모임 이름을 작성해 주세요."
               onChange={handleMeetingName}
-              className="text-black-8 w-full bg-black-2 px-4 py-2.5 rounded-[12px] placeholder:text-black-6"
+              className="w-full rounded-[12px] bg-black-2 px-4 py-2.5 text-black-8 placeholder:text-black-6"
             />
           </div>
-          <div className="w-full flex flex-col gap-3">
+          <div className="flex w-full flex-col gap-3">
             <label htmlFor="meetingSummary" className="font-dunggeunmo text-base text-black-11">
               모임 소개글
             </label>
@@ -197,57 +201,57 @@ export default function CreateMeetingModal() {
               type="text"
               placeholder="모임 소개글을 작성해 주세요."
               onChange={handleMeetingSummary}
-              className="text-black-8 w-full bg-black-2 px-4 py-2.5 rounded-[12px] placeholder:text-black-6"
+              className="w-full rounded-[12px] bg-black-2 px-4 py-2.5 text-black-8 placeholder:text-black-6"
             />
           </div>
-          <div className="w-full flex flex-col gap-3">
+          <div className="flex w-full flex-col gap-3">
             <label htmlFor="meetingPlace" className="font-dunggeunmo text-base text-black-11">
               장소
             </label>
             <PlaceSearch onPlaceSelect={handlePlaceSelect} />
             {selectedPlace && (
-              <div className="mt-2 p-2 bg-black-2 rounded-[12px]">
+              <div className="mt-2 rounded-[12px] bg-black-2 p-2">
                 <p className="text-sm text-black-8">{selectedPlace.address}</p>
               </div>
             )}
           </div>
 
           {/* TODO: 파일명 제출 버튼 위치 바꾸기 */}
-          <div className="w-full flex flex-col gap-3">
+          <div className="flex w-full flex-col gap-3">
             <span className="font-dunggeunmo text-base text-black-11">이미지</span>
-            <div className="relative flex justify-between w-full">
+            <div className="relative flex w-full justify-between">
               <input
                 type="file"
                 id="image"
                 onChange={handleImageChange}
                 accept="image/*"
-                className="absolute w-[360px] opacity-0 file:hidden cursor-pointer "
+                className="absolute w-[360px] cursor-pointer opacity-0 file:hidden "
               />
               <div
-                className={`bg-black-2 px-4 py-2.5 rounded-[12px] w-[360px]  ${imageFile ? 'text-black-8' : 'text-black-6'}`}
+                className={`w-[360px] rounded-[12px] bg-black-2 px-4 py-2.5  ${imageFile ? 'text-black-8' : 'text-black-6'}`}
               >
                 {imageFile ? imageFile.name : '이미지를 첨부해 주세요'}
               </div>
               <label
                 htmlFor="image"
-                className={`flex items-center justify-center w-[100px] cursor-pointer h-auto py-2.5 text-sm font-semibold rounded-[12px] border  ${imageFile ? 'text-black border-black' : 'text-black-6 border-black-6'}`}
+                className={`flex h-auto w-[100px] cursor-pointer items-center justify-center rounded-[12px] border py-2.5 text-sm font-semibold  ${imageFile ? 'border-black text-black' : 'border-black-6 text-black-6'}`}
               >
                 파일 찾기
               </label>
             </div>
           </div>
-          <div className="w-full flex flex-col gap-3">
-            <span className="font-dunggeunmo text-base text-blac-11k">카테고리</span>
-            <div className="w-full flex justify-between gap-3">
+          <div className="flex w-full flex-col gap-3">
+            <span className="text-blac-11k font-dunggeunmo text-base">카테고리</span>
+            <div className="flex w-full justify-between gap-3">
               {meetingCategories.map((type) => (
                 <div
                   key={type}
-                  className={`w-full border rounded-[12px] cursor-pointer border-black-6 pl-[6px] pr-2.5 py-2 flex items-center ${meetingType === type ? 'bg-black-10 border-black-10' : ''}`}
+                  className={`flex w-full cursor-pointer items-center rounded-[12px] border border-black-6 py-2 pl-[6px] pr-2.5 ${meetingType === type ? 'border-black-10 bg-black-10' : ''}`}
                   onClick={() => handleMeetingType(type)}
                 >
-                  <div className="w-full flex justify-between items-center">
-                    <div className="size-[24px] flex items-center justify-center">
-                      <div className="border border-black-6 w-4 h-4 rounded-[5px] bg-white flex items-center justify-center">
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex size-[24px] items-center justify-center">
+                      <div className="flex size-4 items-center justify-center rounded-[5px] border border-black-6 bg-white">
                         {meetingType === type ? (
                           <svg
                             width="10"
@@ -279,15 +283,15 @@ export default function CreateMeetingModal() {
               ))}
             </div>
           </div>
-          <div className="w-full flex justify-between gap-2">
-            <div className="w-[217px] h-[72px] flex flex-col gap-2">
+          <div className="flex w-full justify-between gap-2">
+            <div className="flex h-[72px] w-[217px] flex-col gap-2">
               <CustomDatePicker
                 label="모임 날짜"
                 selected={meetingDate}
                 onChange={handleMeetingDateChange}
               />
             </div>
-            <div className="w-[217px] h-[72px] flex flex-col gap-2">
+            <div className="flex h-[72px] w-[217px] flex-col gap-2">
               <CustomDatePicker
                 label="마감 날짜"
                 selected={deadlineDate}
@@ -295,32 +299,32 @@ export default function CreateMeetingModal() {
               />
             </div>
           </div>
-          <div className="flex flex-col gap-3 w-full">
-            <label htmlFor="모집 정원" className="text-black-11 font-dunggeunmo text-base">
+          <div className="flex w-full flex-col gap-3">
+            <label htmlFor="모집 정원" className="font-dunggeunmo text-base text-black-11">
               모집 정원
             </label>
             <input
               type="text"
-              className="text-black-8 w-full bg-black-2 px-4 py-2.5 rounded-[12px] placeholder:text-black-6"
+              className="w-full rounded-[12px] bg-black-2 px-4 py-2.5 text-black-8 placeholder:text-black-6"
               placeholder="최대 인원을 입력해 주세요."
               onChange={handleParticipantChange}
               value={participantCount}
             />
           </div>
-          <div className="flex flex-col gap-3 w-full">
-            <label htmlFor="최소 인원" className="text-black-11 font-dunggeunmo text-base">
+          <div className="flex w-full flex-col gap-3">
+            <label htmlFor="최소 인원" className="font-dunggeunmo text-base text-black-11">
               최소 인원
             </label>
             <input
               type="text"
               placeholder="최소 인원을 입력해 주세요."
-              className="text-black-8 w-full bg-black-2 px-4 py-2.5 rounded-[12px] placeholder:text-black-6"
+              className="w-full rounded-[12px] bg-black-2 px-4 py-2.5 text-black-8 placeholder:text-black-6"
               onChange={handleMinParticipantsChange}
               value={minParticipants}
             />
           </div>
         </form>
-        <div className="w-full flex justify-center mt-4">
+        <div className="mt-4 flex w-full justify-center">
           {/* TODO: form value 모두 작성 시, 버튼 활성화 로직 추가 */}
           <Button
             color="filled"

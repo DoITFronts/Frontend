@@ -19,7 +19,7 @@ function Like({
         event.stopPropagation(); // 부모 이벤트 전파 방지
         event.preventDefault(); // Link의 기본 동작(페이지 이동) 방지
         onClick(meetingId);
-        likeMutation.mutate(meetingId); //좋아요 기능 동작하도록 함
+        likeMutation.mutate(meetingId); // 좋아요 기능 동작하도록 함
       }}
     >
       <HeartIcon variant={isLiked ? 'active' : 'inactive'} />

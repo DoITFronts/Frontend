@@ -1,6 +1,5 @@
 'use client';
 
-import VALIDATION_RULES, { type Field, PASSWORD_CONFIRM_RULES } from '@/lib/formValidation';
 import cn from 'clsx';
 import {
   FormHTMLAttributes,
@@ -10,6 +9,9 @@ import {
   useState,
 } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+
+import VALIDATION_RULES, { type Field, PASSWORD_CONFIRM_RULES } from '@/lib/formValidation';
+
 import Icon from '../shared/Icon';
 import Button from '../ui/Button';
 
@@ -47,7 +49,7 @@ function Label({ children, className }: LabelProps) {
   return <label className={labelClass}> {children} </label>;
 }
 
-//인풋 라벨 헤더
+// 인풋 라벨 헤더
 function LabelHeader({ children, className }: BaseProps) {
   const headerClass = cn(
     "font-['Pretendard'] text-black-8 text-sm font-bold leading-tight",
@@ -57,13 +59,13 @@ function LabelHeader({ children, className }: BaseProps) {
   return <h2 className={headerClass}>{children}</h2>;
 }
 
-//인풋 기본 스타일
+// 인풋 기본 스타일
 const baseInputStyle =
   "focus:outline-black-7 h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
 
 const baseInputErrorStyle = 'outline outline-2 outline-red-500 focus:outline-gray-500';
 
-//기본 인풋
+// 기본 인풋
 function Input({ className, name, ...rest }: InputProps) {
   const {
     register,
@@ -88,11 +90,11 @@ function Input({ className, name, ...rest }: InputProps) {
         {...rest}
         placeholder={placeholder}
         onBlur={() => trigger(name)}
-        //엔터 입력했을때 유효성 검사 실행되도록
+        // 엔터 입력했을때 유효성 검사 실행되도록
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            //유효성 검사 통과되면, 다음 인풋으로 포커스 이동
+            // 유효성 검사 통과되면, 다음 인풋으로 포커스 이동
             trigger(name).then(() => {
               const formElements = Array.from(
                 (e.target as HTMLInputElement).form?.elements || [],
@@ -122,7 +124,7 @@ function PasswordInput({ className, name, ...rest }: InputProps) {
     trigger,
   } = useFormContext();
 
-  //비밀번호 표시 눈모양 토글 처리
+  // 비밀번호 표시 눈모양 토글 처리
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);

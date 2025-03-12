@@ -1,6 +1,8 @@
 import DatePicker from 'react-datepicker';
+
 import CustomInput from './CustomInput';
 import CustomTimeInput from './CustomTimeInput';
+
 import 'react-datepicker/dist/react-datepicker.css';
 import { useEffect, useState } from 'react';
 
@@ -26,7 +28,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-base font-dunggeunmo text-black-11">{label}</span>
+      <span className="font-dunggeunmo text-base text-black-11">{label}</span>
       <DatePicker
         className="w-full"
         calendarClassName="bg-white h-[266px] rounded-xl border border-gray-200 !flex overflow-hidden"
@@ -50,17 +52,17 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
           />
         }
         renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
-          <div className="w-[250px] py-[5px] px-2.5 justify-between items-center inline-flex">
+          <div className="inline-flex w-[250px] items-center justify-between px-2.5 py-[5px]">
             <button
               onClick={(e) => {
                 e.preventDefault();
                 decreaseMonth();
               }}
-              className="w-6 h-6 overflow-hidden text-black"
+              className="size-6 overflow-hidden text-black"
             >
               {'<'}
             </button>
-            <div className="text-gray-800 text-sm font-medium font-['Pretendard']">
+            <div className="font-['Pretendard'] text-sm font-medium text-gray-800">
               {date.toLocaleString('ko', { year: 'numeric', month: 'long' })}
             </div>
             <button
@@ -68,7 +70,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
                 e.preventDefault();
                 increaseMonth();
               }}
-              className="w-6 h-6 overflow-hidden text-black"
+              className="size-6 overflow-hidden text-black"
             >
               {'>'}
             </button>

@@ -7,6 +7,10 @@ interface FetchMyPageMeetingsParams {
   category?: string; // '술' | '카페' | '보드 게임' | '맛집'
 }
 
+export interface FetchParams {
+  category?: string;
+}
+
 export const fetchProfile = async () => {
   try {
     const response = await axiosInstance.get('/api/v1/my-page/user');
@@ -66,10 +70,17 @@ export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeeting
   }
 };
 
-export const fetchMyPageReviews = async () => {
-  const response = await fetch('/api/mypage/reviews');
-
-  if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
-  return response.json();
+export const fetchMyPageReviews = async (params: FetchParams = {}) => {
+  try {
+    const apiParams: Record<string, string> = {};
+    if (params.category) {
+      params.category = categoryMap[params.category] || 'ALCOHOL';
+    }
+    const response = await axiosInstance.get('/api/v1/my-page/reviews/created', {
+      params: apiParams,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('내가 작성한 리뷰를 불러오는데 실패하였습니다.: ', error);
+  }
 };

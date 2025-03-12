@@ -1,11 +1,13 @@
 'use client';
 
 import { Suspense, useState } from 'react';
-import Chip from '@/components/ui/chip/Chip';
-import { GridSkeleton } from '../components/GridSkeleton';
 import { ErrorBoundary } from 'react-error-boundary';
-import MeetingTabs from '../components/MeetingTab';
+
+import Chip from '@/components/ui/chip/Chip';
+
+import { GridSkeleton } from '../components/GridSkeleton';
 import { MeetingCardError } from '../components/MeetingCardSkeleton';
+import MeetingTabs from '../components/MeetingTab';
 
 const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
 const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];

@@ -1,17 +1,18 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Button from '@/components/ui/Button';
-import Logo from '@/public/assets/logoWhite.svg';
+import Lottie from 'lottie-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import Button from '@/components/ui/Button';
+import { useSetUserTheme } from '@/hooks/useUserInfo';
+import fireworkAnimation from '@/public/assets/landing/fireworks.json';
 import Section01 from '@/public/assets/landing/section01.svg';
 import Section02 from '@/public/assets/landing/section02.svg';
-import { useRouter } from 'next/navigation';
-import Lottie from 'lottie-react';
-import fireworkAnimation from '@/public/assets/landing/fireworks.json';
-import { useSetUserTheme } from "@/hooks/useUserInfo";
+import Logo from '@/public/assets/logoWhite.svg';
 
-//FramerMotion
+// FramerMotion
 const fadeInVariant = {
   hidden: { opacity: 0, y: 50 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
@@ -22,7 +23,7 @@ export default function Page() {
   useSetUserTheme();
 
   return (
-    <div className="bg-black w-full font-['Pretendard'] text-white">
+    <div className="w-full bg-black font-['Pretendard'] text-white">
       <motion.section
         initial="hidden"
         whileInView="visible"
@@ -31,16 +32,16 @@ export default function Page() {
         className="flex items-center justify-center gap-6"
       >
         <Lottie animationData={fireworkAnimation} loop />
-        <div className="text-[80px] font-extrabold leading-[100px]  pt-[10%] pb-[350px] flex flex-col items-center">
+        <div className="flex flex-col items-center  pb-[350px] pt-[10%] text-[80px] font-extrabold leading-[100px]">
           <Image src={Logo} height={41} width={181} alt="번개팅 로고" />
-          <div className="mt-[50px] mb-[81px] text-center">
+          <div className="mb-[81px] mt-[50px] text-center">
             <h1>즉흥적인 만남은</h1>
             <h1 className="text-yellow-6">여기서 시작!</h1>
           </div>
           <Button
             color="white"
             onClick={() => router.push('meeting/list')}
-            className="w-[234px] h-[60px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
+            className="h-[60px] w-[234px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
           >
             시작하기
           </Button>
@@ -53,9 +54,9 @@ export default function Page() {
           whileInView="visible"
           viewport={{ once: false }}
           variants={fadeInVariant}
-          className="flex gap-x-[78px] items-center"
+          className="flex items-center gap-x-[78px]"
         >
-          <div className="gap-[30px] w-[714px]">
+          <div className="w-[714px] gap-[30px]">
             <h2 className="text-[40px] font-bold">
               빠르게 약속을 잡고 싶다면?
               <br />
@@ -75,7 +76,7 @@ export default function Page() {
           whileInView="visible"
           viewport={{ once: false }}
           variants={fadeInVariant}
-          className="flex gap-x-[78px] items-center"
+          className="flex items-center gap-x-[78px]"
         >
           <Image src={Section02} width={408} height={408} alt="section02" />
           <div className="w-[714px]">
@@ -96,16 +97,16 @@ export default function Page() {
         whileInView="visible"
         viewport={{ once: false }}
         variants={fadeInVariant}
-        className="flex flex-col justify-center items-center pb-[10%]"
+        className="flex flex-col items-center justify-center pb-[10%]"
       >
-        <h2 className="text-[40px] font-bold leading-[55px] text-center pb-[83px] pt-[502px]">
+        <h2 className="pb-[83px] pt-[502px] text-center text-[40px] font-bold leading-[55px]">
           오늘, 새로운 사람들과 번개처럼 <br />
           빠르게 만나보세요! 🚀
         </h2>
         <Button
           color="white"
           onClick={() => router.push('meeting/list')}
-          className="w-[234px] h-[60px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
+          className="h-[60px] w-[234px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
         >
           시작하기
         </Button>

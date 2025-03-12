@@ -1,6 +1,6 @@
-import DropDown from '../DropDown';
-
 import Icon from '@/components/shared/Icon';
+
+import DropDown from '../DropDown';
 
 export default function FilterDropdown({
   options,

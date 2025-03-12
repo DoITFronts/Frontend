@@ -1,18 +1,18 @@
 'use client';
 
-import { use } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
+import { use, useState, useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
+import ReviewTab from './ReviewTab';
+import { fetchMyPageMeetings, fetchMyPageReviews, FetchParams } from '@/api/myPage/myPage';
 import Card from '@/app/meeting/list/components/Card';
 import ButonBox from '@/components/ui/ButtonBox';
 import MeetingProgress from '@/components/ui/card/MeetingProgress';
 import ChipInfo from '@/components/ui/chip/ChipInfo';
 import useMeetingToggle from '@/hooks/useMeetingToggle';
-import { useState, useEffect } from 'react';
 import { Meeting } from '@/types/meeting';
-import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
-import { useInView } from 'react-intersection-observer';
 
 // 응답 타입 정의
 interface MeetingsResponse {
@@ -25,7 +25,7 @@ interface ReviewResponse {
 }
 
 // 미팅 데이터를 가져오는 함수를 Promise로 캐싱
-let meetingsCache = new Map<string, Promise<MeetingsResponse>>();
+const meetingsCache = new Map<string, Promise<MeetingsResponse>>();
 
 function getMeetingsData(menuTab: string, activityTab: string): Promise<MeetingsResponse> {
   const cacheKey = `${menuTab}-${activityTab}`;
@@ -52,23 +52,24 @@ function getMeetingsData(menuTab: string, activityTab: string): Promise<Meetings
 }
 
 // 리뷰 데이터를 가져오는 함수를 Promise로 캐싱
-let reviewsCache: Promise<ReviewResponse> | null = null;
+// let reviewsCache: Promise<ReviewResponse> | null = null;
 
-function getReviewsData(): Promise<ReviewResponse> {
-  if (!reviewsCache) {
-    reviewsCache = fetchMyPageReviews() as Promise<ReviewResponse>;
+// function getReviewsData(category?: string): Promise<ReviewResponse> {
+//   if (!reviewsCache) {
+//     const params: FetchParams = category ? { category } : {};
+//     reviewsCache = fetchMyPageReviews(params) as Promise<ReviewResponse>;
 
-    // 5분 후 캐시 삭제 (선택적)
-    setTimeout(
-      () => {
-        reviewsCache = null;
-      },
-      5 * 60 * 1000,
-    );
-  }
+//     // 5분 후 캐시 삭제 (선택적)
+//     setTimeout(
+//       () => {
+//         reviewsCache = null;
+//       },
+//       5 * 60 * 1000,
+//     );
+//   }
 
-  return reviewsCache;
-}
+//   return reviewsCache;
+// }
 
 interface MeetingTabsProps {
   menuTab: string;
@@ -76,30 +77,30 @@ interface MeetingTabsProps {
 }
 
 // 리뷰 탭 컴포넌트
-function ReviewTab() {
-  // try/catch 없이 use 직접 호출
-  const reviewsData = use(getReviewsData());
+// function ReviewTab() {
+//   // try/catch 없이 use 직접 호출
+//   const reviewsData = use(getReviewsData());
 
-  // 리뷰 데이터가 비어있는 경우
-  if (
-    !reviewsData ||
-    Object.keys(reviewsData).length === 0 ||
-    (Array.isArray(reviewsData) && reviewsData.length === 0)
-  ) {
-    return (
-      <div className="col-span-3 flex h-40 items-center justify-center rounded-md bg-black-3 p-4">
-        <p className="text-lg text-black-8">작성한 리뷰가 없어요.</p>
-      </div>
-    );
-  }
+//   // 리뷰 데이터가 비어있는 경우
+//   if (
+//     !reviewsData ||
+//     Object.keys(reviewsData).length === 0 ||
+//     (Array.isArray(reviewsData) && reviewsData.length === 0)
+//   ) {
+//     return (
+//       <div className="col-span-3 flex h-40 items-center justify-center rounded-md bg-black-3 p-4">
+//         <p className="text-lg text-black-8">작성한 리뷰가 없어요.</p>
+//       </div>
+//     );
+//   }
 
-  // 실제 리뷰 데이터가 있는 경우 (현재는 준비 중 메시지 표시)
-  return (
-    <div className="col-span-3 flex h-40 items-center justify-center">
-      <p className="text-lg">리뷰 기능 준비 중</p>
-    </div>
-  );
-}
+// 실제 리뷰 데이터가 있는 경우 (현재는 준비 중 메시지 표시)
+//   return (
+//     <div className="col-span-3 flex h-40 items-center justify-center">
+//       <p className="text-lg">리뷰 기능 준비 중</p>
+//     </div>
+//   );
+// }
 
 // 미팅 리스트 컴포넌트
 function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: string }) {
@@ -124,7 +125,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
   if (!meetings || meetings.length === 0) {
     return (
       <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
-        <p className="font-medium text-base text-[#C0C1C2] text-center">
+        <p className="text-center text-base font-medium text-[#C0C1C2]">
           {menuTab === '나의 번개'
             ? `아직 참여한 번개가 없어요.\n지금 번개에 참여해 보세요!`
             : `아직 만든 번개가 없어요.\n지금 번개를 만들어 보세요!`}
@@ -186,7 +187,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
                 </div>
               </Link>
 
-              <div className="flex h-auto w-full gap-6 mt-aut items-center p-4">
+              <div className="mt-aut flex h-auto w-full items-center gap-6 p-4">
                 <MeetingProgress
                   id={meeting.id}
                   participantCount={meeting.participantCount}
