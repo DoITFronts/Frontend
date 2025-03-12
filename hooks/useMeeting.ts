@@ -4,42 +4,51 @@ import fetchMeeting from '@/api/meeting/fetchMeeting';
 
 const useMeeting = ({
   category,
-  location1,
-  location2,
-  date,
-  per_page,
+  city,
+  town,
+  targetAt,
+  size,
   initialMeetings,
+  order,
 }: {
   category: string;
-  location1: string;
-  location2: string;
-  date: Date | null;
-  per_page: number;
+  city: string;
+  town: string;
+  targetAt: Date | null;
+  size: number;
   initialMeetings: any[];
+  order?: string;
 }) =>
   useInfiniteQuery({
-    queryKey: ['meetings', category, location1, location2, date],
+    queryKey: ['meetings', category, city, town, targetAt, size, order],
     queryFn: async ({ pageParam = 1 }) => {
-      try {
-        return await fetchMeeting({
-          category,
-          location1,
-          location2,
-          date,
-          page: pageParam,
-          per_page,
-        });
-      } catch (error) {
-        console.error('Failed to fetch meetings:', error);
-        throw error;
-      }
+      const response = await fetchMeeting({
+        category,
+        city,
+        town,
+        targetAt,
+        page: pageParam, // ✅ 페이지 번호 추가
+        size,
+        order,
+      });
+      return {
+        lighteningResponses: response?.lighteningResponses ?? [],
+      };
     },
-    initialPageParam: 2,
-    getNextPageParam: (lastPage) =>
-      lastPage?.next && lastPage.next <= lastPage.last ? lastPage.next : undefined,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPages, lastPageParam) => {
+      const lighteningResponses = lastPage?.lighteningResponses ?? []; // `null`일 경우 빈 배열로 처리
+      const hasMore = lighteningResponses.length === size; // `size` 비교
+      return hasMore ? lastPageParam + 1 : undefined;
+    },
+
     initialData: {
-      pages: [initialMeetings], // 초기 데이터 유지
-      pageParams: [1], // 첫 번째 페이지는 SSR에서 가져온 데이터
+      pages: [
+        {
+          lighteningResponses: initialMeetings ?? [],
+        },
+      ],
+      pageParams: [1],
     },
   });
 

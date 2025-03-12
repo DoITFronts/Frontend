@@ -59,7 +59,7 @@ function LabelHeader({ children, className }: BaseProps) {
 
 //인풋 기본 스타일
 const baseInputStyle =
-  "h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
+  "focus:outline-black-7 h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
 
 const baseInputErrorStyle = 'outline outline-2 outline-red-500 focus:outline-gray-500';
 
@@ -88,6 +88,25 @@ function Input({ className, name, ...rest }: InputProps) {
         {...rest}
         placeholder={placeholder}
         onBlur={() => trigger(name)}
+        //엔터 입력했을때 유효성 검사 실행되도록
+        onKeyUp={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            //유효성 검사 통과되면, 다음 인풋으로 포커스 이동
+            trigger(name).then(() => {
+              const formElements = Array.from(
+                (e.target as HTMLInputElement).form?.elements || [],
+              ) as HTMLInputElement[];
+
+              const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
+              const nextElement = formElements[currentIndex + 1];
+
+              if (nextElement) {
+                nextElement.focus();
+              }
+            });
+          }
+        }}
       />
       {errors[name]?.message && <ErrorMessage>{String(errors[name]?.message)}</ErrorMessage>}
     </>
@@ -139,6 +158,23 @@ function PasswordInput({ className, name, ...rest }: InputProps) {
           type={inputType}
           placeholder={placeholder}
           onBlur={() => trigger(name)}
+          onKeyUp={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              trigger(name).then(() => {
+                const formElements = Array.from(
+                  (e.target as HTMLInputElement).form?.elements || [],
+                ) as HTMLInputElement[];
+
+                const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
+                const nextElement = formElements[currentIndex + 1];
+
+                if (nextElement) {
+                  nextElement.focus();
+                }
+              });
+            }
+          }}
         />
         <button
           type="button"
@@ -177,3 +213,4 @@ Form.LabelHeader = LabelHeader;
 Form.Input = Input;
 Form.PasswordInput = PasswordInput;
 Form.Submit = Submit;
+Form.ErrorMessage = ErrorMessage;

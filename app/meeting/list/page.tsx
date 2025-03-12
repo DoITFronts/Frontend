@@ -9,17 +9,17 @@ interface PageProps {
 export default async function Page({ searchParams }: PageProps) {
   const params = await searchParams;
   const category = params?.category ?? '';
-  const location1 = params?.location_1 ?? '';
-  const location2 = params?.location_2 ?? '';
-  const date = params?.date ? new Date(params.date) : null;
+  const city = params?.location_1 ?? '';
+  const town = params?.location_2 ?? '';
+  const targetAt = params?.targetAt ? new Date(params.targetAt) : null;
+  const order = params?.order ?? '';
 
   const initialMeetings = await fetchMeeting({
     category,
-    location1,
-    location2,
-    date,
-    page: 1,
-    per_page: 10,
+    city,
+    town,
+    targetAt,
+    order,
   });
 
   return <MeetingList initialMeetings={initialMeetings} />;

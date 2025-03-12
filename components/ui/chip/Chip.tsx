@@ -29,6 +29,7 @@ export default function Chip({
         type === 'time' ? timeModeClasses : modeClasses,
         disabled && disabledClasses,
         sizeClasses,
+        mode !== 'dark' && 'hover:bg-[#595959] hover:text-white',
       )}
     >
       <div className="font-['Pretendard'] text-sm font-medium leading-tight">{text}</div>

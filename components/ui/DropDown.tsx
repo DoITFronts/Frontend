@@ -14,6 +14,8 @@ interface DropDownProps {
   optionClassName?: string;
   /** 선택된 옵션 값 */
   selectedValue?: string;
+  /** 드롭다운의 정렬방식 */
+  align?: 'left' | 'middle' | 'right';
 }
 
 /**
@@ -45,6 +47,7 @@ export default function DropDown({
   optionClassName,
   trigger,
   selectedValue,
+  align = 'left',
 }: DropDownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -73,7 +76,11 @@ export default function DropDown({
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-fit rounded-lg bg-white shadow-lg">
+        <div
+          className={`scrollbar-none absolute z-10 mt-1 max-h-[350px] w-fit overflow-y-scroll rounded-lg bg-white shadow-lg
+          ${align === 'right' ? 'right-0' : align === 'middle' ? '-left-7 -translate-x-1/2' : 'left-0'}
+        `}
+        >
           {Array.isArray(options) ? (
             <ul>
               {options.map((option) => (

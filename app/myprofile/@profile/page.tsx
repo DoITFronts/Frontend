@@ -1,19 +1,52 @@
+'use client';
+
+import { fetchProfile } from '@/api/myPage/myPage';
+import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
 import ProfileIcon from '@/components/shared/BaseProfile';
+import useModalStore from '@/store/useModalStore';
+import useProfileStore from '@/store/useProfileStore';
+import { hover } from 'framer-motion';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 export default function Page() {
+  const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
+  const [isLoading, setIsLoading] = useState(true);
+  const { nickname, email, description, imageUrl } = useProfileStore();
+  const { openModal } = useModalStore();
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
   return (
-    <div className="w-full h-auto flex gap-6 items-center">
-      <ProfileIcon theme="light" size={102} />
+    <div className="w-full h-auto flex gap-6 items-center relative">
+      <div
+        className="cursor-pointer absolute top-3 right-0"
+        onMouseEnter={() => setIconStatus('hover')}
+        onMouseLeave={() => setIconStatus('default')}
+        onClick={() => openModal('editProfile')}
+      >
+        <EditingIcon status={iconStatus} />
+      </div>
+      {imageUrl ? (
+        <div className="w-[102px] h-[102px] rounded-full overflow-hidden">
+          <img
+            src={`${imageUrl}?timestamp=${new Date().getTime()}`}
+            alt="프로필 이미지"
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ) : (
+        <ProfileIcon size={102} />
+      )}
+
       <div className="w-auto h-auto flex flex-col gap-[2px]">
         <div className="w-auto h-auto flex justify-start gap-2.5">
-          <span className="text-black font-pretandard font-bold text-2xl">수줍은 펭귄</span>
-          <span className="text-black-6 font-pretandard font-medium text-lg">
-            shy.penguin@codeit.com
-          </span>
+          <span className="text-black font-pretandard font-bold text-2xl">{nickname}</span>
+          <span className="text-black-6 font-pretandard font-medium text-lg">{email}</span>
         </div>
-        <div className="w-auto h-auto text-black-10 font-pretandard text-xl">
-          안녕하세요🙂 저는 조용하지만 할 말은 꼭 하는, 적당히 수줍은 펭귄입니다. 🐧
-        </div>
+        <div className="w-auto h-auto text-black-10 font-pretandard text-xl">{description}</div>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axiosInstance from '@/api/api';
 
 interface UpdateMeetingDescriptionParams {
   meetingId: string;
@@ -10,7 +10,7 @@ const updateMeetingDescription = async ({
   description,
 }: UpdateMeetingDescriptionParams) => {
   try {
-    const response = await axios.put(`/api/meetings/detail/${meetingId}/description`, {
+    const response = await axiosInstance.put(`/api/v1/lightenings/${meetingId}`, {
       description,
     });
 
