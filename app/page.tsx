@@ -1,101 +1,114 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { motion } from 'framer-motion';
+import Lottie from 'lottie-react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import Button from '@/components/ui/Button';
+import fireworkAnimation from '@/public/assets/landing/fireworks.json';
+import Section01 from '@/public/assets/landing/section01.svg';
+import Section02 from '@/public/assets/landing/section02.svg';
+import Logo from '@/public/assets/logo/logoWhite.svg';
+
+// FramerMotion
+const fadeInVariant = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
+export default function Page() {
+  const router = useRouter();
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="w-full bg-black font-['Pretendard'] text-white">
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false }}
+        variants={fadeInVariant}
+        className="flex items-center justify-center gap-6"
+      >
+        <Lottie animationData={fireworkAnimation} loop />
+        <div className="flex flex-col items-center  pb-[350px] pt-[10%] text-[80px] font-extrabold leading-[100px]">
+          <Image src={Logo} height={41} width={181} alt="번개팅 로고" />
+          <div className="mb-[81px] mt-[50px] text-center">
+            <h1>즉흥적인 만남은</h1>
+            <h1 className="text-yellow-6">여기서 시작!</h1>
+          </div>
+          <Button
+            color="white"
+            onClick={() => router.push('meeting/list')}
+            className="h-[60px] w-[234px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            시작하기
+          </Button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Lottie animationData={fireworkAnimation} loop />
+      </motion.section>
+      <section className="flex flex-col items-center justify-center gap-y-[330px]">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false }}
+          variants={fadeInVariant}
+          className="flex items-center gap-x-[78px]"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <div className="w-[714px] gap-[30px]">
+            <h2 className="text-[40px] font-bold">
+              빠르게 약속을 잡고 싶다면?
+              <br />
+              번개팅으로.
+            </h2>
+            <p className="text-xl font-extralight leading-[34px]">
+              바쁜 일상 속에서도 가볍게 즐길 수 있는 모임이 필요하신가요?
+              <br />
+              번개팅에서는 술자리, 보드게임, 카페, 맛집 등 다양한 번개 모임을 쉽게 탐색하고 즉시
+              참여할 수 있어요.
+            </p>
+          </div>
+          <Image src={Section01} width={408} height={408} alt="section01" />
+        </motion.div>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false }}
+          variants={fadeInVariant}
+          className="flex items-center gap-x-[78px]"
         >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          <Image src={Section02} width={408} height={408} alt="section02" />
+          <div className="w-[714px]">
+            <h2 className="text-[40px] font-bold">
+              모임 찾기부터 개설까지,
+              <br />
+              믿을 수 있는 번개⚡️
+            </h2>
+            <p className="text-xl font-extralight leading-[34px]">
+              번개팅에서는 단순히 모임을 찾는 것뿐만 아니라, 실제 참여자들의 리뷰를 확인하고 소통할
+              수 있어요.
+            </p>
+          </div>
+        </motion.div>
+      </section>
+      <motion.section
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false }}
+        variants={fadeInVariant}
+        className="flex flex-col items-center justify-center pb-[10%]"
+      >
+        <h2 className="pb-[83px] pt-[502px] text-center text-[40px] font-bold leading-[55px]">
+          오늘, 새로운 사람들과 번개처럼 <br />
+          빠르게 만나보세요! 🚀
+        </h2>
+        <Button
+          color="white"
+          onClick={() => router.push('meeting/list')}
+          className="h-[60px] w-[234px] text-lg shadow-lg shadow-yellow-10 drop-shadow"
         >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          시작하기
+        </Button>
+      </motion.section>
     </div>
   );
 }
