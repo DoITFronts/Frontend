@@ -13,6 +13,9 @@ import useLikeCountStore from '@/store/useLikeCountStore';
 import Icon from '../shared/Icon';
 import DropDown from '../ui/DropDown';
 
+import { fetchProfile } from '@/api/myPage/myPage';
+import useProfileStore from '@/store/useProfileStore';
+
 function NavItem({
   href,
   label,
@@ -41,13 +44,18 @@ export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { mutate: logout } = useSignout();
-  useLikedCount(); // 좋아요 개수 동기화
+  const { nickname, imageUrl } = useProfileStore(); //유저정보
+
+  useLikedCount(); //좋아요 개수 동기화
 
   // 로그인 여부 체크하기
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('accessToken');
       setIsLoggedIn(!!token);
+      if (token) {
+        fetchProfile();
+      }
     }
   }, []);
 
@@ -83,22 +91,38 @@ export default function GNB() {
             <NavItem href="/review" label="리뷰" currentPath={pathname} />
           </div>
         </div>
-        <div>
-          {isLoggedIn ? (
-            // TODO: user 개인 프로필 이미지 분기처리
+        {/* 로그인 여부 & 프로필 사진 유무에 따른 분기처리 */}
+        {isLoggedIn ? (
+          <div className="flex items-center">
             <DropDown
-              trigger={<Icon path="profile/userProfileDefault" width="37px" height="37px" />}
+              trigger={
+                imageUrl ? (
+                  <div className="flex items-center gap-3 overflow-hidden mt-2">
+                    <img
+                      src={`${imageUrl}?timestamp=${new Date().getTime()}`}
+                      alt="프로필 이미지"
+                      className="object-cover w-[37px] h-[37px] rounded-full"
+                    />
+                    <div className="font-semibold text-white">{nickname}</div>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 overflow-hidden mt-2">
+                    <Icon path="profile/userProfileDefault" width="37px" height="37px" />
+                    <div className="font-semibold text-white">{nickname}</div>
+                  </div>
+                )
+              }
               options={['마이페이지', '로그아웃']}
               onSelect={handleDropDownItem}
               optionClassName="w-[110px] px-5 py-3 font-['Pretendard'] text-md font-semibold text-center hover:bg-yellow-5"
             />
-          ) : (
-            <div className="mr-4 flex gap-5">
-              <NavItem href="/user/signin" label="로그인" currentPath={pathname} />
-              <NavItem href="/user/signup" label="회원가입" currentPath={pathname} />
-            </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="mr-4 flex gap-5">
+            <NavItem href="/user/signin" label="로그인" currentPath={pathname} />
+            <NavItem href="/user/signup" label="회원가입" currentPath={pathname} />
+          </div>
+        )}
       </div>
     </nav>
   );

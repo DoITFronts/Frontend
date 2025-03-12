@@ -202,8 +202,6 @@ export default function LikedPage() {
     };
   };
 
-  const { likeMutation } = useLikeMutation();
-
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
@@ -330,7 +328,7 @@ export default function LikedPage() {
               <MeetingItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => likeMutation.mutate(meeting.id)}
+                onClick={() => {}}
                 priority={index < 10}
               />
             ))}

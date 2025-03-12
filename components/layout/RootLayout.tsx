@@ -14,6 +14,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [showSplash, setShowSplash] = useState(false);
 
   useEffect(() => {
+    // 브라우저 환경일 때만 실행
+    if (typeof window === 'undefined') return;
+
+    // 이미 로드된 경우 건너뜀
+    if (window.kakao?.maps) return;
+
+    // 이미 스크립트 태그가 있는 경우 건너뜀
+    if (document.getElementById('kakao-map-script')) return;
+
+    const script = document.createElement('script');
+    script.id = 'kakao-map-script';
+    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_API_KEY}&libraries=services,places&autoload=false`;
+    script.async = true;
+
+    script.onload = () => {
+      window.kakao.maps.load();
+      console.log('카카오맵 SDK 로드 완료');
+    };
+
+    document.head.appendChild(script);
     if (!sessionStorage.getItem('visited')) {
       setShowSplash(true);
       setTimeout(() => {

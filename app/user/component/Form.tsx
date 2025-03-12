@@ -48,7 +48,7 @@ function Label({ children, className }: LabelProps) {
   return <label className={labelClass}> {children} </label>;
 }
 
-// 인풋 라벨 헤더
+//인풋 라벨 헤더
 function LabelHeader({ children, className }: BaseProps) {
   const headerClass = cn(
     "font-['Pretendard'] text-black-8 text-sm font-bold leading-tight",
@@ -97,11 +97,23 @@ function Input({ className, name, ...rest }: InputProps) {
         {...rest}
         placeholder={placeholder}
         onBlur={() => trigger(name)}
-        // 엔터 입력했을때 유효성 검사 실행되도록
-        onKeyDown={(e) => {
+        //엔터 입력했을때 유효성 검사 실행되도록
+        onKeyUp={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            trigger(name);
+            //유효성 검사 통과되면, 다음 인풋으로 포커스 이동
+            trigger(name).then(() => {
+              const formElements = Array.from(
+                (e.target as HTMLInputElement).form?.elements || [],
+              ) as HTMLInputElement[];
+
+              const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
+              const nextElement = formElements[currentIndex + 1];
+
+              if (nextElement) {
+                nextElement.focus();
+              }
+            });
           }
         }}
       />
@@ -155,10 +167,21 @@ function PasswordInput({ className, name, ...rest }: InputProps) {
           type={inputType}
           placeholder={placeholder}
           onBlur={() => trigger(name)}
-          onKeyDown={(e) => {
+          onKeyUp={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
-              trigger(name);
+              trigger(name).then(() => {
+                const formElements = Array.from(
+                  (e.target as HTMLInputElement).form?.elements || [],
+                ) as HTMLInputElement[];
+
+                const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
+                const nextElement = formElements[currentIndex + 1];
+
+                if (nextElement) {
+                  nextElement.focus();
+                }
+              });
             }
           }}
         />

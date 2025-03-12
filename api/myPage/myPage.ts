@@ -44,10 +44,23 @@ export const updateProfile = async (
 
 export const fetchMyPageMeetings = async ({ category }: FetchMyPageMeetingsParams) => {
   try {
-    const englishCategory = category ? categoryMap[category] || 'ALCOHOL' : 'ALCOHOL';
-    const params = { category: englishCategory };
+    const params: Record<string, string> = {};
+    if (category) {
+      params.category = categoryMap[category] || 'ALCOHOL';
+    }
 
-    const response = await axiosInstance.get('/api/v1/my-page/lightenings/created', { params });
+    const basePath = '/api/v1/my-page/lightenings';
+    let endPoint;
+
+    if (type === '나의 번개') {
+      endPoint = `${basePath}/joined`;
+    } else if (type === '내가 만든 번개') {
+      endPoint = `${basePath}/created`;
+    } else {
+      endPoint = `${basePath}/joined`;
+    }
+
+    const response = await axiosInstance.get(endPoint, { params });
     return response.data;
   } catch (error) {
     console.error('내가 만든 번개 목록을 불러오는데 실패했습니다.: ', error);
