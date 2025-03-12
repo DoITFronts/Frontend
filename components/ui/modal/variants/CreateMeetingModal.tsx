@@ -12,6 +12,7 @@ import useModalStore from '@/store/useModalStore';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 
 import CustomDatePicker from '../datePicker';
+import useCreateMeeting from '@/hooks/useMeetingCreate';
 
 const meetingCategories = Object.values(MeetingCategory);
 const categoryKoreanMap = {
@@ -49,6 +50,8 @@ export default function CreateMeetingModal() {
   }, [selectedPlace]);
 
   const router = useRouter();
+
+  const { mutate } = useCreateMeeting();
 
   const handleMeetingName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -156,19 +159,22 @@ export default function CreateMeetingModal() {
       ...(imageFile && { image: imageFile }),
     };
 
-    try {
-      console.log(meetingData);
-      const response = await createMeeting(meetingData);
+    console.log(meetingData);
 
-      if (response.id) {
-        router.push(`/meeting/detail/${response.id}`);
-        toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
-        closeModal();
-      }
-    } catch (error) {
-      toast.error('에러가 발생했습니다.', { autoClose: 900 });
-      console.error('Error: ', error);
-    }
+    mutate(meetingData, {
+      onSuccess: (response) => {
+        if (response.id) {
+          // router.push(`/meeting/detail/${response.id}`);
+          toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
+          closeModal();
+          router.push(`/meeting/detail/${response.id}`);
+        }
+      },
+      onError: (error) => {
+        toast.error('에러가 발생했습니다.', { autoClose: 900 });
+        console.error('Error: ', error);
+      },
+    });
   };
 
   const isFormValid =
