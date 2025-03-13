@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useState } from 'react';
 
 import { signinUser, signupUser, signoutUser } from '@/api/user/auth';
+import { fetchProfile } from '@/api/myPage/myPage';
 
 // 로그인
 export const useSignin = () => {
@@ -19,7 +20,7 @@ export const useSignin = () => {
       console.log('제출된 로그인 데이터:', data);
     },
     onSuccess: (response) => {
-      console.log('로그인 응답:', response);
+      fetchProfile(), console.log('로그인 응답:', response);
       const { accessToken } = response;
       if (accessToken) {
         // 로컬 스토리지,쿠키에 토큰 저장(쿠키 만료시간:1일 설정해둠)

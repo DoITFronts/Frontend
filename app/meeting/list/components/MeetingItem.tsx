@@ -24,6 +24,7 @@ import HostInfo from '../../components/HostInfo';
 import Card from './Card';
 import ButtonBox from '@/components/ui/ButtonBox';
 import { useToggleJoinMutation } from '@/hooks/useOptimisticQuery';
+import useProfileStore from '@/store/useProfileStore';
 
 interface Props {
   meeting: Meeting;
@@ -69,6 +70,13 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
 
   const joinMutation = useToggleJoinMutation(joinLightning);
   const leaveMutation = useToggleJoinMutation(leaveLightning);
+
+  const currentUserId = useProfileStore((state) => state.id);
+
+  const isCurrentUserHost =
+    meeting.participants.some(
+      (participant) => participant.isHost && participant.userId === currentUserId,
+    ) || false;
 
   const handleJoin = (meetingId: string) => {
     joinMutation.mutate(meetingId);
@@ -166,6 +174,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
             </Button> */}
             <ButtonBox
               isJoined={meeting.isJoined}
+              isHost={isCurrentUserHost}
               isCompleted={meeting.isCompleted}
               onJoin={() => handleJoin(meeting.id)}
               onCancel={() => handleCancel(meeting.id)}

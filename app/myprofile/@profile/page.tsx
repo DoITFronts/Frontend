@@ -16,10 +16,6 @@ export default function Page() {
   const { nickname, email, description, imageUrl } = useProfileStore();
   const { openModal } = useModalStore();
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
-
   return (
     <div className="relative flex h-auto w-full items-center gap-6">
       <div
