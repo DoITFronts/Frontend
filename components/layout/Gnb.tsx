@@ -5,15 +5,13 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import { fetchProfile } from '@/api/myPage/myPage';
+import Icon from '@/components/shared/Icon';
+import DropDown from '@/components/ui/dropdown/DropDown';
 import { useSignout } from '@/hooks/useAuth';
 import useLikedCount from '@/hooks/useLikeCount';
 import Logo from '@/public/assets/logo/logoWhite.svg';
 import useLikeCountStore from '@/store/useLikeCountStore';
-
-import Icon from '../shared/Icon';
-import DropDown from '../ui/DropDown';
-
-import { fetchProfile } from '@/api/myPage/myPage';
 import useProfileStore from '@/store/useProfileStore';
 
 function NavItem({
@@ -44,9 +42,9 @@ export default function GNB() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { mutate: logout } = useSignout();
-  const { nickname, imageUrl } = useProfileStore(); //유저정보
+  const { nickname, imageUrl } = useProfileStore(); // 유저정보
 
-  useLikedCount(); //좋아요 개수 동기화
+  useLikedCount(); // 좋아요 개수 동기화
 
   // 로그인 여부 체크하기
   useEffect(() => {
@@ -97,16 +95,16 @@ export default function GNB() {
             <DropDown
               trigger={
                 imageUrl ? (
-                  <div className="flex items-center gap-3 overflow-hidden mt-2">
+                  <div className="mt-2 flex items-center gap-3 overflow-hidden">
                     <img
                       src={`${imageUrl}?timestamp=${new Date().getTime()}`}
                       alt="프로필 이미지"
-                      className="object-cover w-[37px] h-[37px] rounded-full"
+                      className="size-[37px] rounded-full object-cover"
                     />
                     <div className="font-semibold text-white">{nickname}</div>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-3 overflow-hidden mt-2">
+                  <div className="mt-2 flex items-center gap-3 overflow-hidden">
                     <Icon path="profile/userProfileDefault" width="37px" height="37px" />
                     <div className="font-semibold text-white">{nickname}</div>
                   </div>
