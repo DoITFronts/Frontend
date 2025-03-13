@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
 import Form from '@/app/user/component/Form';
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button/Button';
+import Icon from '@/components/utils/Icon';
 import { useSignin } from '@/hooks/useAuth';
 import Logo from '@/public/assets/logo/logo.svg';
 

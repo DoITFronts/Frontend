@@ -5,7 +5,7 @@ import Lottie from 'lottie-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button/Button';
 import fireworkAnimation from '@/public/assets/landing/fireworks.json';
 import Section01 from '@/public/assets/landing/section01.svg';
 import Section02 from '@/public/assets/landing/section02.svg';

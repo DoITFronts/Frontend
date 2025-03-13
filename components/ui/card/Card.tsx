@@ -3,10 +3,9 @@ import { ReactNode } from 'react';
 import ChipDate from '@/components/ui/chip/ChipDate';
 
 import ConfirmedStatus from './component/ConfirmedStatus';
+import Like from './component/Like';
 import Participant from './component/Participant';
 import ProgressBar from './component/ProgressBar';
-
-import Like from './component/Like';
 import Title from './component/Title';
 
 interface CardProps {

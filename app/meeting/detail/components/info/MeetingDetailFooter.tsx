@@ -1,5 +1,5 @@
 import AvatarGroup from '@/app/meeting/detail/components/AvatarGroup';
-import MeetingProgress from '@/components/ui/card/component/MeetingProgress';
+import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 
 interface MeetingDetailFooterProps {
   participantCount: number;
@@ -13,8 +13,7 @@ export default function MeetingDetailFooter({
   participantId,
 }: MeetingDetailFooterProps) {
   return (
-    <MeetingProgress
-      id="1"
+    <MeetingStatus
       participantCount={participantCount}
       capacity={capacity}
       isConfirmed
@@ -22,6 +21,6 @@ export default function MeetingDetailFooter({
       optionClass="justifycontent: spacebetween"
     >
       <AvatarGroup count={participantCount} participantId={participantId} />
-    </MeetingProgress>
+    </MeetingStatus>
   );
 }

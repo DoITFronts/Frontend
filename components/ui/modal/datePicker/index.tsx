@@ -44,7 +44,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
           <CustomTimeInput
             date={selected}
             onTimeChange={handleTimeChange}
-            {/*TODO 안쓰는 파라미터 */}
+            // TODO 안 쓰는 파라미터
             onChange={(timeString: string) => {
               // react-datepicker를 위한 빈 핸들러
               // 실제 시간 변경은 onTimeChange에서 처리됩니다.

@@ -2,10 +2,10 @@ import fetchData from '@/api/request';
 import { FetchMeetingListParams } from '@/types/meeting';
 
 export const fetchMeetingList = async (params: FetchMeetingListParams) =>
-  fetchData('/api/v1/lightenings?', params);
+  fetchData('/api/v1/lightenings', params);
 
 export const fetchLikeMeetingList = async (params: FetchMeetingListParams) =>
-  fetchData('/api/v1/lightenings/like?', params);
+  fetchData('/api/v1/lightenings/like', params);
 
 export const fetchReviewMeetingList = async (params: FetchMeetingListParams) =>
-  fetchData('/api/v1/lightenings/reviews/all?', params);
+  fetchData('/api/v1/reviews/all', params);

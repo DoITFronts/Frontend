@@ -42,7 +42,7 @@ export const updateProfile = async (
   }
 };
 
-export const fetchMyPageMeetings = async ({ category }: FetchMyPageMeetingsParams) => {
+export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeetingsParams) => {
   try {
     const params: Record<string, string> = {};
     if (category) {

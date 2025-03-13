@@ -5,7 +5,7 @@ import { forwardRef } from 'react';
 
 import calendar from '@/public/calendar.svg';
 
-const CustomInput = forwardRef(({ value, onClick }: any) => (
+const CustomInput = forwardRef(({ value, onClick }: any, ref) => (
   <div
     tabIndex={0}
     role="button"

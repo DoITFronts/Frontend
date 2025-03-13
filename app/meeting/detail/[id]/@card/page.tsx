@@ -9,9 +9,9 @@ import {
   DetailCardError,
   DetailCardSkeleton,
 } from '@/app/meeting/detail/components/skeleton/DetailCardSkeleton';
-import Card from '@/components/ui/card/Card';
 import NotFoundPage from '@/app/not-found';
-import Category from '@/components/ui/chip/Category';
+import Card from '@/components/ui/card/Card';
+import Category from '@/components/ui/card/component/Category';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import categoryMap from '@/types/categoryMap';
 import { Participant } from '@/types/meeting';

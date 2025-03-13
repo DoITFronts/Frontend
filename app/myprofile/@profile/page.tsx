@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { fetchProfile } from '@/api/myPage/myPage';
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
-import ProfileIcon from '@/components/shared/BaseProfile';
+import ProfileIcon from '@/components/utils/BaseProfile';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
 
