@@ -15,6 +15,8 @@ import { Meeting } from '@/types/meeting';
 import { useToggleJoinMutation } from '@/hooks/useOptimisticQuery';
 import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import { useMyPageMeetings } from '@/hooks/useMyPage';
+import { MeetingCardLoading } from './MeetingCardSkeleton';
+import { GridSkeleton } from './GridSkeleton';
 
 interface MeetingTabsProps {
   menuTab: string;
@@ -63,9 +65,10 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
   // 로딩 중인 경우
   if (isLoading) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center">
-        <p className="text-center text-base font-medium text-[#C0C1C2]">로딩 중...</p>
-      </div>
+      // <div className="col-span-3 flex h-[435px] items-center justify-center">
+      //   <p className="text-center text-base font-medium text-[#C0C1C2]">로딩 중...</p>
+      // </div>
+      <GridSkeleton />
     );
   }
 
@@ -97,74 +100,74 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
   return (
     <>
       {meetings.map((meeting) => (
-        <motion.div
-          ref={ref}
-          key={meeting.id}
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
-        >
-          <Card mode="list">
-            <div className="flex h-[430px] flex-col justify-between overflow-hidden">
-              <Link href={`/meeting/detail/${meeting.id}`} className="block" prefetch={false}>
-                <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
-                  <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-                  <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-                  {meeting.imageUrl ? (
-                    <Image
-                      src={meeting.imageUrl}
-                      width={384}
-                      height={200}
-                      alt="thumbnail"
-                      className="w-96"
-                    />
-                  ) : (
-                    <Image
-                      src="/assets/card/example_image.png"
-                      width={384}
-                      height={200}
-                      alt="thumbnail"
-                      className="w-96"
-                    />
-                  )}
-                </div>
+        // <motion.div
+        //   ref={ref}
+        //   key={meeting.id}
+        //   initial={{ opacity: 0, y: 30 }}
+        //   animate={inView ? { opacity: 1, y: 0 } : {}}
+        //   transition={{ duration: 0.4, ease: 'easeOut' }}
+        //   className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
+        // >
+        <Card mode="list">
+          <div className="flex h-[430px] flex-col justify-between overflow-hidden">
+            <Link href={`/meeting/detail/${meeting.id}`} className="block" prefetch={false}>
+              <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
+                <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
+                <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
+                {meeting.imageUrl ? (
+                  <Image
+                    src={meeting.imageUrl}
+                    width={384}
+                    height={200}
+                    alt="thumbnail"
+                    className="w-96"
+                  />
+                ) : (
+                  <Image
+                    src="/assets/card/example_image.png"
+                    width={384}
+                    height={200}
+                    alt="thumbnail"
+                    className="w-96"
+                  />
+                )}
+              </div>
 
-                <div className="flex flex-col gap-[10px] p-4">
-                  <div className="flex flex-col gap-2">
-                    <Card.Title name={meeting.title} location={`${meeting.city} ${meeting.town}`} />
-                    <div className="flex h-[22px] flex-row items-center gap-1">
-                      <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                        <ChipInfo datetime={meeting.targetAt} />
-                      </div>
+              <div className="flex flex-col gap-[10px] p-4">
+                <div className="flex flex-col gap-2">
+                  <Card.Title name={meeting.title} location={`${meeting.city} ${meeting.town}`} />
+                  <div className="flex h-[22px] flex-row items-center gap-1">
+                    <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
+                      <ChipInfo datetime={meeting.targetAt} />
                     </div>
                   </div>
-
-                  <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
-                    {meeting.summary}
-                  </div>
                 </div>
-              </Link>
 
-              <div className="mt-aut flex h-auto w-full items-center gap-6 p-4">
-                <MeetingProgress
-                  id={meeting.id}
-                  participantCount={meeting.participantCount}
-                  capacity={meeting.capacity}
-                  isConfirmed={meeting.isConfirmed}
-                  isCompleted={meeting.isCompleted}
-                />
-                <ButtonBox
-                  isJoined={meeting.isJoined}
-                  isCompleted={meeting.isCompleted}
-                  isHost={meeting.participants?.some((p) => p.isHost && p.userId === currentUserId)}
-                  onJoin={() => handleJoin(meeting.id)}
-                  onCancel={() => handleCancel(meeting.id)}
-                />
+                <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
+                  {meeting.summary}
+                </div>
               </div>
+            </Link>
+
+            <div className="mt-aut flex h-auto w-full items-center gap-6 p-4">
+              <MeetingProgress
+                id={meeting.id}
+                participantCount={meeting.participantCount}
+                capacity={meeting.capacity}
+                isConfirmed={meeting.isConfirmed}
+                isCompleted={meeting.isCompleted}
+              />
+              <ButtonBox
+                isJoined={meeting.isJoined}
+                isCompleted={meeting.isCompleted}
+                isHost={meeting.participants?.some((p) => p.isHost && p.userId === currentUserId)}
+                onJoin={() => handleJoin(meeting.id)}
+                onCancel={() => handleCancel(meeting.id)}
+              />
             </div>
-          </Card>
-        </motion.div>
+          </div>
+        </Card>
+        // </motion.div>
       ))}
     </>
   );

@@ -10,6 +10,7 @@ export interface FetchMyPageMeetingsParams {
 
 export interface FetchParams {
   category?: string;
+  type?: string;
 }
 
 export const fetchProfile = async () => {
@@ -75,7 +76,8 @@ export const fetchMyPageReviews = async (params: FetchParams = {}) => {
   try {
     const apiParams: Record<string, string> = {};
     if (params.category) {
-      params.category = categoryMap[params.category] || 'ALCOHOL';
+      const mappedCategory = categoryMap[params.category] || 'ALCOHOL';
+      apiParams.category = mappedCategory;
     }
     const response = await axiosInstance.get('/api/v1/my-page/reviews/created', {
       params: apiParams,

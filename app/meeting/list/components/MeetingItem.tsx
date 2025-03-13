@@ -74,7 +74,7 @@ export default function MeetingItem({ meeting, onClick, priority }: Props) {
   const currentUserId = useProfileStore((state) => state.id);
 
   const isCurrentUserHost =
-    meeting.participants.some(
+    meeting.participants?.some(
       (participant) => participant.isHost && participant.userId === currentUserId,
     ) || false;
 
