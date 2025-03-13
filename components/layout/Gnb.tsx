@@ -28,7 +28,7 @@ function NavItem({
   return (
     <Link
       href={href}
-      className={`flex items-center font-['Pretendard'] text-sm font-bold md:text-base ${
+      className={`flex items-center font-['Pretendard'] text-sm md:text-base font-bold text-center ${
         isActive ? 'text-yellow-400' : 'text-white'
       }`}
     >
@@ -68,20 +68,21 @@ export default function GNB() {
   };
   const { likedCount } = useLikeCountStore();
   return (
-    <nav className="fixed left-0 top-0 z-50 flex h-[60px] w-full items-center bg-black px-[15%] shadow-md md:h-[60px]">
-      <div className="flex w-full justify-between">
-        <div className="flex items-center justify-between gap-x-[31px] md:gap-x-[78px]">
-          <Link href="/meeting/list" className="flex h-[17px] w-[75px] md:h-5 md:w-20">
+    <nav className="flex items-center justify-center fixed left-0 top-0 z-50 h-[3.5625rem] sm:h-[3.75rem] w-full  bg-black shadow-md px-[1.1875rem] sm:px-[1.4375rem]">
+      <div className="flex justify-between w-full lg:w-[75rem]">
+        <div className="flex items-center justify-between w-[16.9375rem] md:w-[20.625rem] gap-2">
+          {/* 로고 */}
+          <Link href="/meeting/list" className="h-[1.0625rem] w-[4.6875rem] md:h-5 md:w-20">
             {/* TODO 이거 priority만 있어도 되는거 맞나? */}
-            <Image src={Logo} alt="번개팅 메인 로고" width={80} height={20} priority />
+            <Image src={Logo} alt="번개팅 메인 로고" width={73.62} height={16.2} priority />
           </Link>
-          <div className="mr-5 flex gap-x-3 md:gap-x-6">
+          <div className="flex items-center md:gap-6 gap-2 ml-1 break-keep">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
-            <div className="flex items-center justify-center gap-1">
+            <div className="flex items-center">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
               {/* TODO: 좋아요 count 받아야함 */}
               {likedCount() > 0 && (
-                <span className="mb-[1.5px] h-fit rounded-full bg-yellow-6 px-[5px] text-center text-[12px] font-bold text-black">
+                <span className="mb-[0.0938rem] ml-[0.375rem] h-fit rounded-full bg-yellow-6 px-[0.3125rem] text-center text-[0.625rem] font-bold text-black">
                   {likedCount()}
                 </span>
               )}
@@ -91,32 +92,36 @@ export default function GNB() {
         </div>
         {/* 로그인 여부 & 프로필 사진 유무에 따른 분기처리 */}
         {isLoggedIn ? (
-          <div className="flex items-center">
+          <div className="">
             <DropDown
               trigger={
                 imageUrl ? (
-                  <div className="mt-2 flex items-center gap-3 overflow-hidden">
+                  <div className="mt-1 flex items-center overflow-hidden gap-1 md:gap-[0.625rem] ml-1 md:ml-5">
                     <img
                       src={`${imageUrl}?timestamp=${new Date().getTime()}`}
                       alt="프로필 이미지"
-                      className="size-[37px] rounded-full object-cover"
+                      className="size-[1.875rem] md:size-[2.25rem] rounded-full object-cover"
                     />
-                    <div className="font-semibold text-white">{nickname}</div>
+                    <div className="hidden sm:block font-bold text-white text-sm md:text-base whitespace-nowrap">
+                      {nickname}
+                    </div>
                   </div>
                 ) : (
-                  <div className="mt-2 flex items-center gap-3 overflow-hidden">
-                    <Icon path="profile/userProfileDefault" width="37px" height="37px" />
-                    <div className="font-semibold text-white">{nickname}</div>
+                  <div className="mt-1 flex items-center overflow-hidden gap-1 md:gap-[0.625rem] ml-1 md:ml-5">
+                    <Icon path="profile/userProfileDefault" width="36px" height="36px" />
+                    <div className="hidden sm:block font-bold text-white text-sm md:text-base whitespace-nowrap">
+                      {nickname}
+                    </div>
                   </div>
                 )
               }
               options={['마이페이지', '로그아웃']}
               onSelect={handleDropDownItem}
-              optionClassName="w-[110px] px-5 py-3 font-['Pretendard'] text-md font-semibold text-center hover:bg-yellow-5"
+              optionClassName="w-[6.875rem] px-5 py-3 font-['Pretendard'] text-md font-semibold text-center hover:bg-yellow-5"
             />
           </div>
         ) : (
-          <div className="mr-4 flex gap-5">
+          <div className="flex gap-2 whitespace-nowrap ml-1">
             <NavItem href="/user/signin" label="로그인" currentPath={pathname} />
             <NavItem href="/user/signup" label="회원가입" currentPath={pathname} />
           </div>
