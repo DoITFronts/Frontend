@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-import ProfileIcon from '@/components/shared/BaseProfile';
+import ProfileIcon from '@/components/utils/BaseProfile';
 
 // TODO hover action 추가 필요
 interface AvatarGroupProps {
@@ -33,7 +33,7 @@ function AvatarGroup({ count, maxCount = 4, participantId = [] }: AvatarGroupPro
       {Array.from({ length: visibleIcons }, (_, i) => (
         <motion.div
           key={i}
-          className="rounded-full overflow-hidden"
+          className="overflow-hidden rounded-full"
           variants={avatarVariants}
           initial="hidden"
           whileInView="visible"

@@ -72,8 +72,8 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
               // 애니메이션을 framer-motion을 사용하여 추가
               return (
                 <div key={index} className="flex items-center gap-6 font-pretandard">
-                  <span className="font-pretendard relative justify-start text-center text-xs font-medium leading-tight text-neutral-800">
-                    {5 - index}점
+                  <span className="font-pretendard relative min-w-5 justify-start text-center text-xs font-medium leading-tight text-neutral-800">
+                    {index + 1}점
                   </span>
                   <div className="relative h-1 min-w-64 rounded-full bg-[#E5E7EB]">
                     <motion.div

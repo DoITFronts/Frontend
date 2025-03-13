@@ -5,12 +5,12 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import FilterDropdown from '@/components/ui/card/component/FilterDropdown';
-import MeetingItem from '@/components/ui/card/component/MeetingItem';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
+import CardItem from '@/components/ui/card/CardItem';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import Icon from '@/components/utils/Icon';
 import useLikeMutation from '@/hooks/useLikeMutation';
 import useMeetingList from '@/hooks/useMeetingList';
 import {
@@ -20,10 +20,11 @@ import {
   participantFilter,
 } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
+import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
-import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
+import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
 interface InitialMeetingsProps {
   initialMeetings: Meeting[];
@@ -46,6 +47,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   );
   const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const { openModal } = useModalStore();
 
   // 임시 날짜 상태
   const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
@@ -211,7 +213,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
             onClick={() => handleCategoryClick(category)}
             className="cursor-pointer focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -308,7 +310,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           <EmptyMessage firstLine="아직 번개가 없어요" secondLine="지금 번개를 만들어 보세요!" />
         )}
         {!isLoading && !isError && (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
               <CardItem
                 key={`${meeting.id}-${index}`}

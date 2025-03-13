@@ -1,6 +1,5 @@
-import Tag from '@/components/ui/Tag';
-
-import Card from '../../../../../components/ui/card/Card';
+import Card from '@/components/ui/card/Card';
+import Tag from '@/components/ui/card/component/Tag';
 
 interface MeetingDetailHeaderProps {
   title: string;

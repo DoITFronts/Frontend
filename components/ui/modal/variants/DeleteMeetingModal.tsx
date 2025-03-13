@@ -1,7 +1,7 @@
 'use client';
 
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button/Button';
+import Icon from '@/components/utils/Icon';
 import useModalStore from '@/store/useModalStore';
 
 export default function DeleteMeetingModal() {

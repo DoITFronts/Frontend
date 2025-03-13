@@ -8,7 +8,7 @@ import {
   BottomFloatingBarError,
   BottomFloatingBarSkeleton,
 } from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button/Button';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import useModalStore from '@/store/useModalStore';
 import { isUserLoggedIn } from '@/utils/authUtils';

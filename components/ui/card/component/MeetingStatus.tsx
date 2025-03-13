@@ -25,7 +25,7 @@ export default function MeetingStatus({
             <Card.Participant participantCount={participantCount} capacity={capacity} />
             {children}
           </div>
-          <Card.ConfirmedStatus isConfirmed={isConfirmed} />
+          <Card.ConfirmedStatus isConfirmed={isConfirmed && !isCompleted} />
         </div>
         <Card.ProgressBar
           participantCount={participantCount}

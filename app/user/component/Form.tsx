@@ -10,8 +10,8 @@ import {
 } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button/Button';
+import Icon from '@/components/utils/Icon';
 import VALIDATION_RULES, { type Field, PASSWORD_CONFIRM_RULES } from '@/lib/formValidation';
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
@@ -48,7 +48,7 @@ function Label({ children, className }: LabelProps) {
   return <label className={labelClass}> {children} </label>;
 }
 
-//인풋 라벨 헤더
+// 인풋 라벨 헤더
 function LabelHeader({ children, className }: BaseProps) {
   const headerClass = cn(
     "font-['Pretendard'] text-black-8 text-sm font-bold leading-tight",
@@ -97,11 +97,11 @@ function Input({ className, name, ...rest }: InputProps) {
         {...rest}
         placeholder={placeholder}
         onBlur={() => trigger(name)}
-        //엔터 입력했을때 유효성 검사 실행되도록
+        // 엔터 입력했을때 유효성 검사 실행되도록
         onKeyUp={(e) => {
           if (e.key === 'Enter') {
             e.preventDefault();
-            //유효성 검사 통과되면, 다음 인풋으로 포커스 이동
+            // 유효성 검사 통과되면, 다음 인풋으로 포커스 이동
             trigger(name).then(() => {
               const formElements = Array.from(
                 (e.target as HTMLInputElement).form?.elements || [],

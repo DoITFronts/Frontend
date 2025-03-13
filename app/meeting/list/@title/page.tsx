@@ -1,4 +1,6 @@
-import Button from '@/components/ui/Button';
+'use client';
+
+import Button from '@/components/ui/button/Button';
 import useModalStore from '@/store/useModalStore';
 
 export default function Header() {

@@ -1,18 +1,18 @@
 'use client';
 
-import { use } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import Image from 'next/image';
-import Card from '@/app/meeting/list/components/Card';
-import ButonBox from '@/components/ui/ButtonBox';
-import MeetingProgress from '@/components/ui/card/MeetingProgress';
-import ChipInfo from '@/components/ui/chip/ChipInfo';
-import useMeetingToggle from '@/hooks/useMeetingToggle';
-import { useState, useEffect } from 'react';
-import { Meeting } from '@/types/meeting';
-import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
+import Link from 'next/link';
+import { use, useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
+import ButtonBox from '@/components/ui/button/ButtonBox';
+import Card from '@/components/ui/card/Card';
+import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
+import ChipDate from '@/components/ui/chip/ChipDate';
+import useMeetingToggle from '@/hooks/useMeetingToggle';
+import { Meeting } from '@/types/meeting';
 
 // 응답 타입 정의
 interface MeetingsResponse {
@@ -25,7 +25,7 @@ interface ReviewResponse {
 }
 
 // 미팅 데이터를 가져오는 함수를 Promise로 캐싱
-let meetingsCache = new Map<string, Promise<MeetingsResponse>>();
+const meetingsCache = new Map<string, Promise<MeetingsResponse>>();
 
 function getMeetingsData(menuTab: string, activityTab: string): Promise<MeetingsResponse> {
   const cacheKey = `${menuTab}-${activityTab}`;
@@ -124,7 +124,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
   if (!meetings || meetings.length === 0) {
     return (
       <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
-        <p className="font-medium text-base text-[#C0C1C2] text-center">
+        <p className="text-center text-base font-medium text-[#C0C1C2]">
           {menuTab === '나의 번개'
             ? `아직 참여한 번개가 없어요.\n지금 번개에 참여해 보세요!`
             : `아직 만든 번개가 없어요.\n지금 번개를 만들어 보세요!`}
@@ -175,7 +175,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
                     <Card.Title name={meeting.title} location={`${meeting.city} ${meeting.town}`} />
                     <div className="flex h-[22px] flex-row items-center gap-1">
                       <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                        <ChipInfo datetime={meeting.targetAt} />
+                        <ChipDate datetime={meeting.targetAt} />
                       </div>
                     </div>
                   </div>
@@ -186,15 +186,14 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
                 </div>
               </Link>
 
-              <div className="flex h-auto w-full gap-6 mt-aut items-center p-4">
-                <MeetingProgress
-                  id={meeting.id}
+              <div className="mt-aut flex h-auto w-full items-center gap-6 p-4">
+                <MeetingStatus
                   participantCount={meeting.participantCount}
                   capacity={meeting.capacity}
                   isConfirmed={meeting.isConfirmed}
                   isCompleted={meeting.isCompleted}
                 />
-                <ButonBox onClick={() => toggleMeeting(meeting)} isJoined={meeting.isJoined} />
+                <ButtonBox onClick={() => toggleMeeting(meeting)} isJoined={meeting.isJoined} />
               </div>
             </div>
           </Card>
