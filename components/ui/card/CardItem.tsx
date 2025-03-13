@@ -60,16 +60,28 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
       return;
     }
 
-    if (isJoined) {
-      await leaveLightning(meeting?.id as string);
-      toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
-      setParticipantCount(participantCount - 1);
-    } else {
-      await joinLightning(meeting?.id as string);
-      toast.success('모임에 참여했습니다.', { autoClose: 900 });
-      setParticipantCount(participantCount + 1);
+    try {
+      if (isJoined) {
+        setIsJoined(false);
+        setParticipantCount((prevCount) => prevCount - 1);
+        setIsCompleted(participantCount - 1 >= meeting.capacity);
+        setIsConfirmed(participantCount - 1 >= meeting.minCapacity);
+        await leaveLightning(meeting.id);
+        toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+      } else {
+        setIsJoined(true);
+        setParticipantCount((prevCount) => prevCount + 1);
+        setIsCompleted(participantCount + 1 >= meeting.capacity);
+        setIsConfirmed(participantCount + 1 >= meeting.minCapacity);
+        await joinLightning(meeting.id);
+        toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      }
+    } catch (error) {
+      setIsJoined(meeting.isJoined);
+      setParticipantCount(meeting.participantCount);
+      setIsConfirmed(meeting.isConfirmed);
+      toast.error('오류가 발생했습니다.');
     }
-    setIsJoined(!isJoined);
   };
 
   const handleDeleteMeeting = async () => {
@@ -91,7 +103,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
 
   let buttonText;
   let buttonClickHandler;
-  if (isCompleted) {
+  if (isCompleted && !isJoined) {
     buttonText = buttonTextMap.completed;
     buttonClickHandler = () => {};
   } else if (isJoined) {
@@ -123,9 +135,9 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
                 <Image
                   src={meeting.imageUrl || '/assets/card/example_image.png'}
-                  fill
                   alt="thumbnail"
-                  className="object-cover"
+                  fill
+                  className="z-0 object-cover"
                   priority={priority}
                 />
                 <div className="absolute right-[14px] top-[17.5px]">
@@ -175,7 +187,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               color={isJoined ? 'white' : 'filled'}
               type="button"
               onClick={buttonClickHandler}
-              disabled={isCompleted}
+              disabled={isCompleted && !isJoined}
             >
               {buttonText}
             </Button>
