@@ -1,6 +1,4 @@
 // 로그인, 회원가입, 로그아웃 API 요청
-import Cookies from 'js-cookie';
-
 import axiosInstance from '../api';
 
 // 회원가입

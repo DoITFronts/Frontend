@@ -1,15 +1,15 @@
 import Image from 'next/image';
-import { ChangeEvent, useEffect, useState } from 'react';
+
+import { useState, useEffect, ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
 
-import { fetchProfile, updateProfile } from '@/api/myPage/myPage';
-import Icon from '@/components/shared/Icon';
+import { updateProfile } from '@/api/myPage/myPage';
+import Icon from '@/components/utils/Icon';
 import userProfile from '@/public/userProfile.svg';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
-import useUserStore from '@/store/userStore';
 
-import Button from '../../Button';
+import Button from '../../button/Button';
 
 const MAX_NICKNAME_LENGTH = 8;
 const MAX_DESCRIPTION_LENGTH = 50;

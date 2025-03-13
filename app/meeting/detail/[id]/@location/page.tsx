@@ -57,7 +57,7 @@ export default function MeetingLocation() {
             </div>
             <div className="inline-flex h-16 flex-col items-start justify-start gap-2">
               <div className="inline-flex items-start justify-start gap-2">
-                <div className="flex w-14 items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
+                <div className="flex min-w-14 items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
                   <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
                     도로명
                   </div>

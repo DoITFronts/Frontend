@@ -4,7 +4,6 @@ import CustomInput from './CustomInput';
 import CustomTimeInput from './CustomTimeInput';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import { useEffect, useState } from 'react';
 
 interface DatePickerProps {
   label: string;
@@ -45,6 +44,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
           <CustomTimeInput
             date={selected}
             onTimeChange={handleTimeChange}
+            // TODO 안 쓰는 파라미터
             onChange={(timeString: string) => {
               // react-datepicker를 위한 빈 핸들러
               // 실제 시간 변경은 onTimeChange에서 처리됩니다.
@@ -54,6 +54,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
         renderCustomHeader={({ date, decreaseMonth, increaseMonth }) => (
           <div className="inline-flex w-[250px] items-center justify-between px-2.5 py-[5px]">
             <button
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 decreaseMonth();
@@ -66,6 +67,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
               {date.toLocaleString('ko', { year: 'numeric', month: 'long' })}
             </div>
             <button
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 increaseMonth();

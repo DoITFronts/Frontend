@@ -14,6 +14,7 @@ import useModalStore from '@/store/useModalStore';
 
 import CreateMeetingModal from './variants/CreateMeetingModal';
 import CreateReviewModal from './variants/CreateReviewModal';
+import DeleteMeetingModal from './variants/DeleteMeetingModal';
 import LoginCheckModal from './variants/LoginCheckModal';
 import ProfileModal from './variants/ProfileModal';
 import SignUpModal from './variants/SignUpModal';
@@ -30,6 +31,8 @@ function ModalContent({ modalType, modalProps }: { modalType: string; modalProps
       return <LoginCheckModal />;
     case 'createReview':
       return <CreateReviewModal meetingId={modalProps?.meetingId || ''} />;
+    case 'delete':
+      return <DeleteMeetingModal />;
     default:
       return null;
   }

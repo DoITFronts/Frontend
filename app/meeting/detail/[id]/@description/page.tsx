@@ -39,6 +39,7 @@ export default function MeetingDescription() {
       return tab === 'edit' ? (
         <MarkdownEditor
           value={description}
+          // TODO 새로고침 했을 떄 값왜 날라가는지
           onChange={(value) => setDescription(value || description)}
         />
       ) : (

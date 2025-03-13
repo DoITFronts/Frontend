@@ -5,13 +5,16 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import createMeeting from '@/api/meeting/createMeeting';
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
+
+import Button from '@/components/ui/button/Button';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
+import Icon from '@/components/utils/Icon';
+
 import useModalStore from '@/store/useModalStore';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 
 import CustomDatePicker from '../datePicker';
+
 import useCreateMeeting from '@/hooks/useMeetingCreate';
 
 const meetingCategories = Object.values(MeetingCategory);

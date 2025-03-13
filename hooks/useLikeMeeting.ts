@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import fetchLikeMeeting from '@/api/meeting/fetchLikeMeeting';
+import { fetchLikeMeetingList } from '@/api/meeting/fetchMeeting';
 
 const useLikeMeeting = ({
   category,
@@ -22,7 +22,7 @@ const useLikeMeeting = ({
   useInfiniteQuery({
     queryKey: ['meetings', category, city, town, targetAt, size, order],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await fetchLikeMeeting({
+      const response = await fetchLikeMeetingList({
         category,
         city,
         town,

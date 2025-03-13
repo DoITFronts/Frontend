@@ -1,6 +1,6 @@
-import ProfileIcon from '@/components/shared/BaseProfile';
-import ReviewHeart from '@/components/ui/review/ReviewHeart';
-import { formatDate } from '@/utils/formatDateTime';
+import ProfileIcon from '../../../../../../../../Library/Mobile Documents/.Trash/components/utils/BaseProfile';
+import ReviewHeart from '../../../../../../../../Library/Mobile Documents/.Trash/components/ui/review/ReviewHeart';
+import { formatDate } from '../../../../../../../../Library/Mobile Documents/.Trash/utils/formatDateTime';
 
 interface ReviewItemProps {
   count: number;

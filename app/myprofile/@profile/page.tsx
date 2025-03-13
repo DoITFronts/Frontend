@@ -1,18 +1,15 @@
 'use client';
 
-import { hover } from 'framer-motion';
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { fetchProfile } from '@/api/myPage/myPage';
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
-import ProfileIcon from '@/components/shared/BaseProfile';
+import ProfileIcon from '@/components/utils/BaseProfile';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
 
 export default function Page() {
   const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
-  const [isLoading, setIsLoading] = useState(true);
   const { nickname, email, description, imageUrl } = useProfileStore();
   const { openModal } = useModalStore();
 

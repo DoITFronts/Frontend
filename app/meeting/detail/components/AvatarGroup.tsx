@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
 
-import ProfileIcon from '@/components/shared/BaseProfile';
+import ProfileIcon from '@/components/utils/BaseProfile';
 
+// TODO hover action 추가 필요
 interface AvatarGroupProps {
   count: number;
   maxCount?: number;

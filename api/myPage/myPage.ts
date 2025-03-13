@@ -1,8 +1,9 @@
 import useProfileStore from '@/store/useProfileStore';
-import axiosInstance from '../api';
 import categoryMap from '@/types/categoryMap';
 
-export interface FetchMyPageMeetingsParams {
+import axiosInstance from '../api';
+
+interface FetchMyPageMeetingsParams {
   type: string; // '나의 번개' | '내가 만든 번개'
   category?: string; // '술' | '카페' | '보드 게임' | '맛집'
   size?: number;

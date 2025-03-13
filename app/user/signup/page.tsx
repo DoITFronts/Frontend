@@ -3,9 +3,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import Form from '@/components/form/Form';
+import Form from '@/app/user/component/Form';
 import { useSignup } from '@/hooks/useAuth';
-import Logo from '@/public/assets/logo.svg';
+import Logo from '@/public/assets/logo/logo.svg';
 
 export default function Signup() {
   const { mutate, errorMessage } = useSignup();

@@ -1,4 +1,5 @@
 import { CreateMeetingParams } from '@/types/createMeeting';
+
 import axiosInstance from '../api';
 
 const createMeeting = async (meetingData: CreateMeetingParams) => {

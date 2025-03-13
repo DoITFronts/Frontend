@@ -5,12 +5,11 @@ import Lottie from 'lottie-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import Button from '@/components/ui/Button';
-import { useSetUserTheme } from '@/hooks/useUserInfo';
+import Button from '@/components/ui/button/Button';
 import fireworkAnimation from '@/public/assets/landing/fireworks.json';
 import Section01 from '@/public/assets/landing/section01.svg';
 import Section02 from '@/public/assets/landing/section02.svg';
-import Logo from '@/public/assets/logoWhite.svg';
+import Logo from '@/public/assets/logo/logoWhite.svg';
 
 // FramerMotion
 const fadeInVariant = {
@@ -20,7 +19,6 @@ const fadeInVariant = {
 
 export default function Page() {
   const router = useRouter();
-  useSetUserTheme();
 
   return (
     <div className="w-full bg-black font-['Pretendard'] text-white">

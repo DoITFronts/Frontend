@@ -6,14 +6,13 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { fetchProfile } from '@/api/myPage/myPage';
+import Icon from '@/components/shared/Icon';
+import DropDown from '@/components/ui/dropdown/DropDown';
 import { useSignout } from '@/hooks/useAuth';
 import useLikedCount from '@/hooks/useLikeCount';
-import Logo from '@/public/assets/mainLogo/logoYW.svg';
+import Logo from '@/public/assets/logo/logoWhite.svg';
 import useLikeCountStore from '@/store/useLikeCountStore';
 import useProfileStore from '@/store/useProfileStore';
-
-import Icon from '../shared/Icon';
-import DropDown from '../ui/DropDown';
 
 function NavItem({
   href,
@@ -73,14 +72,8 @@ export default function GNB() {
       <div className="flex w-full justify-between">
         <div className="flex items-center justify-between gap-x-[31px] md:gap-x-[78px]">
           <Link href="/meeting/list" className="flex h-[17px] w-[75px] md:h-5 md:w-20">
-            <Image
-              src={Logo}
-              alt="번개팅 메인 로고"
-              width={80}
-              height={20}
-              priority
-              loading="eager"
-            />
+            {/* TODO 이거 priority만 있어도 되는거 맞나? */}
+            <Image src={Logo} alt="번개팅 메인 로고" width={80} height={20} priority />
           </Link>
           <div className="mr-5 flex gap-x-3 md:gap-x-6">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />

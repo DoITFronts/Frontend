@@ -1,16 +1,18 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
+// TODO 단일 책임 원리 적용해주세용
+// 카테고리 필터, 드롭다운 필터, 무한 스크롤
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import FilterDropdown from '@/components/ui/card/FilterDropdown';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
+import CardItem from '@/components/ui/card/CardItem';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import Icon from '@/components/utils/Icon';
 import useLikeMeeting from '@/hooks/useLikeMeeting';
 import {
   defaultFilter,
@@ -23,7 +25,6 @@ import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
 
-import MeetingItem from '../meeting/list/components/MeetingItem';
 import {
   MeetingCardError,
   MeetingCardLoading,
@@ -223,7 +224,7 @@ export default function LikedPage() {
             onClick={() => handleCategoryClick(category)}
             className="cursor-pointer focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -323,7 +324,7 @@ export default function LikedPage() {
         {!isLoading && !isError && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
-              <MeetingItem
+              <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
                 onClick={() => {}}

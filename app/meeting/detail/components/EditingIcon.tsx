@@ -2,7 +2,7 @@ interface IconButtonProps {
   status: 'default' | 'hover' | 'editing';
 }
 
-const EditingIcon: React.FC<IconButtonProps> = ({ status }) => {
+function EditingIcon({ status }: IconButtonProps) {
   const getIcon = () => {
     switch (status) {
       case 'default':
@@ -62,6 +62,6 @@ const EditingIcon: React.FC<IconButtonProps> = ({ status }) => {
   };
 
   return <div>{getIcon()}</div>;
-};
+}
 
 export default EditingIcon;
