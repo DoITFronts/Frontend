@@ -9,12 +9,14 @@ import Category from '@/components/ui/card/component/Category';
 import HostInfo from '@/components/ui/card/component/HostInfo';
 import ChipDate from '@/components/ui/chip/ChipDate';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
+import categoryMap from '@/types/categoryMap';
 import { Reviews } from '@/types/review';
 
 export default function ReviewItem({ review, priority }: { review: Reviews; priority: boolean }) {
-  const searchParams = useSearchParams();
-  const category = searchParams.get('category');
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const reverseCategoryMap: Record<string, string> = Object.fromEntries(
+    Object.entries(categoryMap).map(([kor, eng]) => [eng, kor]),
+  );
 
   return (
     <Link
@@ -37,7 +39,7 @@ export default function ReviewItem({ review, priority }: { review: Reviews; prio
             priority={priority}
           />
           <div className="absolute right-[14px] top-[17.5px]">
-            <Category type={!category ? '술' : category} />
+            <Category type={reverseCategoryMap[review.category]} />
           </div>
         </div>
       </div>

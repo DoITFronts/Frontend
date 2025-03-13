@@ -16,6 +16,7 @@ export interface Reviews {
   rating: number;
   createdAt: string;
   lighteningId: number;
+  category: string;
   title: string;
   city: string;
   town: string;
