@@ -70,8 +70,8 @@ const config: Config = {
         pretandard: ['Pretendard', 'sans-serif'],
       },
       screens: {
-        sm: { min: '360px', max: '767px' },
-        md: { min: '768px', max: '1199px' },
+        sm: { min: '360px' },
+        md: { min: '768px' },
         lg: { min: '1200px' },
       },
     },
