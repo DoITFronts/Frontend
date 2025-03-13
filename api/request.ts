@@ -1,4 +1,4 @@
-import { getAuthHeaders } from '@/utils/authUtils';
+import { getAuthHeaders } from '@/utils/auth/loginUtils';
 import buildQueryParams from '@/utils/queryParams';
 
 const fetchData = async (endpoint: string, params: any) => {
