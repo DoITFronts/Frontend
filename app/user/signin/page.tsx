@@ -30,14 +30,14 @@ export default function Signin() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white ">
-      <div className="w-[330px] sm:w-[402px] flex flex-col items-center">
+      <div className="w-[20.625rem] sm:w-[25.125rem] flex flex-col items-center">
         <div className="w-[95%]">
-          <div className="mb-[30px] sm:mb-[50px] flex items-center justify-center">
+          <div className="mb-[1.875rem] sm:mb-[3.125rem] flex items-center justify-center">
             <Link href="/">
               <Image
                 src={Logo}
                 alt="번개팅 로고"
-                className="w-[100px] sm:w-[147px] h-[22px] sm:h-[32.4px]"
+                className="w-[6.25rem] sm:w-[9.1875rem] h-[1.375rem] sm:h-[2.025rem]"
               />
             </Link>
           </div>
@@ -63,19 +63,20 @@ export default function Signin() {
                 <Form.ErrorMessage className="pl-2 pt-3">{errorMessage}</Form.ErrorMessage>
               )}
             </Form.Label>
-            <Form.Submit className="w-full text-sm sm:text-base">로그인</Form.Submit>
+            <Form.Submit className="w-full text-sm sm:text-base sm:h-[2.75rem] h-[2.5rem]">
+              로그인
+            </Form.Submit>
             <Button
-              className="mt-[18px] w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-[10px] text-center text-sm sm:text-base font-bold text-white sm:h-[44px] h-[40px]]"
+              className="mt-[1.125rem] w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-[0.625rem] text-center text-sm sm:text-base font-bold text-white sm:h-[2.75rem] h-[2.5rem]"
               onClick={handleTestAccountClick}
             >
               ⚡️ 게스트 로그인 ⚡️
             </Button>
-            <Button className="mt-[18px] w-full bg-[#fee500] px-3 py-[10px] text-center text-sm sm:text-base font-bold text-black hover:bg-[#fee500] active:bg-[#fee500]">
+            <Button className="mt-[1.125rem] w-full bg-[#fee500] px-3 py-[0.625rem] text-center text-sm sm:text-base font-bold text-black hover:bg-[#fee500] active:bg-[#fee500] sm:h-[2.75rem] h-[2.5rem]">
               <Icon path="user/kakaoLogo" width="22px" height="22px" />
               카카오로 로그인하기
             </Button>
           </Form>
-
           <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-xs sm:text-base font-bold text-neutral-800">
             처음이신가요?
             <Link className="text-gray-300 underline" href="/user/signup">
