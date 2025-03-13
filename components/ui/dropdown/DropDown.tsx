@@ -77,7 +77,7 @@ export default function DropDown({
 
       {isOpen && (
         <div
-          className={`scrollbar-none absolute z-10 mt-1 max-h-[350px] w-fit overflow-y-scroll rounded-lg bg-white shadow-lg
+          className={`scrollbar-none absolute z-50 mt-1 max-h-[350px] w-fit overflow-y-scroll rounded-lg bg-white shadow-lg
           ${align === 'right' ? 'right-0' : align === 'middle' ? '-left-7 -translate-x-1/2' : 'left-0'}
         `}
         >
