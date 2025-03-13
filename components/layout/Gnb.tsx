@@ -76,7 +76,7 @@ export default function GNB() {
             {/* TODO 이거 priority만 있어도 되는거 맞나? */}
             <Image src={Logo} alt="번개팅 메인 로고" width={73.62} height={16.2} priority />
           </Link>
-          <div className="flex items-center md:gap-6 gap-2 ml-1 break-keep">
+          <div className="flex items-center md:gap-6 sm:gap-3 gap-2 ml-1 break-keep">
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
             <div className="flex items-center">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
