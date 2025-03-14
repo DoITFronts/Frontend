@@ -34,11 +34,13 @@ export default function DetailCard() {
       <div className="mt-14 flex h-[271px] gap-6">
         <div className="relative flex w-[518px] items-center justify-center overflow-hidden">
           <Image
-            src={data.imageUrl || '/assets/card/example_image.png'}
+            src={data.imageUrl || `/fallback/fallback_image_${data?.category?.toLowerCase()}.png`}
             width={384}
             height={200}
             alt="thumbnail"
             className="w-full"
+            placeholder="blur"
+            blurDataURL={`/fallback/fallback_image_${data?.category?.toLowerCase()}.png`}
           />
           <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
           <div className="absolute right-[14px] top-[17.5px]">
