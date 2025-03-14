@@ -1,5 +1,6 @@
-import Icon from '../../../../../../../../Library/Mobile Documents/.Trash/components/utils/Icon';
 import { useEffect, useState } from 'react';
+
+import Icon from '@/components/utils/Icon';
 
 export default function ButtonBox({
   isJoined,
@@ -35,17 +36,17 @@ export default function ButtonBox({
   };
 
   return (
-    <div className="w-auto h-auto flex gap-3">
+    <div className="flex size-auto gap-3">
       {localIsJoined ? (
         <button
-          className="px-5 py-2.5 bg-white text-black text-base font-semibold rounded-[12px] w-[100px] border border-black whitespace-nowrap"
+          className="w-[100px] whitespace-nowrap rounded-[12px] border border-black bg-white px-5 py-2.5 text-base font-semibold text-black"
           onClick={handleClick}
         >
           번개 취소
         </button>
       ) : (
         <button
-          className="px-5 py-2.5 bg-black text-white text-base rounded-[12px] w-[100px] flex"
+          className="flex w-[100px] rounded-[12px] bg-black px-5 py-2.5 text-base text-white"
           onClick={handleClick}
         >
           번개 참여
@@ -54,7 +55,7 @@ export default function ButtonBox({
       {chatIconDisabled ? (
         ''
       ) : (
-        <div className="w-auto h-[44px] p-2.5 bg-yellow-6 rounded-[12px]">
+        <div className="h-[44px] w-auto rounded-[12px] bg-yellow-6 p-2.5">
           <Icon path="chat" width="28px" height="24px" />
         </div>
       )}

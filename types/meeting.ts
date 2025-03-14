@@ -42,11 +42,11 @@ export interface Meeting {
   town: string;
   participantCount: number;
   capacity: number;
+  minCapacity: number;
   isLiked: boolean;
   isJoined: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
-  minCapacity: number;
   chatRoomId: number;
   participants: Participant[];
 }

@@ -16,7 +16,7 @@ export default function SplashScreen({ onCompleteAction }: { onCompleteAction: (
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black gap-9"
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-9 bg-black"
         initial={{ opacity: 1 }}
         exit={{ opacity: 0, scale: 1.2 }}
         transition={{ duration: 1 }}
@@ -35,7 +35,7 @@ export default function SplashScreen({ onCompleteAction }: { onCompleteAction: (
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, ease: 'easeOut' }}
         >
-          <Image src="/assets/mainLogo/splash.svg" alt="Splash" width={76} height={60} />
+          <Image src="/assets/logo/splash.svg" alt="Splash" width={76} height={60} />
         </motion.div>
       </motion.div>
     </AnimatePresence>
