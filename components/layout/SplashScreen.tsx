@@ -35,7 +35,7 @@ export default function SplashScreen({ onCompleteAction }: { onCompleteAction: (
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 1, ease: 'easeOut' }}
         >
-          <Image src="/assets/mainLogo/splash.svg" alt="Splash" width={76} height={60} />
+          <Image src="/assets/main/logo/splash.svg" alt="Splash" width={76} height={60} />
         </motion.div>
       </motion.div>
     </AnimatePresence>

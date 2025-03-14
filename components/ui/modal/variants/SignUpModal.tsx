@@ -1,6 +1,6 @@
+import Button from '@/components/ui/button/Button';
 import Icon from '@/components/utils/Icon';
 
-import Button from '@/components/ui/button/Button';
 
 export default function SignUpModal() {
   return (
