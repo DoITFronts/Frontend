@@ -47,7 +47,6 @@ export interface Meeting {
   isJoined: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
-  minCapacity: number;
   chatRoomId: number;
   participants: Participant[];
 }
