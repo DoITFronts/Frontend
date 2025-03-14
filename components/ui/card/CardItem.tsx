@@ -134,7 +134,11 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                 <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
                 <Image
-                  src={meeting.imageUrl || '/assets/card/example_image.png'}
+                  src={
+                    meeting.imageUrl ||
+                    `/fallback/fallback_default.png` ||
+                    `/fallback/fallback_${meeting?.category?.toLowerCase()}.png`
+                  }
                   alt="thumbnail"
                   fill
                   className="z-0 object-cover"
@@ -150,8 +154,8 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
                     <Card.Title
-                      name={meeting.title}
-                      location={`${reverseCityMap[meeting.city] || meeting.city} ${reverseCityMap[meeting.town] || meeting.town}`}
+                      name={meeting.title || '제목 없음'}
+                      location={`${reverseCityMap[meeting.city] || meeting.city || '지역 1'} ${reverseCityMap[meeting.town] || meeting.town || '지역 2'}`}
                     />
                     {meeting.participants
                       ?.filter((participant) => participant.isHost)
@@ -164,7 +168,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                       ))}
 
                     <div className="flex h-[22px] flex-row items-center gap-1">
-                      <ChipDate datetime={meeting.targetAt} />
+                      <ChipDate datetime={meeting.targetAt || new Date().toString()} />
                     </div>
                   </div>
                   <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
