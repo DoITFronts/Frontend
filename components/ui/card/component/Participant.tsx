@@ -1,4 +1,4 @@
-import Icon from '@/components/utils/Icon';
+import Icon from '../../../../../../../../../Library/Mobile Documents/.Trash/components/utils/Icon';
 
 function Participant({
   participantCount,
