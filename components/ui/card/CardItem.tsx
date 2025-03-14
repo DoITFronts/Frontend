@@ -97,7 +97,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
 
   const buttonTextMap = {
     completed: '마감',
-    joined: isHost ? '번개 삭제하기' : '참여 취소',
+    joined: isHost ? '번개 삭제' : '참여 취소',
     default: '참여하기',
   };
 
