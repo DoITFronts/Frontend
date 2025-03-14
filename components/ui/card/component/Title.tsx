@@ -1,4 +1,4 @@
-import Icon from '@/components/utils/Icon';
+import Icon from '../../../../../../../../../Library/Mobile Documents/.Trash/components/utils/Icon';
 
 function Title({ name, location }: { name: string; location: string }) {
   return (

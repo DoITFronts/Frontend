@@ -6,8 +6,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { fetchProfile } from '@/api/myPage/myPage';
+import Icon from '@/components/shared/Icon';
 import DropDown from '@/components/ui/dropdown/DropDown';
-import Icon from '@/components/utils/Icon';
 import { useSignout } from '@/hooks/useAuth';
 import useLikedCount from '@/hooks/useLikeCount';
 import Logo from '@/public/assets/logo/logoWhite.svg';
