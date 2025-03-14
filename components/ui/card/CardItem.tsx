@@ -130,7 +130,9 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
             <div className="flex flex-col justify-between gap-4 overflow-hidden">
               {/* 이미지 */}
               <div className="relative flex h-[172px] w-full items-center justify-center overflow-hidden md:h-[200px]">
-                <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                <div className="absolute left-0 top-0 z-10">
+                  <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                </div>
                 <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
                 <Image
