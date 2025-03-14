@@ -5,8 +5,9 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import Gnb from '@/components/layout/Gnb';
-import SplashScreen from '@/components/layout/SplashScreen';
 import Modal from '@/components/ui/modal/Modal';
+
+import SplashScreen from './SplashScreen';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

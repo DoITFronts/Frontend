@@ -23,6 +23,7 @@ import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
+import { formatShortDate } from '@/utils/formatDateTime';
 
 import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
@@ -203,15 +204,15 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const { likeMutation } = useLikeMutation();
 
   return (
-    <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
             onClick={() => handleCategoryClick(category)}
-            className="cursor-pointer focus:outline-none"
+            className="cursor-pointer font-semibold focus:outline-none"
           >
             <CategoryFilter
               text={category}
@@ -223,8 +224,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -271,8 +272,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               </div>
             }
             trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
+              <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate ? formatShortDate(selectedDate.toISOString()) : '날짜'}
                 <div onClick={handleResetDate}>
                   <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
                 </div>
@@ -287,7 +288,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
+            <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
                 <Icon path={selectedFilter ? 'exit' : 'sort'} />
               </div>
@@ -300,7 +301,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       {/* 번개 리스트 */}
       <div>
         {isLoading && (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <MeetingCardLoading key={index} />
             ))}

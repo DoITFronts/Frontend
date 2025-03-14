@@ -1,4 +1,4 @@
-import Icon from '../../../../../../../../Library/Mobile Documents/.Trash/components/utils/Icon';
+import Icon from '@/components/utils/Icon';
 
 import DropDown from './DropDown';
 
@@ -17,7 +17,7 @@ export default function FilterDropdown({
       onSelect={onSelect}
       selectedValue={selectedValue}
       trigger={
-        <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
+        <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
           {selectedValue}
           <Icon path="chevron_down" />
         </div>
