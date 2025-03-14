@@ -12,7 +12,6 @@ const requestTimes = new Map<string, number>();
 
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    // const token = localStorage.getItem('accessToken');
     const token = getToken();
 
     if (token && !config.url?.includes('/api/v1/login')) {
