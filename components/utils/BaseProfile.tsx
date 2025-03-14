@@ -1,5 +1,4 @@
 import { useThemeStore } from '@/store/themeStore';
-import useUserStore from '@/store/user/userStore';
 import useProfileStore from '@/store/useProfileStore';
 
 interface ProfileIconProps {
