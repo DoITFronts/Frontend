@@ -51,7 +51,7 @@ export default function Signup() {
                 autoComplete="email"
                 required
               />
-              {errorMessage && (
+              {error && (
                 <Form.ErrorMessage className="mt-1 pl-2">{errorMessage}</Form.ErrorMessage>
               )}
             </Form.Label>
