@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
 import { useThemeStore } from '@/store/themeStore';
-import userStore from '@/store/userStore';
+import useUserStore from '@/store/user/userStore';
 
 const fetchUserInfo = async () => {
   const storedUserInfo = localStorage.getItem('userInfo');
@@ -19,7 +19,7 @@ const useUserInfo = () =>
 
 const useSetUser = () => {
   const { data: userInfo } = useUserInfo();
-  const setUser = userStore((state) => state.setUser);
+  const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
     if (userInfo?.sub) {

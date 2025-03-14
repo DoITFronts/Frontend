@@ -24,6 +24,7 @@ import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
+import { formatShortDate } from '@/utils/formatDateTime';
 
 import {
   MeetingCardError,
@@ -204,19 +205,19 @@ export default function LikedPage() {
   return (
     <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
       {/* 제목 */}
-      <div className="mb-[52px] flex items-center justify-between">
-        <div className="inline-flex h-[68px] flex-col items-start justify-start gap-[9px]">
-          <div className="text-center font-dunggeunmo text-3xl font-normal text-black">
+      <div className="flex flex-col items-center justify-between sm:items-start md:flex-row">
+        <div className="flex flex-col items-start gap-3">
+          <div className="text-start align-middle font-dunggeunmo text-2xl font-normal leading-[100%] tracking-[-0.06em] text-black sm:whitespace-pre-line md:whitespace-normal md:text-3xl">
             찜한 번개를 한 눈에 확인할 수 있어요!
           </div>
-          <div className="text-center font-pretandard text-2xl font-normal text-black">
+          <div className="text-start align-middle font-pretandard text-base font-normal leading-[100%] tracking-normal text-black md:text-[22px]">
             관심 있는 번개를 찜해두면, 번개를 놓치지 않고 참여할 수 있어요
           </div>
         </div>
       </div>
 
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3 mt-6 md:mt-[50px]">
         {meetingCategory.map((category) => (
           <button
             key={category}
@@ -234,8 +235,8 @@ export default function LikedPage() {
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -282,8 +283,8 @@ export default function LikedPage() {
               </div>
             }
             trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
+              <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate ? formatShortDate(selectedDate.toISOString()) : '날짜'}
                 <div onClick={handleResetDate}>
                   <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
                 </div>
@@ -298,7 +299,7 @@ export default function LikedPage() {
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
+            <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
                 <Icon path={selectedFilter ? 'exit' : 'sort'} />
               </div>
@@ -311,7 +312,7 @@ export default function LikedPage() {
       {/* 번개 리스트 */}
       <div>
         {isLoading && (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <MeetingCardLoading key={index} />
             ))}
