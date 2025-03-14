@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { toast } from 'react-toastify';
+import { getToken } from '@/utils/auth/tokenUtils';
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -11,7 +12,8 @@ const requestTimes = new Map<string, number>();
 
 axiosInstance.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    const token = localStorage.getItem('accessToken');
+    // const token = localStorage.getItem('accessToken');
+    const token = getToken();
 
     if (token && !config.url?.includes('/api/v1/login')) {
       config.headers.Authorization = token.startsWith('Bearer') ? token : `Bearer ${token}`;

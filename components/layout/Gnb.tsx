@@ -3,16 +3,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 
-import { fetchProfile } from '@/api/myPage/myPage';
 import Icon from '@/components/shared/Icon';
 import DropDown from '@/components/ui/dropdown/DropDown';
-import { useSignout } from '@/hooks/useAuth';
 import useLikedCount from '@/hooks/useLikeCount';
 import Logo from '@/public/assets/logo/logoWhite.svg';
 import useLikeCountStore from '@/store/useLikeCountStore';
 import useProfileStore from '@/store/useProfileStore';
+import { useSignout } from '@/hooks/user/useSignout';
+import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 function NavItem({
   href,
@@ -39,23 +38,11 @@ function NavItem({
 
 export default function GNB() {
   const pathname = usePathname();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
   const { mutate: logout } = useSignout();
   const { nickname, imageUrl } = useProfileStore(); // 유저정보
 
   useLikedCount(); // 좋아요 개수 동기화
-
-  // 로그인 여부 체크하기
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('accessToken');
-      setIsLoggedIn(!!token);
-      if (token) {
-        fetchProfile();
-      }
-    }
-  }, []);
 
   // 드롭다운 아이템 Click시 handler
   const handleDropDownItem = (item: string) => {
@@ -63,15 +50,14 @@ export default function GNB() {
       router.push('/myprofile'); // 마이페이지로 이동
     } else if (item === '로그아웃') {
       logout(); // 로그아웃 처리
-      setIsLoggedIn(false);
     }
   };
   const { likedCount } = useLikeCountStore();
+
   return (
     <nav className="flex items-center justify-center fixed left-0 top-0 z-50 h-[3.5625rem] sm:h-[3.75rem] w-full  bg-black shadow-md px-[1.1875rem] sm:px-[1.4375rem]">
       <div className="flex justify-between w-full lg:w-[75rem]">
         <div className="flex items-center justify-between w-[16.9375rem] md:w-[20.625rem] gap-2">
-          {/* 로고 */}
           <Link href="/meeting/list" className="h-[1.0625rem] w-[4.6875rem] md:h-5 md:w-20">
             {/* TODO 이거 priority만 있어도 되는거 맞나? */}
             <Image src={Logo} alt="번개팅 메인 로고" width={73.62} height={16.2} priority />
@@ -80,7 +66,6 @@ export default function GNB() {
             <NavItem href="/meeting/list" label="번개 찾기" currentPath={pathname} />
             <div className="flex items-center">
               <NavItem href="/liked" label="찜한 번개" currentPath={pathname} />
-              {/* TODO: 좋아요 count 받아야함 */}
               {likedCount() > 0 && (
                 <span className="mb-[0.0938rem] ml-[0.375rem] h-fit rounded-full bg-yellow-6 px-[0.3125rem] text-center text-[0.625rem] font-bold text-black">
                   {likedCount()}
@@ -91,8 +76,8 @@ export default function GNB() {
           </div>
         </div>
         {/* 로그인 여부 & 프로필 사진 유무에 따른 분기처리 */}
-        {isLoggedIn ? (
-          <div className="">
+        {isUserLoggedIn() ? (
+          <div>
             <DropDown
               trigger={
                 imageUrl ? (

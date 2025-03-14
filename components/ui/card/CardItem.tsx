@@ -16,7 +16,7 @@ import useModalStore from '@/store/useModalStore';
 import categoryMap from '@/types/categoryMap';
 import { Meeting } from '@/types/meeting';
 import { cityMap } from '@/types/regions';
-import { isUserLoggedIn } from '@/utils/authUtils';
+import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 import ChipDate from '../chip/ChipDate';
 

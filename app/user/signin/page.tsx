@@ -7,11 +7,11 @@ import { useForm } from 'react-hook-form';
 import Form from '@/app/user/component/Form';
 import Button from '@/components/ui/button/Button';
 import Icon from '@/components/utils/Icon';
-import { useSignin } from '@/hooks/useAuth';
+import { useSignin } from '@/hooks/user/useSignin';
 import Logo from '@/public/assets/logo/logo.svg';
 
 export default function Signin() {
-  const { mutate, errorMessage } = useSignin();
+  const { mutate, error } = useSignin();
   const { setValue } = useForm();
 
   const handleSignin = (data: SignInRequestData) => {
@@ -27,6 +27,12 @@ export default function Signin() {
     // 자동 로그인
     handleSignin({ username: 'guest@gmail.com', password: 'asdf1234!!' });
   };
+
+  //에러 메세지
+  const errorMessage =
+    error?.response?.status === 401
+      ? '이메일 또는 비밀번호가 올바르지 않습니다.'
+      : '로그인에 실패했습니다. 다시 시도해주세요!';
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white ">
@@ -59,9 +65,7 @@ export default function Signin() {
                 autoComplete="password"
                 required
               />
-              {errorMessage && (
-                <Form.ErrorMessage className="pl-2 pt-3">{errorMessage}</Form.ErrorMessage>
-              )}
+              {error && <Form.ErrorMessage className="pl-2 pt-3">{errorMessage}</Form.ErrorMessage>}
             </Form.Label>
             <Form.Submit className="w-full text-sm sm:text-base sm:h-[2.75rem] h-[2.5rem]">
               로그인

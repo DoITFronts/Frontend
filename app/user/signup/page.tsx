@@ -4,15 +4,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Form from '@/app/user/component/Form';
-import { useSignup } from '@/hooks/useAuth';
+import { useSignup } from '@/hooks/user/useSignUp';
 import Logo from '@/public/assets/logo/logo.svg';
 
 export default function Signup() {
-  const { mutate, errorMessage } = useSignup();
+  const { mutate, error } = useSignup();
 
   const handleSignup = (data: SignUpRequestData) => {
     mutate(data);
   };
+
+  //에러 메세지
+  const errorMessage =
+    error?.response?.status === 400
+      ? '이미 가입되어있는 이메일입니다..'
+      : '회원가입에 실패했습니다. 다시 시도해주세요!';
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-white ">
