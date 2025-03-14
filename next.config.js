@@ -1,20 +1,10 @@
-import withBundleAnalyzer from '@next/bundle-analyzer';
-import type { NextConfig } from 'next';
-import withPWA from 'next-pwa';
-
-const withBundle = withBundleAnalyzer({
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+const withPWA = require('next-pwa');
 
-const withPwa = withPWA({
-  dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
-  register: true,
-  skipWaiting: true,
-});
-
-const nextConfig: NextConfig = withPwa(
-  withBundle({
+module.exports = withBundleAnalyzer(
+  withPWA({
     reactStrictMode: true,
     images: {
       domains: process.env.NEXT_PUBLIC_IMAGE_DOMAINS?.split(',') || [],
@@ -37,7 +27,14 @@ const nextConfig: NextConfig = withPwa(
         ],
       },
     ],
-  }),
+    webpack(config, { isServer }) {
+      if (!isServer) {
+        config.resolve.fallback = {
+          ...config.resolve.fallback,
+          fs: false,
+        };
+      }
+      return config;
+    },
+  })
 );
-
-export default nextConfig;
