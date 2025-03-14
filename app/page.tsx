@@ -109,25 +109,7 @@ export default function Page() {
           </div>
         </motion.div>
       </section>
-      <motion.section
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false }}
-        variants={fadeInVariant}
-        className="flex flex-col items-center justify-center pt-[32.0625rem] sm:pt-50 md:pt-[31.375rem] pb-[18.6875rem] sm:pb-[17.8125rem] md:pb-[17.1875rem]"
-      >
-        <h2 className=" pb-[3.125rem] xl:pb-[5.1875rem] text-center text-xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
-          오늘, 새로운 사람들과 번개처럼 <br />
-          빠르게 만나보세요! 🚀
-        </h2>
-        <Button
-          color="white"
-          onClick={() => router.push('meeting/list')}
-          className="sm:h-[3.75rem] sm:w-[14.625rem] h-[2.5rem] w-[6.25rem] text-sm sm:text-lg shadow-lg shadow-yellow-10 drop-shadow"
-        >
-          시작하기
-        </Button>
-      </motion.section>
+      <PWAInstaller />
     </div>
   );
 }
