@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import Button from '@/components/ui/Button';
 import { PWA_INSTALL_ERROR } from '@/constants/errorText';
 import { PWA_DEVICE_WARNIG } from '@/constants/warningText';
 import usePWA from '@/lib/pwa';
+
+import Button from '@/components/ui/button/Button';
 
 const fadeInVariant = {
   hidden: { opacity: 0, y: 50 },

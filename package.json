@@ -15,11 +15,8 @@
     "@jest/globals": "^29.7.0",
     "@next/bundle-analyzer": "^15.2.1",
     "@tanstack/react-query": "^5.66.5",
-<<<<<<< HEAD
     "@types/next-pwa": "^5.6.9",
-=======
     "@testing-library/jest-dom": "^6.6.3",
->>>>>>> b58c3184afc1f6116970337a7fe30d8d1defccd4
     "@types/react-datepicker": "^7.0.0",
     "@uiw/react-md-editor": "^4.0.5",
     "axios": "^1.7.9",
