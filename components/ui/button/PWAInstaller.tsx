@@ -8,7 +8,7 @@ import { PWA_INSTALL_ERROR } from '@/constants/errorText';
 import { PWA_DEVICE_WARNIG } from '@/constants/warningText';
 import usePWA from '@/lib/pwa';
 
-import Button from '@/components/ui/Button';
+import Button from '@/components/ui/button/Button';
 
 const fadeInVariant = {
   hidden: { opacity: 0, y: 50 },
