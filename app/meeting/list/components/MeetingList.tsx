@@ -204,7 +204,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const { likeMutation } = useLikeMutation();
 
   return (
-    <div className="container mx-auto mt-[50px] max-w-[1200px] sm:mt-6">
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
       <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (

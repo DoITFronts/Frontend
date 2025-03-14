@@ -146,7 +146,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               </div>
 
               {/* 상세 정보 */}
-              <div className="flex h-[152px] flex-col justify-between p-4 pt-0 md:h-[145px]">
+              <div className="flex h-[152px] flex-col justify-between p-4 py-0">
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
                     <Card.Title
@@ -167,7 +167,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                       <ChipDate datetime={meeting.targetAt} />
                     </div>
                   </div>
-                  <div className="line-clamp-1 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
+                  <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
                     {meeting.summary}
                   </div>
                 </div>
