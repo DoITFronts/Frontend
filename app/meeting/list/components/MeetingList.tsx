@@ -301,7 +301,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       {/* 번개 리스트 */}
       <div>
         {isLoading && (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 md:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <MeetingCardLoading key={index} />
             ))}
