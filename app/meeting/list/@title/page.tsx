@@ -7,11 +7,11 @@ export default function Header() {
   const { openModal } = useModalStore();
 
   return (
-    <div className="flex flex-col items-center justify-between sm:items-start md:flex-row">
+    <div className="flex flex-col items-start justify-between sm:flex-row">
       <div className="flex flex-col items-start gap-3">
         <div className="text-start align-middle font-dunggeunmo text-2xl font-normal leading-[100%] tracking-[-0.06em] text-black sm:whitespace-pre-line md:whitespace-normal md:text-3xl">
           맛집 탐방 같이 갈 사람,
-          <span className="sm:block md:inline"> 누구 없나요?</span>
+          <span className="block sm:inline"> 누구 없나요?</span>
         </div>
         <div className="text-start align-middle font-pretandard text-base font-normal leading-[100%] tracking-normal text-black md:text-[22px]">
           망설이면 자리 없어요! 선착순 모집중~
@@ -19,7 +19,7 @@ export default function Header() {
       </div>
       <Button
         color="white"
-        className="w-[100px] sm:mt-[18px] lg:w-[150px]"
+        className="mt-[18px] w-[100px] sm:mt-0 lg:w-[150px]"
         type="submit"
         onClick={() => openModal('create')}
       >

@@ -20,8 +20,8 @@ export default function DeleteMeetingModal() {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="fixed inset-0 bg-black opacity-10" onClick={closeModal} />
-      <div className="relative inline-flex w-[400px] flex-col items-start justify-start gap-2.5 overflow-hidden rounded-xl border border-black bg-white p-6">
+      <div className="fixed inset-0" onClick={closeModal} />
+      <div className="relative inline-flex w-[330px] flex-col items-start justify-start gap-2.5 overflow-hidden rounded-xl border border-black bg-white p-6 sm:w-[400px]">
         <div className="flex h-auto w-full flex-col gap-6 overflow-y-auto [&::-webkit-scrollbar]:hidden">
           <div className="flex w-full justify-between">
             <span className="font-dunggeunmo text-xl text-black">{'< 모임 삭제 >'}</span>
@@ -33,7 +33,7 @@ export default function DeleteMeetingModal() {
             <p className="text-base text-black-11">
               정말로 이 모임을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
             </p>
-            <div className="flex w-full justify-end gap-2 p-2">
+            <div className="flex w-full justify-center gap-2 p-2">
               <Button color="white" onClick={closeModal}>
                 취소
               </Button>

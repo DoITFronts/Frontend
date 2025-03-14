@@ -301,7 +301,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       {/* 번개 리스트 */}
       <div>
         {isLoading && (
-          <div className="grid grid-cols-1 gap-x-6 gap-y-5 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <MeetingCardLoading key={index} />
             ))}
@@ -326,7 +326,13 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 무한 스크롤 트리거 */}
       <div ref={observerRef} className="h-10" />
-      {isFetchingNextPage && <MeetingCardLoading />}
+      {isFetchingNextPage && (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <MeetingCardLoading key={index} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
