@@ -5,14 +5,14 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
-import FilterDropdown from '@/components/ui/card/FilterDropdown';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
+import CardItem from '@/components/ui/card/CardItem';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import Icon from '@/components/utils/Icon';
 import useLikeMutation from '@/hooks/useLikeMutation';
-import useMeeting from '@/hooks/useMeeting';
+import useMeetingList from '@/hooks/useMeetingList';
 import {
   defaultFilter,
   defaultFirstOption,
@@ -23,16 +23,15 @@ import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
+import { formatShortDate } from '@/utils/formatDateTime';
 
-import MeetingItem from './MeetingItem';
-import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
+import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
 interface InitialMeetingsProps {
   initialMeetings: Meeting[];
 }
 
 export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
-  const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -49,6 +48,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   );
   const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const { openModal } = useModalStore();
 
   // 임시 날짜 상태
   const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
@@ -121,15 +121,16 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   };
 
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeeting({
-    category: selectedCategory,
-    city: selectedFirstLocation,
-    town: selectedSecondLocation,
-    targetAt: selectedDate,
-    size: 10,
-    initialMeetings,
-    order: selectedFilter,
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMeetingList({
+      category: selectedCategory,
+      city: selectedFirstLocation,
+      town: selectedSecondLocation,
+      targetAt: selectedDate,
+      size: 10,
+      initialMeetings,
+      order: selectedFilter,
+    });
 
   // 번개 데이터 통합
   const meetings = useMemo(
@@ -203,32 +204,17 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const { likeMutation } = useLikeMutation();
 
   return (
-    <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[52px] flex items-center justify-between">
-        <div className="inline-flex h-[68px] flex-col items-start justify-start gap-[9px]">
-          <div className="text-center font-dunggeunmo text-3xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-          <div className="text-center font-pretandard text-2xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-        </div>
-        <Button color="white" size="sm" type="submit" onClick={() => openModal('create')}>
-          번개 만들기
-        </Button>
-      </div>
-
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
             onClick={() => handleCategoryClick(category)}
-            className="cursor-pointer focus:outline-none"
+            className="cursor-pointer font-semibold focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -238,8 +224,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -286,8 +272,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               </div>
             }
             trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
+              <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate ? formatShortDate(selectedDate.toISOString()) : '날짜'}
                 <div onClick={handleResetDate}>
                   <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
                 </div>
@@ -302,7 +288,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
+            <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
                 <Icon path={selectedFilter ? 'exit' : 'sort'} />
               </div>
@@ -314,15 +300,20 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 번개 리스트 */}
       <div>
-        {isLoading && <MeetingCardLoading />}
-        {isError && <MeetingCardError />}
+        {isLoading && (
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <MeetingCardLoading key={index} />
+            ))}
+          </div>
+        )}
         {!isLoading && !isError && meetings.length === 0 && (
           <EmptyMessage firstLine="아직 번개가 없어요" secondLine="지금 번개를 만들어 보세요!" />
         )}
         {!isLoading && !isError && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
-              <MeetingItem
+              <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
                 onClick={() => likeMutation.mutate(meeting.id)}
@@ -335,7 +326,13 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 무한 스크롤 트리거 */}
       <div ref={observerRef} className="h-10" />
-      {isFetchingNextPage && <MeetingCardLoading />}
+      {isFetchingNextPage && (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <MeetingCardLoading key={index} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

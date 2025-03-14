@@ -1,21 +1,22 @@
 'use client';
 
 import { ko } from 'date-fns/locale';
-import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import Icon from '@/components/utils/Icon';
 import useReview from '@/hooks/useReview';
 import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { regions } from '@/types/regions';
 import { Reviews } from '@/types/review';
+import { formatShortDate } from '@/utils/formatDateTime';
 
 import ReviewItem from './ReviewItem';
 import ReviewStatus from './ReviewStatus';
@@ -28,37 +29,11 @@ interface InitialReviewsProps {
   };
 }
 
-// 드롭다운 재사용 컴포넌트
-function FilterDropdown({
-  options,
-  selectedValue,
-  onSelect,
-}: {
-  options: string[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <DropDown
-      options={options}
-      onSelect={onSelect}
-      selectedValue={selectedValue}
-      trigger={
-        <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-          {selectedValue}
-          <Icon path="chevron_down" />
-        </div>
-      }
-      optionClassName="justify-start min-w-[95px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
-    />
-  );
-}
-
 export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { reviews, totalCount } = initialReviews;
+  const { reviews } = initialReviews;
 
   // URL에서 가져온 검색 조건을 상태로 관리
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '전체');
@@ -84,7 +59,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
 
   // useInfiniteQuery를 사용해 모든 리뷰 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useReview({
+  const { isLoading, isError, isFetchingNextPage } = useReview({
     category: selectedCategory,
     city: selectedFirstLocation,
     town: selectedSecondLocation,
@@ -196,27 +171,17 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   };
 
   return (
-    <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[50px] inline-flex flex-col items-start justify-start gap-3">
-        <div className="relative justify-center text-center font-['DungGeunMo'] text-3xl font-normal text-black">
-          모든 리뷰
-        </div>
-        <div className="relative justify-center text-center font-['Pretendard'] text-[22px] font-normal text-black">
-          번개의 모든 리뷰를 살펴보세요:)
-        </div>
-      </div>
-
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-6 md:gap-3 lg:mb-10">
         {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
             onClick={() => handleCategoryClick(category)}
-            className="cursor-pointer focus:outline-none"
+            className="cursor-pointer font-semibold focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -226,15 +191,13 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
       </div>
 
       {/* 리뷰 점수 */}
-      <div className="flex justify-center">
-        <div className="mb-10 flex w-[1000px] items-center justify-center border-y-gray-200">
-          <ReviewStatus reviews={reviews} />
-        </div>
+      <div className="mb-[30px] flex max-w-[1200px] md:mb-6 lg:mb-10">
+        <ReviewStatus reviews={reviews} />
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -254,7 +217,6 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
                   inline
                   selected={tempDate}
                   onChange={setTempDate}
-                  minDate={new Date()}
                   calendarClassName="custom-calendar"
                   renderDayContents={(day, date) => <div style={getDayStyle(date)}>{day}</div>}
                 />
@@ -281,8 +243,8 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
               </div>
             }
             trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
+              <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate ? formatShortDate(selectedDate.toISOString()) : '날짜'}
                 <div onClick={handleResetDate}>
                   <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
                 </div>
@@ -297,7 +259,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
+            <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
                 <Icon path={selectedFilter ? 'exit' : 'sort'} />
               </div>

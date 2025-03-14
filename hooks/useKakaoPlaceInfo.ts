@@ -13,40 +13,6 @@ interface PlaceInfo {
   roadAddress: string | null;
 }
 
-const loadKakaoAPI = (): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (window.kakao?.maps) {
-      console.log('✅ 카카오 맵 SDK 이미 로드됨');
-      resolve();
-      return;
-    }
-
-    if (document.getElementById('kakao-map-script')) {
-      console.log('⏳ 기존 스크립트 로드 대기 중...');
-      return;
-    }
-
-    const script = document.createElement('script');
-    script.id = 'kakao-map-script';
-    script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_JS_API_KEY}&libraries=services,places&autoload=false`;
-    script.async = true;
-    script.defer = true;
-
-    script.onload = () => {
-      console.log('✅ 카카오 맵 SDK 최종 로드 완료');
-      window.kakao.maps.load(() => {
-        resolve();
-      });
-    };
-
-    script.onerror = () => {
-      console.error('❌ 카카오 맵 SDK 로드 실패');
-      reject(new Error('카카오 맵 SDK 로드 실패'));
-    };
-
-    document.head.appendChild(script);
-  });
-
 const useKakaoPlaceInfo = (
   latitude: string,
   longitude: string,
@@ -58,17 +24,17 @@ const useKakaoPlaceInfo = (
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const initializeKakaoAPI = async () => {
-      try {
-        await loadKakaoAPI();
+    const checkKakaoSDK = () => {
+      if (window.kakao?.maps?.services?.Geocoder) {
         setIsScriptLoaded(true);
-        console.log('🚀 카카오 API 로드 성공! 데이터 요청 시작.');
-      } catch (error) {
-        console.error('🚨 카카오 API 로드 중 오류 발생:', error);
+        console.log('🚀 카카오 API 사용 준비 완료');
+      } else {
+        // 아직 로드되지 않았다면 잠시 후 다시 확인
+        setTimeout(checkKakaoSDK, 100);
       }
     };
 
-    initializeKakaoAPI();
+    checkKakaoSDK();
   }, []);
 
   useEffect(() => {

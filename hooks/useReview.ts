@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import fetchReview from '@/api/review/fetchReview';
+import { fetchReviewMeetingList } from '@/api/meeting/fetchMeeting';
 
 const useReview = ({
   category,
@@ -22,7 +22,7 @@ const useReview = ({
   useInfiniteQuery({
     queryKey: ['reviews', category, city, town, targetAt, order],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await fetchReview({
+      const response = await fetchReviewMeetingList({
         category,
         city,
         town,

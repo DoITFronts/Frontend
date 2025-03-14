@@ -2,6 +2,8 @@
 
 import dynamic from 'next/dynamic';
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
 import {
@@ -11,6 +13,9 @@ import {
 import { useMeetingDetail, useMeetingEditor, useUpdateMeeting } from '@/hooks/useMeetingDetail';
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
+function CustomParagraph(props: React.HTMLAttributes<HTMLParagraphElement>) {
+  return <p {...props} className="whitespace-pre-wrap" />;
+}
 
 export default function MeetingDescription() {
   const { meetingId, data, isLoading, error, refetch } = useMeetingDetail();
@@ -18,7 +23,6 @@ export default function MeetingDescription() {
   const { isEditing, setIsEditing, status, setStatus, description, setDescription, tab, setTab } =
     useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
-
   const host = data?.participants?.find((participant) => participant.isHost);
   const isHost = Number(userId) === host?.userId;
 
@@ -37,19 +41,33 @@ export default function MeetingDescription() {
   const renderContent = () => {
     if (isEditing) {
       return tab === 'edit' ? (
-        <MarkdownEditor value={description} onChange={(value) => setDescription(value || '')} />
+        <MarkdownEditor
+          value={description}
+          // TODO 새로고침 했을 떄 값왜 날라가는지
+          onChange={(value) => setDescription(value || description)}
+        />
       ) : (
         <div className="rounded-md border bg-gray-50 p-4">
-          <ReactMarkdown className="flex flex-col gap-1">
-            {description || '설명이 없습니다.'}
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeRaw]}
+            components={{ p: CustomParagraph }}
+            className="flex flex-col gap-1"
+          >
+            {description || '설명을 추가해주세요!.'}
           </ReactMarkdown>
         </div>
       );
     }
 
     return (
-      <ReactMarkdown className="flex flex-col gap-1">
-        {data?.description ?? '설명이 없습니다.'}
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeRaw]}
+        components={{ p: CustomParagraph }}
+        className="flex flex-col gap-1"
+      >
+        {data?.description ?? '설명을 추가해주세요!.'}
       </ReactMarkdown>
     );
   };

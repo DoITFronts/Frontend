@@ -41,42 +41,37 @@ export default function MeetingLocation() {
           번개 위치
         </div>
         <motion.div
-          className="inline-flex h-[373px] w-full items-start justify-start gap-[19px]"
+          className="flex w-full flex-col items-start justify-start gap-5 md:flex-row"
           variants={mapVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
         >
-          <div ref={mapContainer} className="size-full self-stretch bg-[#d9d9d9]" />
-          <div className="inline-flex h-full w-2/6 flex-col items-start justify-start gap-[19px]">
+          <div
+            ref={mapContainer}
+            className="h-auto min-h-[250px] w-full bg-[#d9d9d9] md:h-[373px] md:w-3/5"
+          />
+          <div className="flex w-full flex-col items-start justify-start gap-4 md:w-2/5">
             <div className="flex flex-col items-start justify-center gap-1">
-              <div className="font-['Pretendard'] text-2xl font-bold text-black">{placeName}</div>
-              <div className="font-['Pretendard'] text-base font-semibold leading-snug text-[#bfbfbf]">
+              <div className="text-xl font-bold text-black md:text-2xl">{placeName}</div>
+              <div className="text-sm font-semibold text-[#bfbfbf] md:text-base">
                 {placeInfo?.categoryGroupName || '기타'}
               </div>
             </div>
-            <div className="inline-flex h-16 flex-col items-start justify-start gap-2">
-              <div className="inline-flex items-start justify-start gap-2">
-                <div className="flex w-14 items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
-                  <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
-                    도로명
-                  </div>
+            <div className="flex w-full flex-col gap-2">
+              <div className="flex w-full flex-col gap-2 md:flex-row">
+                <div className="flex min-w-14 items-center justify-center rounded bg-neutral-100 px-2.5 py-1">
+                  <div className="text-xs font-medium text-[#595959]">도로명</div>
                 </div>
-                <div className="font-['Pretendard'] text-base font-medium leading-snug text-neutral-800">
+                <div className="text-base font-medium text-neutral-800">
                   {placeInfo?.roadAddress || '정보 없음'}
                 </div>
               </div>
-              <div className="inline-flex items-start justify-start gap-2">
-                <div className="flex w-14 items-center justify-center gap-2.5 overflow-hidden rounded bg-neutral-100 px-2.5 py-1">
-                  <div className="flex items-center justify-start gap-1">
-                    <div className="font-['Pretendard'] text-xs font-medium leading-tight text-[#595959]">
-                      지번
-                    </div>
-                  </div>
+              <div className="flex w-full flex-col gap-2 md:flex-row">
+                <div className="flex min-w-14 items-center justify-center rounded bg-neutral-100 px-2.5 py-1">
+                  <div className="text-xs font-medium text-[#595959]">지번</div>
                 </div>
-                <div className="font-['Pretendard'] text-base font-medium leading-snug text-neutral-800">
-                  {meeting.address}
-                </div>
+                <div className="text-base font-medium text-neutral-800">{meeting.address}</div>
               </div>
             </div>
           </div>

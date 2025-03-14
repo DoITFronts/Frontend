@@ -25,13 +25,13 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
   const totalPossibleReviews = reviews.length;
 
   return (
-    <div className="flex w-[70%] flex-col items-center justify-between gap-4 sm:flex-row">
-      <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center gap-4 md:flex-row">
+      <div className="flex w-full max-w-[580px] flex-col items-center p-6 md:p-10">
         <div className="flex flex-row">
-          <p className="relative justify-start font-['Pretendard'] text-[40px] font-bold leading-loose text-black">
+          <p className="relative justify-start font-['Pretendard'] text-[40px] font-bold leading-normal text-black">
             {average}
           </p>
-          <p className="relative justify-start font-['Pretendard'] text-[40px] font-semibold leading-loose text-[#bfbfbf]">
+          <p className="relative justify-start font-['Pretendard'] text-[40px] font-semibold leading-normal text-[#bfbfbf]">
             /5
           </p>
         </div>
@@ -72,8 +72,8 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
               // 애니메이션을 framer-motion을 사용하여 추가
               return (
                 <div key={index} className="flex items-center gap-6 font-pretandard">
-                  <span className="font-pretendard relative justify-start text-center text-xs font-medium leading-tight text-neutral-800">
-                    {5 - index}점
+                  <span className="font-pretendard relative min-w-5 justify-start text-center text-xs font-medium leading-tight text-neutral-800">
+                    {index + 1}점
                   </span>
                   <div className="relative h-1 min-w-64 rounded-full bg-[#E5E7EB]">
                     <motion.div

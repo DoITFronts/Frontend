@@ -37,14 +37,17 @@ export interface Meeting {
   summary: string;
   imageUrl: string;
   targetAt: string;
+  endAt: string;
   city: string;
   town: string;
   participantCount: number;
   capacity: number;
+  minCapacity: number;
   isLiked: boolean;
   isJoined: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
+  chatRoomId: number;
   participants: Participant[];
 }
 
@@ -53,7 +56,6 @@ export interface MeetingDetail extends Meeting {
   latitude: string;
   longitude: string;
   address: string;
-  host: Host;
   description: string;
 }
 
@@ -72,4 +74,14 @@ export interface CreateMeetingParams {
   capacity: number;
   minCapacity: number;
   image?: File;
+}
+
+export interface FetchMeetingListParams {
+  category: string;
+  city: string;
+  town: string;
+  targetAt: Date | null;
+  page?: number;
+  size?: number;
+  order?: string;
 }
