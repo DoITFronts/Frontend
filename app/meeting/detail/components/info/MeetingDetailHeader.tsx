@@ -30,8 +30,8 @@ export default function MeetingDetailHeader({
             </div>
           </div>
         </div>
-        <div className="flex flex-row items-center gap-1.5 font-['Pretendard'] text-2xl font-semibold text-black">
-          <div className="max-w-[350px] whitespace-normal break-words text-2xl font-bold text-black">
+        <div className="flex flex-row justify-between items-center gap-1.5 font-['Pretendard'] text-2xl font-semibold text-black">
+          <div className="w-full whitespace-normal break-words text-2xl font-bold text-black">
             {title}
           </div>
           <div className="hidden min-w-[130px] items-center justify-start lg:flex">

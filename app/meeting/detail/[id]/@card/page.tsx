@@ -10,7 +10,6 @@ import {
   DetailCardError,
   DetailCardSkeleton,
 } from '@/app/meeting/detail/components/skeleton/DetailCardSkeleton';
-import NotFoundPage from '@/app/not-found';
 import Card from '@/components/ui/card/Card';
 import Category from '@/components/ui/card/component/Category';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
@@ -22,8 +21,7 @@ export default function DetailCard() {
   const meetingId = params.id as string;
 
   const { data, isLoading, error, refetch } = useMeetingDetail();
-  if (!meetingId || !data?.id) return <NotFoundPage />;
-  if (isLoading) return <DetailCardSkeleton />;
+  if (!meetingId || !data?.id || isLoading) return <DetailCardSkeleton />;
   if (error) return <DetailCardError onRetry={() => refetch} />;
 
   const reverseCategoryMap: Record<string, string> = Object.fromEntries(
@@ -32,7 +30,7 @@ export default function DetailCard() {
 
   return (
     <Card mode="detail">
-      <div className="mt-14 flex w-full gap-6 sm:flex-col lg:min-h-[17rem]">
+      <div className="mt-14 flex w-full gap-6 flex-col md:flex-row lg:min-h-[17rem]">
         <motion.div
           whileHover={{
             scaleX: 1.05,
@@ -40,7 +38,7 @@ export default function DetailCard() {
             translateX: '-2%',
           }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative flex w-[32rem] items-center justify-center overflow-hidden"
+          className="relative flex w-full md:w-[24rem] lg:w-[32rem] items-center justify-center overflow-hidden"
         >
           <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
           <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
@@ -50,14 +48,14 @@ export default function DetailCard() {
             width={384}
             height={200}
             alt="thumbnail"
-            className="size-full object-cover"
+            className="w-full h-auto object-cover aspect-[4/3]"
           />
           <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
           <div className="absolute right-[0.8rem] top-4">
             <Category type={reverseCategoryMap[data.category]} />
           </div>
         </motion.div>
-        <div className="flex h-[17rem] w-full flex-col justify-between lg:w-[calc(100%-32rem)]">
+        <div className="flex h-auto w-full flex-col justify-between lg:w-[calc(100%-32rem)]">
           <MeetingDetailHeader
             title={data.title}
             location={`${data.city} ${data.town}`}
