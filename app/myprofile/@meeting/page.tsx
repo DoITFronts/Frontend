@@ -87,18 +87,7 @@ export default function MyPage() {
 
       {/* 컨텐츠 영역 - ErrorBoundary와 Suspense 활용 */}
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-        <ErrorBoundary
-          FallbackComponent={({ error }) => (
-            <div className="col-span-3">
-              <MeetingCardError />
-              <div className="mt-4 text-center text-red-500">{error.message}</div>
-            </div>
-          )}
-        >
-          <Suspense fallback={<GridSkeleton />}>
-            <MeetingTabs menuTab={selectedMenuTab} activityTab={selectedActivityTab} />
-          </Suspense>
-        </ErrorBoundary>
+        <MeetingTabs menuTab={selectedMenuTab} activityTab={selectedActivityTab} />
       </div>
     </div>
   );

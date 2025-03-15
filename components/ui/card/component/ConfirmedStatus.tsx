@@ -1,4 +1,4 @@
-import CheckIcon from '../../../../../../../../../Library/Mobile Documents/.Trash/components/Icons/CheckIcon';
+import CheckIcon from '@/components/shared/Icons/CheckIcon';
 
 function ConfirmedStatus({ isConfirmed }: { isConfirmed: boolean }) {
   if (!isConfirmed) return null;

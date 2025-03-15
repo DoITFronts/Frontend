@@ -5,8 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useInView } from 'react-intersection-observer';
 
-import Card from '@/app/meeting/list/components/Card';
-import ChipInfo from '@/components/ui/chip/ChipInfo';
+import Card from '@/components/ui/card/Card';
+import ChipDate from '@/components/ui/chip/ChipDate';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
 import { useMyPageReviews } from '@/hooks/useMyPage';
 
