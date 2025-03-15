@@ -7,7 +7,7 @@ const useLikeMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (meetingId: string) => toggleLike(meetingId),
+    mutationFn: (meetingId: string) => toggleLike(meetingId), //api보내기
     onMutate: async (meetingId: string) => {
       await queryClient.cancelQueries({ queryKey: ['meetings'] });
 
