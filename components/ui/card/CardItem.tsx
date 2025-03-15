@@ -11,7 +11,7 @@ import { joinLightning, leaveLightning, deleteLightning } from '@/api/client/mee
 import Button from '@/components/ui/button/Button';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';
-import useLikeToggle from '@/hooks/useLikeToggle';
+import useLikeToggle from '@/hooks/like/useLikeToggle';
 import useModalStore from '@/store/useModalStore';
 import categoryMap from '@/types/categoryMap';
 import { Meeting } from '@/types/meeting';

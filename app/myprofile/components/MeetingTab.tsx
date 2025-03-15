@@ -11,7 +11,7 @@ import ButtonBox from '@/components/ui/button/ButtonBox';
 import Card from '@/components/ui/card/Card';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import ChipDate from '@/components/ui/chip/ChipDate';
-import useMeetingToggle from '@/hooks/useMeetingToggle';
+import useMeetingToggle from '@/hooks/meeting/useMeetingToggle';
 import { Meeting } from '@/types/meeting';
 
 // 응답 타입 정의

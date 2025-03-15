@@ -8,8 +8,8 @@ import {
   BottomFloatingBarSkeleton,
 } from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
 import Button from '@/components/ui/button/Button';
-import useJoinLightning from '@/hooks/useJoinLightning';
-import { useMeetingDetail } from '@/hooks/useMeetingDetail';
+import useJoinLightning from '@/hooks/meeting/useJoinLightning';
+import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
 import useModalStore from '@/store/useModalStore';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 

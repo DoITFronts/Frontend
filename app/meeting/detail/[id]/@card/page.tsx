@@ -12,7 +12,7 @@ import {
 } from '@/app/meeting/detail/components/skeleton/DetailCardSkeleton';
 import Card from '@/components/ui/card/Card';
 import Category from '@/components/ui/card/component/Category';
-import { useMeetingDetail } from '@/hooks/useMeetingDetail';
+import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
 import categoryMap from '@/types/categoryMap';
 import { Participant } from '@/types/meeting';
 

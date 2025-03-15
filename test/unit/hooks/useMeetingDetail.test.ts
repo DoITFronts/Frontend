@@ -3,7 +3,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { act } from 'react';
 
 import fetchMeetingById from '@/api/client/meeting/fetchMeetingById';
-import { useMeetingDetail, useMeetingEditor } from '@/hooks/useMeetingDetail';
+import { useMeetingDetail, useMeetingEditor } from '@/hooks/meeting/useMeetingDetail';
 import { MeetingCategory, MeetingDetail } from '@/types/meeting';
 
 jest.mock('@/api/client/meeting/fetchMeetingById');

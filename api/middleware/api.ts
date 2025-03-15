@@ -1,5 +1,6 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { toast } from 'react-toastify';
+
 import { getToken } from '@/utils/auth/tokenUtils';
 
 const axiosInstance = axios.create({

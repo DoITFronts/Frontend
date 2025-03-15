@@ -11,8 +11,8 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useLikeMutation from '@/hooks/useLikeMutation';
-import useMeetingList from '@/hooks/useMeetingList';
+import useLikeMutation from '@/hooks/like/useLikeMutation';
+import useMeetingList from '@/hooks/meeting/useMeetingList';
 import {
   defaultFilter,
   defaultFirstOption,

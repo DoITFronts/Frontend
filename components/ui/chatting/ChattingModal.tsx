@@ -9,34 +9,25 @@ import chatStore from '@/store/chatStore';
 export default function ChatModal() {
   const [message, setMessage] = useState('');
   const messageEndRef = useRef<HTMLDivElement | null>(null);
-
-  // Zustand 상태 가져오기
   const { isOpen, currentRoomId, messages, closeChat } = chatStore();
 
-  // ✅ currentRoomId가 변경될 때 WebSocket 연결 실행
   useEffect(() => {
     if (currentRoomId) {
       connectWebSocket();
     }
     return () => {
-      disconnectWebSocket(); // ✅ 컴포넌트 언마운트 또는 채팅방 닫힐 때 연결 해제
+      disconnectWebSocket();
     };
   }, [currentRoomId]);
-
-  // 채팅 모달 닫힐 때 입력 필드 초기화
   useEffect(() => {
     if (!isOpen) setMessage('');
   }, [isOpen]);
-
-  // 채팅 메시지를 전송하는 함수
   const handleSendMessage = () => {
     if (message.trim() && currentRoomId) {
-      sendMessage(message); // ✅ WebSocket 메시지 전송
+      sendMessage(message);
       setMessage('');
     }
   };
-
-  // 스크롤을 항상 최신 메시지로 이동
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
@@ -46,22 +37,19 @@ export default function ChatModal() {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-96 rounded-2xl bg-white p-6 text-black shadow-xl dark:bg-gray-900 dark:text-white">
-        {/* 채팅 헤더 */}
         <div className="mb-4 flex items-center justify-between border-b pb-2">
           <h2 className="text-lg font-bold">채팅방 {currentRoomId}</h2>
           <button
             type="button"
             onClick={() => {
               closeChat();
-              disconnectWebSocket(); // ✅ 채팅방 닫을 때 WebSocket 해제
+              disconnectWebSocket();
             }}
             className="text-gray-500 hover:text-gray-300"
           >
             <Icon path="/assets/X" />
           </button>
         </div>
-
-        {/* 채팅 메시지 리스트 */}
         <div className="h-64 space-y-2 overflow-y-auto rounded-md border bg-gray-100 p-2 dark:bg-gray-800">
           {messages.length === 0 ? (
             <p className="text-center text-gray-500 dark:text-gray-400">메시지가 없습니다.</p>
@@ -74,8 +62,6 @@ export default function ChatModal() {
           )}
           <div ref={messageEndRef} />
         </div>
-
-        {/* 입력창 */}
         <div className="mt-4 flex gap-2">
           <input
             type="text"

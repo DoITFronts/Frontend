@@ -10,7 +10,7 @@ import {
   DescriptionSkeleton,
   DescriptionError,
 } from '@/app/meeting/detail/components/skeleton/DescriptionSkeleton';
-import { useMeetingDetail, useMeetingEditor, useUpdateMeeting } from '@/hooks/useMeetingDetail';
+import { useMeetingDetail, useMeetingEditor, useUpdateMeeting } from '@/hooks/meeting/useMeetingDetail';
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 function CustomParagraph(props: React.HTMLAttributes<HTMLParagraphElement>) {

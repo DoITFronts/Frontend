@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import useLikeMeeting from '@/hooks/useLikeMeeting';
+import useLikeMeeting from '@/hooks/like/useLikeMeeting';
 import useLikeCountStore from '@/store/useLikeCountStore';
 
 const useLikedCount = () => {
