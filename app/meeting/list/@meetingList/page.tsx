@@ -1,4 +1,4 @@
-import { fetchMeetingList } from '@/api/meeting/fetchMeeting';
+import { fetchMeetingList } from '@/api/server/fetchMeeting';
 import MeetingList from '@/app/meeting/list/components/MeetingList';
 
 interface PageProps {

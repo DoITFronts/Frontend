@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import { removeToken } from '@/utils/auth/tokenUtils';
 import { toast } from 'react-toastify';
 import useUserStore from '@/store/user/userStore';
-import { signoutUser } from '@/api/user/auth';
+import { signoutUser } from '@/api/client/user/auth';
 
 // 로그아웃
 export const useSignout = () => {

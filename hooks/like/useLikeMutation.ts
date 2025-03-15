@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient, InfiniteData } from '@tanstack/react-query';
 
-import toggleLike from '@/api/meeting/toggleLike';
+import toggleLike from '@/api/client/meeting/toggleLike';
 import { Meeting } from '@/types/meeting';
 
 const useLikeMutation = () => {

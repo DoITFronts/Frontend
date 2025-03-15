@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 interface ChatState {
   isOpen: boolean;
-  currentRoomId: string | null;
+  currentRoomId: number | null;
   messages: string[];
-  openChat: (roomId: string) => void;
+  openChat: (roomId: number) => void;
   closeChat: () => void;
   addMessage: (message: string) => void;
   clearMessages: () => void;

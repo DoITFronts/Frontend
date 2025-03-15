@@ -1,4 +1,4 @@
-import axiosInstance from '../api';
+import axiosInstance from '../../middleware/api';
 
 const toggleLike = async (meetingId: string) => {
   try {

@@ -1,56 +1,55 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { fetchReviewMeetingList } from '@/api/meeting/fetchMeeting';
+import { fetchMeetingList } from '@/api/server/fetchMeeting';
 
-const useReview = ({
+const useMeetingList = ({
   category,
   city,
   town,
   targetAt,
   size,
-  initialReviews,
+  initialMeetings,
   order,
 }: {
   category: string;
   city: string;
   town: string;
   targetAt: Date | null;
-  size?: number;
-  initialReviews: any[];
+  size: number;
+  initialMeetings: any[];
   order?: string;
 }) =>
   useInfiniteQuery({
-    queryKey: ['reviews', category, city, town, targetAt, order],
+    queryKey: ['meetings', category, city, town, targetAt, size, order],
     queryFn: async ({ pageParam = 1 }) => {
-      const response = await fetchReviewMeetingList({
+      const response = await fetchMeetingList({
         category,
         city,
         town,
         targetAt,
-        page: pageParam,
+        page: pageParam, // ✅ 페이지 번호 추가
         size,
         order,
       });
       return {
-        reviews: response.reviews,
-        totalCount: response.totalCount,
+        lighteningResponses: response?.lighteningResponses ?? [],
       };
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages, lastPageParam) => {
-      const reviews = lastPage?.reviews ?? [];
-      const hasMore = reviews.length === size;
+      const lighteningResponses = lastPage?.lighteningResponses ?? []; // `null`일 경우 빈 배열로 처리
+      const hasMore = lighteningResponses.length === size; // `size` 비교
       return hasMore ? lastPageParam + 1 : undefined;
     },
+
     initialData: {
       pages: [
         {
-          reviews: initialReviews ?? [],
-          totalCount: initialReviews.length,
+          lighteningResponses: initialMeetings ?? [],
         },
       ],
       pageParams: [1],
     },
   });
 
-export default useReview;
+export default useMeetingList;

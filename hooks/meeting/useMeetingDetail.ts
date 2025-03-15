@@ -2,8 +2,8 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
-import fetchMeetingById from '@/api/meeting/fetchMeetingById';
-import updateMeetingDescription from '@/api/meeting/updateMeetingDescription';
+import fetchMeetingById from '@/api/client/meeting/fetchMeetingById';
+import updateMeetingDescription from '@/api/client/meeting/updateMeetingDescription';
 import { MeetingDetail } from '@/types/meeting';
 
 interface UpdateMeetingParams {

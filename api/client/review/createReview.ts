@@ -1,4 +1,4 @@
-import axiosInstance from '@/api/api';
+import axiosInstance from '@/api/middleware/api';
 
 const createReview = async (meetingId: string, content: string, score: number) => {
   try {

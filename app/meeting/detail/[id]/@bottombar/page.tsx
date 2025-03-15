@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import {
   BottomFloatingBarError,
   BottomFloatingBarSkeleton,
 } from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
 import Button from '@/components/ui/button/Button';
+import useJoinLightning from '@/hooks/useJoinLightning';
 import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import useModalStore from '@/store/useModalStore';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
@@ -34,6 +34,7 @@ const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
 
 export default function BottomFloatingBar() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
+  const { joinMutation, leaveMutation } = useJoinLightning(meeting?.id as string);
   const [isJoined, setIsJoined] = useState(false);
   const { openModal } = useModalStore();
 
@@ -42,12 +43,11 @@ export default function BottomFloatingBar() {
       openModal('loginCheck');
       return;
     }
-
     if (isJoined) {
-      await leaveLightning(meeting?.id as string);
+      await leaveMutation.mutate();
       toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
     } else {
-      await joinLightning(meeting?.id as string);
+      await joinMutation.mutate();
       toast.success('모임에 참여했습니다.', { autoClose: 900 });
     }
     setIsJoined(!isJoined);

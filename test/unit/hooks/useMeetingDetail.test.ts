@@ -2,11 +2,11 @@ import { jest, expect } from '@jest/globals';
 import { renderHook, waitFor } from '@testing-library/react';
 import { act } from 'react';
 
-import fetchMeetingById from '@/api/meeting/fetchMeetingById';
+import fetchMeetingById from '@/api/client/meeting/fetchMeetingById';
 import { useMeetingDetail, useMeetingEditor } from '@/hooks/useMeetingDetail';
 import { MeetingCategory, MeetingDetail } from '@/types/meeting';
 
-jest.mock('@/api/meeting/fetchMeetingById');
+jest.mock('@/api/client/meeting/fetchMeetingById');
 
 const mockedFetchMeetingById = fetchMeetingById as jest.MockedFunction<typeof fetchMeetingById>;
 

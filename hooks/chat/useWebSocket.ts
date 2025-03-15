@@ -15,7 +15,7 @@ const useWebSocket = (token: string) => {
       socketRef.current = new WebSocket(wsUrl);
 
       socketRef.current.onopen = () => {
-        console.log('✅ WebSocket 연결됨');
+        console.log('WebSocket 연결됨');
         toast.success('채팅방에 입장했습니다.', { autoClose: 900 });
 
         const subscribeMessage = JSON.stringify({
@@ -26,12 +26,12 @@ const useWebSocket = (token: string) => {
       };
 
       socketRef.current.onmessage = (event) => {
-        console.log('📩 메시지 수신:', event.data);
+        console.log('메시지 수신:', event.data);
         addMessage(event.data);
       };
 
       socketRef.current.onerror = (error) => {
-        console.error('❌ WebSocket 오류 발생', error);
+        console.error('WebSocket 오류 발생', error);
         toast.error('웹소켓 연결 오류가 발생했습니다.');
       };
 

@@ -1,4 +1,4 @@
-import fetchData from '@/api/request';
+import fetchData from '@/api/middleware/request';
 import { FetchMeetingListParams } from '@/types/meeting';
 
 export const fetchMeetingList = async (params: FetchMeetingListParams) =>

@@ -1,4 +1,4 @@
-import axiosInstance from '@/api/api';
+import axiosInstance from '@/api/middleware/api';
 
 const fetchMeetingById = async (id: string | undefined) => {
   if (!id) {

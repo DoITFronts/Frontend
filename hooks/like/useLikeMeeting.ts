@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { fetchLikeMeetingList } from '@/api/meeting/fetchMeeting';
+import { fetchLikeMeetingList } from '@/api/server/fetchMeeting';
 
 const useLikeMeeting = ({
   category,

@@ -1,7 +1,8 @@
-import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
-import { Meeting } from '@/types/meeting';
 import { Dispatch, SetStateAction } from 'react';
 import { toast } from 'react-toastify';
+
+import { joinLightning, leaveLightning } from '@/api/client/meeting/joinMeeting';
+import { Meeting } from '@/types/meeting';
 
 export default function useMeetingToggle(setMeetings: Dispatch<SetStateAction<Meeting[]>>) {
   const toggleMeeting = async (meeting: Meeting): Promise<boolean> => {

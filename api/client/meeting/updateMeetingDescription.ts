@@ -1,4 +1,4 @@
-import axiosInstance from '@/api/api';
+import axiosInstance from '@/api/middleware/api';
 
 interface UpdateMeetingDescriptionParams {
   meetingId: string;

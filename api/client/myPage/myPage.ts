@@ -1,7 +1,7 @@
 import useProfileStore from '@/store/useProfileStore';
 import categoryMap from '@/types/categoryMap';
 
-import axiosInstance from '../api';
+import axiosInstance from '../../middleware/api';
 
 interface FetchMyPageMeetingsParams {
   type: string; // '나의 번개' | '내가 만든 번개'

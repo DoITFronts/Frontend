@@ -1,4 +1,4 @@
-import axiosInstance from '@/api/api';
+import axiosInstance from '@/api/middleware/api';
 
 // TODO fetchmeetingbyid 에다가 옮기세요
 const fetchDetailReview = async (meetingId: string) => {

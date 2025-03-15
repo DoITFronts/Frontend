@@ -1,6 +1,6 @@
 import { CreateMeetingParams } from '@/types/createMeeting';
 
-import axiosInstance from '../api';
+import axiosInstance from '../../middleware/api';
 
 const createMeeting = async (meetingData: CreateMeetingParams) => {
   const formData = new FormData();

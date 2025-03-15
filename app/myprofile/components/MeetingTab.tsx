@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { use, useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/myPage/myPage';
+import { fetchMyPageMeetings, fetchMyPageReviews } from '@/api/client/myPage/myPage';
 import ButtonBox from '@/components/ui/button/ButtonBox';
 import Card from '@/components/ui/card/Card';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
@@ -136,7 +136,7 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
   // 데이터가 있는 경우 렌더링
   return (
     <>
-      {meetings.map((meeting, index) => (
+      {meetings.map((meeting) => (
         <motion.div
           ref={ref}
           key={meeting.id}
@@ -193,7 +193,11 @@ function MeetingList({ menuTab, activityTab }: { menuTab: string; activityTab: s
                   isConfirmed={meeting.isConfirmed}
                   isCompleted={meeting.isCompleted}
                 />
-                <ButtonBox onClick={() => toggleMeeting(meeting)} isJoined={meeting.isJoined} />
+                <ButtonBox
+                  onClick={() => toggleMeeting(meeting)}
+                  isJoined={meeting.isJoined}
+                  roomId={meeting.chatRoomId}
+                />
               </div>
             </div>
           </Card>

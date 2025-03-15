@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning, deleteLightning } from '@/api/meeting/joinMeeting';
+import { joinLightning, leaveLightning, deleteLightning } from '@/api/client/meeting/joinMeeting';
 import Button from '@/components/ui/button/Button';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';

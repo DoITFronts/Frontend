@@ -1,5 +1,5 @@
 // 로그인, 회원가입, 로그아웃 API 요청
-import axiosInstance from '../api';
+import axiosInstance from '../../middleware/api';
 
 // 회원가입
 const signupUser = async (data: SignUpRequestData) => {
