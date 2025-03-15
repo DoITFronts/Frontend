@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: circleci/node:18
+      - image: circleci/node:20
 
 jobs:
   install-dependencies:
@@ -48,6 +48,15 @@ jobs:
             npx @sentry/cli releases new "v${CIRCLE_SHA1}"
             npx @sentry/cli releases set-commits "v${CIRCLE_SHA1}" --auto
             npx @sentry/cli releases finalize "v${CIRCLE_SHA1}"
+
+
+  lighthouse:
+    executor: node-executor
+    steps:
+      - checkout
+      - run:
+          name: Run Lighthouse CI
+          command: lhci autorun
 
 workflows:
   version: 2
