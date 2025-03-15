@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest --watch",
     "test:ci": "jest --ci",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "deploy": "npx netlify deploy --prod"
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
