@@ -128,22 +128,20 @@ function MeetingList({
               className="block"
               prefetch={false}
             >
-              <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
+              <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
                 <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
                 {meeting.imageUrl ? (
                   <Image
                     src={meeting.imageUrl}
-                    width={384}
-                    height={200}
+                    fill
                     alt="thumbnail"
-                    className="w-96"
+                    className="object-cover"
                   />
                 ) : (
                   <Image
                     src="/assets/card/example_image.png"
-                    width={384}
-                    height={200}
+                    fill
                     alt="thumbnail"
                     className="w-96"
                   />
