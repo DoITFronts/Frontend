@@ -10,12 +10,12 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useReview from '@/hooks/useReview';
+import useReview from '@/hooks/review/useReview';
 import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
-import { regions } from '@/types/regions';
-import { Reviews } from '@/types/review';
+import { regions } from '@/types/map/regions';
+import { Reviews } from '@/types/review/review';
 import { formatShortDate } from '@/utils/formatDateTime';
 
 import ReviewItem from './ReviewItem';
@@ -173,7 +173,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   return (
     <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-3 flex gap-[10px] md:mb-6 md:gap-3 lg:mb-10">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (
           <button
             key={category}

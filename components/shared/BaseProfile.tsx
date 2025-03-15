@@ -14,7 +14,7 @@ function ProfileIcon({ size = 'medium', id }: ProfileIconProps) {
   const theme = isOdd ? 'light' : 'dark';
 
   if (imageUrl) {
-    return <img src={imageUrl} alt="User Profile" className="rounded-full object-cover" />;
+    return <img src={imageUrl} alt="User Profile" className="rounded-full object-cover w-[1.875rem] h-[1.875rem]" />;
   }
 
   const backgroundColor = theme === 'dark' ? '#595959' : '#F0F0F0';

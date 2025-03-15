@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 import Icon from '@/components/shared/Icon';
 import DropDown from '@/components/ui/dropdown/DropDown';
-import useLikedCount from '@/hooks/useLikeCount';
+import useLikedCount from '@/hooks/like/useLikeCount';
 import Logo from '@/public/assets/logo/logoWhite.svg';
 import useLikeCountStore from '@/store/useLikeCountStore';
 import useProfileStore from '@/store/useProfileStore';

@@ -7,15 +7,15 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning, deleteLightning } from '@/api/meeting/joinMeeting';
+import { joinLightning, leaveLightning, deleteLightning } from '@/api/client/meeting/joinMeeting';
 import Button from '@/components/ui/button/Button';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';
-import useLikeToggle from '@/hooks/useLikeToggle';
+import useLikeToggle from '@/hooks/like/useLikeToggle';
 import useModalStore from '@/store/useModalStore';
-import categoryMap from '@/types/categoryMap';
-import { Meeting } from '@/types/meeting';
-import { cityMap } from '@/types/regions';
+import categoryMap from '@/types/map/categoryMap';
+import { Meeting } from '@/types/meeting/meeting';
+import { cityMap } from '@/types/map/regions';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 import ChipDate from '../chip/ChipDate';
@@ -130,7 +130,9 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
             <div className="flex flex-col justify-between gap-4 overflow-hidden">
               {/* 이미지 */}
               <div className="relative flex h-[172px] w-full items-center justify-center overflow-hidden md:h-[200px]">
-                <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                <div className="absolute left-0 top-0 z-10">
+                  <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                </div>
                 <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
                 <Image

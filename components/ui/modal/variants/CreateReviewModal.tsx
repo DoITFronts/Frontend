@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import createReview from '@/api/review/createReview';
+import createReview from '@/api/client/review/createReview';
 import Button from '@/components/ui/button/Button';
 import ReviewHeartSelectable from '@/components/ui/review/ReviewHeartSelectable'; // 새로운 별점 컴포넌트
 import Icon from '@/components/utils/Icon';

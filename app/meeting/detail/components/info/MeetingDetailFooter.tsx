@@ -1,6 +1,6 @@
 import AvatarGroup from '@/app/meeting/detail/components/AvatarGroup';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
-import { Participant } from '@/types/meeting';
+import { Participant } from '@/types/meeting/meeting';
 
 interface MeetingDetailFooterProps {
   participantCount: number;
