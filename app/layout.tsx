@@ -19,7 +19,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body>
         <link rel="preconnect" href="/" />
         <RootLayout>{children}</RootLayout>
-        <ToastContainer position="top-center" autoClose={900} hideProgressBar limit={1} />
+        <ToastContainer
+          position="top-center"
+          autoClose={900}
+          hideProgressBar
+          closeButton={false}
+          limit={1}
+        />
       </body>
     </html>
   );
