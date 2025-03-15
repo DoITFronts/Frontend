@@ -24,6 +24,14 @@ import Card from './Card';
 import Category from './component/Category';
 import HostInfo from './component/HostInfo';
 
+import {
+  MEETING_JOIN_SUCCESS,
+  MEETING_CANCEL_SUCCESS,
+  MEETING_CREATE_SUCCESS,
+  MEETING_DELETE_SUCCESS,
+} from '@/constants/successText';
+import { GENERAL_ERROR } from '@/constants/errorText';
+
 interface Props {
   meeting: Meeting;
   onClick: () => void;
@@ -67,20 +75,20 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
         setIsCompleted(participantCount - 1 >= meeting.capacity);
         setIsConfirmed(participantCount - 1 >= meeting.minCapacity);
         await leaveLightning(meeting.id);
-        toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+        toast.success(MEETING_CANCEL_SUCCESS);
       } else {
         setIsJoined(true);
         setParticipantCount((prevCount) => prevCount + 1);
         setIsCompleted(participantCount + 1 >= meeting.capacity);
         setIsConfirmed(participantCount + 1 >= meeting.minCapacity);
         await joinLightning(meeting.id);
-        toast.success('모임에 참여했습니다.', { autoClose: 900 });
+        toast.success(MEETING_JOIN_SUCCESS);
       }
     } catch (error) {
       setIsJoined(meeting.isJoined);
       setParticipantCount(meeting.participantCount);
       setIsConfirmed(meeting.isConfirmed);
-      toast.error('오류가 발생했습니다.');
+      toast.error(GENERAL_ERROR);
     }
   };
 
@@ -91,7 +99,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
     }
 
     await deleteLightning(meeting?.id as string);
-    toast.success('모임을 삭제했습니다.', { autoClose: 900 });
+    toast.success(MEETING_DELETE_SUCCESS);
     // 추가적인 삭제 후 처리 로직이 필요할 수 있습니다.
   };
 

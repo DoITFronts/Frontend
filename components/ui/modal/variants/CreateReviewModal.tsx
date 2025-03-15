@@ -8,6 +8,12 @@ import Button from '@/components/ui/button/Button';
 import ReviewHeartSelectable from '@/components/ui/review/ReviewHeartSelectable'; // 새로운 별점 컴포넌트
 import Icon from '@/components/utils/Icon';
 import useModalStore from '@/store/useModalStore';
+import { REVIEW_SUBMIT_SUCCESS } from '@/constants/successText';
+import {
+  REVIEW_EMPTY_ERROR,
+  SELECT_RATING_ERROR,
+  REVIEW_SUBMISSION_ERROR,
+} from '@/constants/errorText';
 
 interface CreateReviewModalProps {
   meetingId: string;
@@ -21,20 +27,20 @@ export default function CreateReviewModal({ meetingId }: CreateReviewModalProps)
 
   const handleSubmit = async () => {
     if (score === 0) {
-      toast.error('별점을 선택해주세요!');
+      toast.error(SELECT_RATING_ERROR);
       return;
     }
     if (!content.trim()) {
-      toast.error('리뷰 내용을 입력해주세요!');
+      toast.error(REVIEW_EMPTY_ERROR);
       return;
     }
 
     try {
       await createReview(meetingId, content, score);
-      toast.success('리뷰가 등록되었습니다!');
+      toast.success(REVIEW_SUBMIT_SUCCESS);
       closeModal();
     } catch (error) {
-      toast.error('리뷰 등록에 실패했습니다.');
+      toast.error(REVIEW_SUBMISSION_ERROR);
     }
   };
 

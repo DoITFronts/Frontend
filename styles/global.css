@@ -141,3 +141,21 @@ html {
 .react-datepicker__day--keyboard-selected {
   background: transparent !important; /* 기본 파란색 배경 제거 */
 }
+
+.Toastify__toast--container {
+  width: fit-content;
+}
+
+.Toastify__toast {
+  text-align: center;
+  border-radius: 10px;
+}
+.Toastify__toast--success {
+  color: black;
+  background: linear-gradient(-45deg, #f7faf6 0%, #c9f1b9 100%);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(-45deg, #f44242 0%, #f99e9e 100%);
+  color: white;
+}

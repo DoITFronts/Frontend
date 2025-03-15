@@ -10,6 +10,11 @@ import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import Icon from '@/components/utils/Icon';
 import useModalStore from '@/store/useModalStore';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
+import {
+  IMAGE_SIZE_ERROR,
+  SELECT_PLACE_ERROR,
+  SELECT_MEETING_TYPE_ERROR,
+} from '@/constants/errorText';
 
 import CustomDatePicker from '../datePicker';
 
@@ -113,17 +118,17 @@ export default function CreateMeetingModal() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!meetingType) {
-      console.error('모임 유형을 선택해주세요');
+      toast.error(SELECT_MEETING_TYPE_ERROR);
       return;
     }
 
     if (!selectedPlace) {
-      console.error('장소를 선택해주세요');
+      toast.error(SELECT_PLACE_ERROR);
       return;
     }
 
     if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 900 });
+      toast.error(IMAGE_SIZE_ERROR);
       return;
     }
 

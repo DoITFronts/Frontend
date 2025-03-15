@@ -5,6 +5,8 @@ import useUserStore from '@/store/user/userStore';
 import { signinUser } from '@/api/user/auth';
 import { setToken, decodeToken } from '@/utils/auth/tokenUtils';
 import { fetchProfile } from '@/api/myPage/myPage';
+import { SIGNIN_SUCCESS } from '@/constants/successText';
+import { SIGNIN_ERROR, INVALID_CREDENTIALS_ERROR } from '@/constants/errorText';
 
 export const useSignin = () => {
   const router = useRouter();
@@ -24,10 +26,7 @@ export const useSignin = () => {
             nickname: decodedToken.nickname || '',
           });
 
-          toast.success('성공적으로 로그인 되었습니다 :)', {
-            hideProgressBar: true,
-            autoClose: 900,
-          });
+          toast.success(SIGNIN_SUCCESS);
           router.push('/meeting/list');
           fetchProfile();
         }
@@ -36,9 +35,9 @@ export const useSignin = () => {
     onError: (error: any) => {
       console.error('로그인 실패:', error.response?.data || error.message);
       if (error.response?.status === 401) {
-        toast.error('이메일 또는 비밀번호가 올바르지 않습니다.');
+        toast.error(INVALID_CREDENTIALS_ERROR);
       } else {
-        toast.error('로그인에 실패했습니다. 다시 시도해주세요!');
+        toast.error(SIGNIN_ERROR);
       }
     },
   });

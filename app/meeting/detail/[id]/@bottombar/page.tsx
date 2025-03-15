@@ -13,6 +13,13 @@ import { useMeetingDetail } from '@/hooks/useMeetingDetail';
 import useModalStore from '@/store/useModalStore';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
+import { URL_COPY_ERROR } from '@/constants/errorText';
+import {
+  URL_COPY_SUCCESS,
+  MEETING_CANCEL_SUCCESS,
+  MEETING_JOIN_SUCCESS,
+} from '@/constants/successText';
+
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
   ALCOHOL: {
     title: '퇴근 후, 함께하는 가볍고 기분 좋은 한 잔! 🍻',
@@ -45,10 +52,10 @@ export default function BottomFloatingBar() {
 
     if (isJoined) {
       await leaveLightning(meeting?.id as string);
-      toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+      toast.success(MEETING_CANCEL_SUCCESS);
     } else {
       await joinLightning(meeting?.id as string);
-      toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      toast.success(MEETING_JOIN_SUCCESS);
     }
     setIsJoined(!isJoined);
   };
@@ -57,10 +64,10 @@ export default function BottomFloatingBar() {
     navigator.clipboard
       .writeText(window.location.href)
       .then(() => {
-        toast.success('URL이 클립보드에 복사되었습니다.', { autoClose: 900 });
+        toast.success(URL_COPY_SUCCESS);
       })
       .catch(() => {
-        toast.error('URL 복사에 실패했습니다.', { autoClose: 900 });
+        toast.error(URL_COPY_ERROR);
       });
   };
 
