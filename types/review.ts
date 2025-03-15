@@ -1,24 +1,28 @@
-import { MeetingCategory } from "@/types/meeting";
-
 export interface Review {
   id: string;
-  writer: string;
-  profileImage?: string;
+  score: number;
   content: string;
-  date: string;
-  count: number;
+  nickname: string;
+  userId: string;
+  userImageUrl?: string;
+  createdAt: string;
 }
 
 export type ReviewList = Review[];
 
 export interface Reviews {
-  id: string;
-  category: MeetingCategory;
-  summary: string;
-  imageUrl: string;
-  targetAt: string;
+  reviewId: number;
+  reviewContent: string;
+  rating: number;
+  createdAt: string;
+  lighteningId: number;
+  category: string;
+  title: string;
   city: string;
   town: string;
-  participantCount: number;
-  review: Review;
+  lighteningImageUrl: string;
+  targetAt: string;
+  userId: number;
+  nickname: string;
+  userImageUrl: string;
 }

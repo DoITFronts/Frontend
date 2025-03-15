@@ -13,10 +13,9 @@ interface SignInRequestData {
 }
 
 interface User {
+  id: number;
   email: string;
-  name: string;
   nickname: string;
-  birthday: number;
-  userBio: string;
-  profileImage: string;
+  description: string | null;
+  imageUrl: string;
 }

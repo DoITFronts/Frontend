@@ -5,13 +5,11 @@ import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
-import {
-  ReviewListError,
-  ReviewListSkeleton,
-} from '@/app/meeting/detail/components/skeleton/ReviewSkeleton';
-import Pagination from '@/components/ui/Pagination';
+import fetchDetailReview from '@/api/client/review/fetchDetailReview';
+import { ReviewListSkeleton } from '@/app/meeting/detail/components/skeleton/ReviewSkeleton';
+import Pagination from '@/components/ui/pagination/pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';
-import { ReviewList } from '@/types/review';
+import { Review } from '@/types/review';
 
 const reviewVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -26,12 +24,11 @@ export default function MeetingReviews() {
   const reviewsPerPage = 5;
 
   const {
-    data: meeting,
+    data: reviews = [],
     isLoading,
     error,
-    refetch,
-  } = useQuery<ReviewList>({
-    queryKey: ['event', meetingId],
+  } = useQuery<Review[]>({
+    queryKey: ['event-reviews', meetingId],
     queryFn: () => fetchDetailReview(meetingId),
     enabled: !!meetingId,
     staleTime: 1000 * 60 * 5,
@@ -40,8 +37,8 @@ export default function MeetingReviews() {
 
   if (!meetingId) return <p>⚠️ 이벤트 ID가 필요합니다.</p>;
   if (isLoading) return <ReviewListSkeleton />;
-  if (error || !meeting) return null;
-  if (!meeting?.length)
+  if (error) return null;
+  if (reviews.length === 0)
     return (
       <div className="mb-16 inline-flex h-[500px] w-full items-center justify-center gap-2.5">
         <div className="text-center font-['Pretendard'] text-base font-medium leading-snug text-[#c0c1c2]">
@@ -50,13 +47,13 @@ export default function MeetingReviews() {
       </div>
     );
 
-  const totalReviews = meeting.length;
+  const totalReviews = reviews.length;
   const totalPages = Math.ceil(totalReviews / reviewsPerPage);
   const startIndex = (currentPage - 1) * reviewsPerPage;
-  const selectedReviews = meeting.slice(startIndex, startIndex + reviewsPerPage);
+  const selectedReviews = reviews.slice(startIndex, startIndex + reviewsPerPage);
 
   return (
-    <div className="mb-24 flex-col">
+    <div className="mb-28 flex-col">
       <div className="font-['DungGeunMo'] text-2xl font-normal text-black">이전 번개 리뷰</div>
       <div className="mt-4 space-y-4">
         {selectedReviews.map((review, index) => (
@@ -68,10 +65,10 @@ export default function MeetingReviews() {
             viewport={{ once: true, amount: 0.3 }}
           >
             <ReviewItem
-              date={review.date}
+              date={review.createdAt}
               content={review.content}
-              count={review.count}
-              username={review.writer}
+              count={review.score}
+              username={review.nickname}
             />
             {index < selectedReviews.length - 1 && (
               <div className="mt-2" data-svg-wrapper="">

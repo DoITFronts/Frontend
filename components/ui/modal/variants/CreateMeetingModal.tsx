@@ -4,17 +4,24 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import chatApi from '@/api/chat/chatApi';
-import createMeeting from '@/api/meeting/createMeeting';
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
+import { connectWebSocket } from '@/api/socket/websocket';
+import createMeeting from '@/api/client/meeting/createMeeting';
+import Button from '@/components/ui/button/Button';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
+import Icon from '@/components/utils/Icon';
+import chatStore from '@/store/chatStore';
 import useModalStore from '@/store/useModalStore';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 
 import CustomDatePicker from '../datePicker';
 
 const meetingCategories = Object.values(MeetingCategory);
+const categoryKoreanMap = {
+  [MeetingCategory.GOURMET]: '맛집',
+  [MeetingCategory.CAFE]: '카페',
+  [MeetingCategory.BOARD_GAME]: '보드게임',
+  [MeetingCategory.ALCOHOL]: '술',
+};
 
 export default function CreateMeetingModal() {
   const { closeModal } = useModalStore();
@@ -28,12 +35,12 @@ export default function CreateMeetingModal() {
   const [participantCount, setParticipantCount] = useState('');
   const [minParticipants, setMinParticipants] = useState('');
   const [selectedPlace, setSelectedPlace] = useState<{
-    latitude: string;
-    longitude: string;
     placeName: string;
     address: string;
     city: string;
     town: string;
+    latitude: string;
+    longitude: string;
   } | null>(null);
   // TODO: 추후에 데이터 연결 시 보내는 postData.
   useEffect(() => {
@@ -126,26 +133,28 @@ export default function CreateMeetingModal() {
       title: meetingName,
       summary: meetingSummary,
       address: selectedPlace.address,
+      placeName: selectedPlace.placeName,
       city: selectedPlace.city,
       town: selectedPlace.town,
-      placeName: selectedPlace.placeName,
       latitude: selectedPlace.latitude,
       longitude: selectedPlace.longitude,
       category: meetingType,
       targetAt: meetingDate.toISOString(),
       endAt: deadlineDate.toISOString(),
-      capacity: parseInt(participantCount, 10),
-      minCapacity: parseInt(minParticipants, 10) || 1,
+      capacity: parseInt(participantCount),
+      minCapacity: parseInt(minParticipants) || 1,
       ...(imageFile && { image: imageFile }),
     };
 
     try {
+      console.log(meetingData);
       const response = await createMeeting(meetingData);
 
       if (response.id) {
+        chatStore.getState().openChat(response.chatRoomId);
+        connectWebSocket();
         router.push(`/meeting/detail/${response.id}`);
         toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
-        await chatApi(meetingData.title);
         closeModal();
       }
     } catch (error) {
@@ -182,7 +191,6 @@ export default function CreateMeetingModal() {
             </label>
             <input
               type="text"
-              id="meetingName"
               placeholder="모임 이름을 작성해 주세요."
               onChange={handleMeetingName}
               className="w-full rounded-[12px] bg-black-2 px-4 py-2.5 text-black-8 placeholder:text-black-6"
@@ -271,7 +279,7 @@ export default function CreateMeetingModal() {
                     <div
                       className={`text-sm ${meetingType === type ? 'text-white' : 'text-black-6'}`}
                     >
-                      {type}
+                      {categoryKoreanMap[type]}
                     </div>
                   </div>
                 </div>

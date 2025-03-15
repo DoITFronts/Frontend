@@ -1,36 +1,50 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
+import { fetchProfile } from '@/api/client/myPage/myPage';
 import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
-import ProfileIcon from '@/components/shared/BaseProfile';
+import ProfileIcon from '@/components/utils/BaseProfile';
 import useModalStore from '@/store/useModalStore';
 import useProfileStore from '@/store/useProfileStore';
-import { hover } from 'framer-motion';
-import { useState } from 'react';
 
 export default function Page() {
   const [iconStatus, setIconStatus] = useState<'default' | 'hover' | 'editing'>('default');
-
-  const { nickname, email, userBio, profileImage } = useProfileStore();
+  const { nickname, email, description, imageUrl } = useProfileStore();
   const { openModal } = useModalStore();
 
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
   return (
-    <div className="w-full h-auto flex gap-6 items-center relative">
+    <div className="relative flex h-auto w-full items-center gap-6">
       <div
-        className="cursor-pointer absolute top-3 right-0"
+        className="absolute right-0 top-3 cursor-pointer"
         onMouseEnter={() => setIconStatus('hover')}
         onMouseLeave={() => setIconStatus('default')}
         onClick={() => openModal('editProfile')}
       >
         <EditingIcon status={iconStatus} />
       </div>
-      <ProfileIcon size={102} />
-
-      <div className="w-auto h-auto flex flex-col gap-[2px]">
-        <div className="w-auto h-auto flex justify-start gap-2.5">
-          <span className="text-black font-pretandard font-bold text-2xl">{nickname}</span>
-          <span className="text-black-6 font-pretandard font-medium text-lg">{email}</span>
+      {imageUrl ? (
+        <div className="size-[102px] overflow-hidden rounded-full">
+          <img
+            src={`${imageUrl}?timestamp=${new Date().getTime()}`}
+            alt="프로필 이미지"
+            className="size-full object-cover"
+          />
         </div>
-        <div className="w-auto h-auto text-black-10 font-pretandard text-xl">{userBio}</div>
+      ) : (
+        <ProfileIcon size={102} />
+      )}
+
+      <div className="flex size-auto flex-col gap-[2px]">
+        <div className="flex size-auto justify-start gap-2.5">
+          <span className="font-pretandard text-2xl font-bold text-black">{nickname}</span>
+          <span className="font-pretandard text-lg font-medium text-black-6">{email}</span>
+        </div>
+        <div className="size-auto font-pretandard text-xl text-black-10">{description}</div>
       </div>
     </div>
   );

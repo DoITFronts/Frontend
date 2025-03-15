@@ -1,20 +1,27 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+
+import { connectWebSocket, disconnectWebSocket, sendMessage } from '@/api/socket/websocket';
 import Icon from '@/components/shared/Icon';
-import useWebSocket from '@/hooks/useWebSocket';
-import useChatStore from '@/store/chatStore';
+import chatStore from '@/store/chatStore';
 
 export default function ChatModal() {
   const [message, setMessage] = useState('');
   const messageEndRef = useRef<HTMLDivElement | null>(null);
 
   // Zustand 상태 가져오기
-  const { isOpen, currentRoomId, messages, closeChat } = useChatStore();
-  const token = 'YOUR_BEARER_TOKEN';
+  const { isOpen, currentRoomId, messages, closeChat } = chatStore();
 
-  // WebSocket 훅 사용
-  const { sendMessage } = useWebSocket(token);
+  // ✅ currentRoomId가 변경될 때 WebSocket 연결 실행
+  useEffect(() => {
+    if (currentRoomId) {
+      connectWebSocket();
+    }
+    return () => {
+      disconnectWebSocket(); // ✅ 컴포넌트 언마운트 또는 채팅방 닫힐 때 연결 해제
+    };
+  }, [currentRoomId]);
 
   // 채팅 모달 닫힐 때 입력 필드 초기화
   useEffect(() => {
@@ -24,7 +31,7 @@ export default function ChatModal() {
   // 채팅 메시지를 전송하는 함수
   const handleSendMessage = () => {
     if (message.trim() && currentRoomId) {
-      sendMessage(message);
+      sendMessage(message); // ✅ WebSocket 메시지 전송
       setMessage('');
     }
   };
@@ -42,7 +49,14 @@ export default function ChatModal() {
         {/* 채팅 헤더 */}
         <div className="mb-4 flex items-center justify-between border-b pb-2">
           <h2 className="text-lg font-bold">채팅방 {currentRoomId}</h2>
-          <button type="button" onClick={closeChat} className="text-gray-500 hover:text-gray-300">
+          <button
+            type="button"
+            onClick={() => {
+              closeChat();
+              disconnectWebSocket(); // ✅ 채팅방 닫을 때 WebSocket 해제
+            }}
+            className="text-gray-500 hover:text-gray-300"
+          >
             <Icon path="/assets/X" />
           </button>
         </div>
@@ -52,8 +66,8 @@ export default function ChatModal() {
           {messages.length === 0 ? (
             <p className="text-center text-gray-500 dark:text-gray-400">메시지가 없습니다.</p>
           ) : (
-            messages.map((msg, index) => (
-              <div key={index} className="rounded-md bg-gray-200 p-2 dark:bg-gray-700">
+            messages.map((msg) => (
+              <div key={msg} className="rounded-md bg-gray-200 p-2 dark:bg-gray-700">
                 {msg}
               </div>
             ))

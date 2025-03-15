@@ -1,18 +1,18 @@
 'use client';
 
-import { InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ko } from 'date-fns/locale';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import DatePicker from 'react-datepicker';
 
-import toggleLike from '@/api/meeting/toggleLike';
-import Icon from '@/components/shared/Icon';
-import Button from '@/components/ui/Button';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
-import EmptyMessage from '@/components/ui/EmptyMessage';
-import useMeeting from '@/hooks/useMeeting';
+import CardItem from '@/components/ui/card/CardItem';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import Icon from '@/components/utils/Icon';
+import useLikeMutation from '@/hooks/useLikeMutation';
+import useMeetingList from '@/hooks/useMeetingList';
 import {
   defaultFilter,
   defaultFirstOption,
@@ -23,43 +23,15 @@ import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting';
 import { regions } from '@/types/regions';
+import { formatShortDate } from '@/utils/formatDateTime';
 
-import MeetingItem from './MeetingItem';
-import { MeetingCardError, MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
+import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
 interface InitialMeetingsProps {
   initialMeetings: Meeting[];
 }
 
-// 드롭다운 재사용 컴포넌트
-function FilterDropdown({
-  options,
-  selectedValue,
-  onSelect,
-}: {
-  options: string[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <DropDown
-      options={options}
-      onSelect={onSelect}
-      selectedValue={selectedValue}
-      trigger={
-        <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-          {selectedValue}
-          <Icon path="chevron_down" />
-        </div>
-      }
-      optionClassName="justify-start min-w-[95px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
-    />
-  );
-}
-
 export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
-  const queryClient = useQueryClient();
-  const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -74,16 +46,18 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
-  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('filter') || '');
+  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const { openModal } = useModalStore();
+
+  // 임시 날짜 상태
+  const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
 
   useEffect(() => {
     setSelectedCategory(searchParams.get('category') || '전체');
     setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
     setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
-    setSelectedDate(
-      searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
-    );
+    setSelectedFilter(searchParams.get('order') || '');
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
@@ -130,72 +104,33 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     updateSearchParams('location_2', selected);
   };
 
-  // 날짜 변경 핸들러
-  const handleDateChange = (date: Date | null) => {
-    if (date?.toDateString() === selectedDate?.toDateString()) {
-      setSelectedDate(null);
-      updateSearchParams('targetAt', '');
-    } else if (date) {
-      const fixedDate = new Date(date);
-      fixedDate.setHours(12, 0, 0, 0); // **12시로 고정** (UTC 보정용)
-      setSelectedDate(fixedDate);
-      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`); // ISO 포맷 유지
-    } else {
-      setSelectedDate(null);
-      updateSearchParams('targetAt', '');
+  // 날짜 확인 핸들러
+  const handleDateConfirm = () => {
+    setSelectedDate(tempDate);
+    if (tempDate) {
+      const fixedDate = new Date(tempDate);
+      fixedDate.setHours(12, 0, 0, 0); // UTC 보정
+      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`);
     }
   };
 
   // 마감 임박, 참여 인원 필터링 클릭 핸들러
-  // TODO: 실제 api에 맞는 params 참조
   const handleSelectFilter = (selected: string) => {
     setSelectedFilter(selected);
-    updateSearchParams('filter', selected);
+    updateSearchParams('order', selected);
   };
 
-  // 좋아요 Mutation
-  const likeMutation = useMutation({
-    mutationFn: (meetingId: string) => toggleLike(meetingId),
-    onMutate: async (meetingId: string) => {
-      await queryClient.cancelQueries({ queryKey: ['meetings'] });
-
-      // 기존 데이터 가져오기
-      const prevData = queryClient.getQueryData<InfiniteData<Meeting[]>>(['meetings']);
-
-      // 새로운 좋아요 상태 적용 (낙관적 업데이트)
-      queryClient.setQueryData(['meetings'], (oldData: any) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          pages: oldData.pages.map((page: Meeting[]) =>
-            page.map((meeting) =>
-              meeting.id === meetingId ? { ...meeting, isLiked: !meeting.isLiked } : meeting,
-            ),
-          ),
-        };
-      });
-
-      return { prevData };
-    },
-    onError: (_err, _meetingId, context) => {
-      if (context?.prevData) {
-        queryClient.setQueryData(['meetings'], context.prevData);
-      }
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
-    },
-  });
-
   // useInfiniteQuery를 사용해 번개 데이터 가져오기
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useMeeting({
-    category: selectedCategory,
-    city: selectedFirstLocation,
-    town: selectedSecondLocation,
-    targetAt: selectedDate,
-    per_page: 10,
-    initialMeetings,
-  });
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useMeetingList({
+      category: selectedCategory,
+      city: selectedFirstLocation,
+      town: selectedSecondLocation,
+      targetAt: selectedDate,
+      size: 10,
+      initialMeetings,
+      order: selectedFilter,
+    });
 
   // 번개 데이터 통합
   const meetings = useMemo(
@@ -214,7 +149,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       (entries) => {
         if (entries[0].isIntersecting) fetchNextPage();
       },
-      { threshold: 1.0 },
+      { rootMargin: '150px', threshold: 0.3 },
     );
 
     observer.observe(observerRef.current);
@@ -229,60 +164,57 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     [selectedFirstLocation],
   );
 
-  // 번개 생성 모달 핸들러
-  const handleClickCreateMeeting = () => {
-    openModal('create');
-  };
-
-  // 캘린더 모달 핸들러
-  const handleClickCalendar = () => {
-    openModal('calender');
-  };
-
-  // 좋아요 버튼 클릭 핸들러
-  const handleClickLike = (meetingId: string) => {
-    likeMutation.mutate(meetingId);
-  };
-
   // 날짜 필터링 초기화 클릭 핸들러
   const handleResetDate = () => {
     setSelectedDate(null);
+    setTempDate(null);
     updateSearchParams('targetAt', '');
   };
 
   // 마감 임박, 참여 인원 필터링 초기화 클릭 핸들러
   const handleResetFilter = () => {
     setSelectedFilter('');
-    updateSearchParams('filter', '');
+    updateSearchParams('order', '');
   };
 
-  return (
-    <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[52px] flex items-center justify-between">
-        <div className="inline-flex h-[68px] flex-col items-start justify-start gap-[9px]">
-          <div className="text-center font-dunggeunmo text-3xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-          <div className="text-center font-pretandard text-2xl font-normal text-black">
-            맛집 탐방 같이 갈 사람, 누구 없나요?
-          </div>
-        </div>
-        <Button color="white" size="sm" type="submit" onClick={handleClickCreateMeeting}>
-          번개 만들기
-        </Button>
-      </div>
+  // 캘린더 내부 스타일
+  const getDayStyle = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
+    const isToday = date.getTime() === today.getTime();
+    const isSelected = tempDate?.getTime() === date.getTime();
+    const isFiltered = selectedDate?.getTime() === date.getTime();
+
+    return {
+      width: '32px',
+      height: '32px',
+      display: 'flex',
+      padding: '10px',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '5px',
+      color: '#8c8c8c',
+
+      ...(isToday && { fontWeight: 'bold', color: 'black' }),
+      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
+    };
+  };
+
+  const { likeMutation } = useLikeMutation();
+
+  return (
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
             onClick={() => handleCategoryClick(category)}
-            className="cursor-pointer focus:outline-none"
+            className="cursor-pointer font-semibold focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -292,8 +224,8 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -305,47 +237,60 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
             onSelect={handleSelectSecondLocation}
           />
           <DropDown
+            align="middle"
             options={
-              <DatePicker
-                locale={ko}
-                inline
-                selected={selectedDate}
-                onChange={handleDateChange}
-                minDate={new Date()}
-                dayClassName={(date) => {
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-
-                  const isToday = date.getTime() === today.getTime();
-                  const isSelected = selectedDate?.getTime() === date.getTime();
-
-                  if (isSelected) return 'custom-selected'; // 선택된 날짜
-                  if (isToday) return 'custom-today'; // 오늘 날짜
-                  return 'custom-default'; // 기본 날짜
-                }}
-                calendarClassName="custom-calendar"
-              />
-            }
-            trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
-                <div onClick={handleResetDate}>
-                  <Icon path={selectedDate ? 'x' : 'chevron_down'} />
+              <div className="flex flex-col gap-[10px] p-3">
+                <DatePicker
+                  locale={ko}
+                  inline
+                  selected={tempDate}
+                  onChange={setTempDate}
+                  minDate={new Date()}
+                  calendarClassName="custom-calendar"
+                  renderDayContents={(day, date) => <div style={getDayStyle(date)}>{day}</div>}
+                />
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    onClick={handleResetDate}
+                    className="inline-flex items-center justify-center gap-2.5 self-stretch overflow-hidden rounded-xl border border-[#1e1e1e] bg-white  py-2.5"
+                  >
+                    <div className="relative w-[145px] justify-start text-center font-['Pretendard'] text-sm font-semibold leading-tight text-[#1e1e1e]">
+                      초기화
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDateConfirm}
+                    className="inline-flex w-[145px] items-center justify-center gap-2.5 self-stretch overflow-hidden rounded-xl bg-black py-2.5"
+                  >
+                    <div className="relative justify-start text-center font-['Pretendard'] text-sm font-semibold leading-tight text-white">
+                      완료
+                    </div>
+                  </button>
                 </div>
               </div>
             }
-            onSelect={handleClickCalendar}
+            trigger={
+              <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate ? formatShortDate(selectedDate.toISOString()) : '날짜'}
+                <div onClick={handleResetDate}>
+                  <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
+                </div>
+              </div>
+            }
+            onSelect={() => openModal('calendar')}
           />
         </div>
         <DropDown
+          align="right"
           options={[defaultFilter, participantFilter]}
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-              {selectedFilter || defaultFilter}
+            <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
-                <Icon path={selectedFilter ? 'x' : 'chevron_down'} />
+                <Icon path={selectedFilter ? 'exit' : 'sort'} />
               </div>
             </div>
           }
@@ -355,18 +300,24 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 번개 리스트 */}
       <div>
-        {isLoading && <MeetingCardLoading />}
-        {isError && <MeetingCardError />}
+        {isLoading && (
+          <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <MeetingCardLoading key={index} />
+            ))}
+          </div>
+        )}
         {!isLoading && !isError && meetings.length === 0 && (
           <EmptyMessage firstLine="아직 번개가 없어요" secondLine="지금 번개를 만들어 보세요!" />
         )}
         {!isLoading && !isError && (
           <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
             {meetings.map((meeting: Meeting, index) => (
-              <MeetingItem
+              <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => handleClickLike(meeting.id)}
+                onClick={() => likeMutation.mutate(meeting.id)}
+                priority={index < 10}
               />
             ))}
           </div>
@@ -375,7 +326,13 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
 
       {/* 무한 스크롤 트리거 */}
       <div ref={observerRef} className="h-10" />
-      {isFetchingNextPage && <MeetingCardLoading />}
+      {isFetchingNextPage && (
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <MeetingCardLoading key={index} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

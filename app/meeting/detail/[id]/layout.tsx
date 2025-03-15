@@ -20,7 +20,7 @@ export default function MeetingLayout({
   bottombar,
 }: MeetingLayoutProps) {
   return (
-    <div className="mx-auto flex max-w-5xl flex-col">
+    <div className="mx-auto flex max-w-7xl flex-col px-[5%] lg:px-0">
       {card && <div>{card}</div>}
       {host && <div>{host}</div>}
       {description && <div>{description}</div>}

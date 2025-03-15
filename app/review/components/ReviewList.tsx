@@ -1,109 +1,39 @@
 'use client';
 
 import { ko } from 'date-fns/locale';
-import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import DatePicker from 'react-datepicker';
 
-import Icon from '@/components/shared/Icon';
-import Chip from '@/components/ui/chip/Chip';
-import DropDown from '@/components/ui/DropDown';
+import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import DropDown from '@/components/ui/dropdown/DropDown';
+import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
+import EmptyMessage from '@/components/ui/list/EmptyMessage';
+import Icon from '@/components/utils/Icon';
+import useReview from '@/hooks/useReview';
 import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
 import { regions } from '@/types/regions';
-import { Review } from '@/types/review';
+import { Reviews } from '@/types/review';
+import { formatShortDate } from '@/utils/formatDateTime';
 
 import ReviewItem from './ReviewItem';
 import ReviewStatus from './ReviewStatus';
-import SmallReviewSkeleton from './skeleton/ReviewSkeleton';
 import ReviewSkeleton from './skeleton/ReviewSkeleton';
 
-// Reviews 사용
-export interface ReviewListProps {
-  id: string;
-  category: string;
-  summary: string;
-  imageUrl: string;
-  targetAt: string;
-  city: string;
-  town: string;
-  participantCount: number;
-  review: Review;
+interface InitialReviewsProps {
+  initialReviews: {
+    reviews: Reviews[];
+    totalCount: number;
+  };
 }
 
-// TODO: 실제 api에서 데이터 가져오기
-const reviews: ReviewListProps[] = [
-  {
-    id: '0',
-    category: '카페',
-    summary: '카페에서 공부해요!',
-    imageUrl: 'https://codeit-doit.s3.ap-northeast-2.amazonaws.com/lightening/43/image.jpg',
-    targetAt: '2025-03-06T02:50:00.155',
-    city: '서울',
-    town: '강동구',
-    participantCount: 3,
-    review: {
-      id: '0',
-      writer: '르키비키자너',
-      profileImage: '',
-      content:
-        '카페에서 공부하니까 더 잘 되는 느?낌 카페에서 공부하니까 더 잘 되는 느?낌 카페에서 공부하니까 더 잘 되는 느?낌 ',
-      date: '2025-03-08T02:50:00.155',
-      count: 3,
-    },
-  },
-  {
-    id: '1',
-    category: '보드게임',
-    summary: '보드게임 정복하러 가실 분',
-    imageUrl: 'https://codeit-doit.s3.ap-northeast-2.amazonaws.com/lightening/40/image.jpg',
-    targetAt: '2025-03-12T02:50:00.155',
-    city: '경기',
-    town: '화성시',
-    participantCount: 7,
-    review: {
-      id: '1',
-      writer: '김정목',
-      profileImage: '',
-      content: '제가 1등을 해서 그런지 재밌었네요~~~',
-      date: '2025-03-13T02:50:00.155',
-      count: 5,
-    },
-  },
-];
-
-// 드롭다운 재사용 컴포넌트
-function FilterDropdown({
-  options,
-  selectedValue,
-  onSelect,
-}: {
-  options: string[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <DropDown
-      options={options}
-      onSelect={onSelect}
-      selectedValue={selectedValue}
-      trigger={
-        <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-          {selectedValue}
-          <Icon path="chevron_down" />
-        </div>
-      }
-      optionClassName="justify-start min-w-[95px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
-    />
-  );
-}
-
-export default function ReviewList() {
+export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   const { openModal } = useModalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const { reviews } = initialReviews;
 
   // URL에서 가져온 검색 조건을 상태로 관리
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '전체');
@@ -116,7 +46,7 @@ export default function ReviewList() {
   const [selectedDate, setSelectedDate] = useState(
     searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
   );
-  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('filter') || '');
+  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   const meetingLocationFirst = useMemo(() => [defaultFirstOption, ...Object.keys(regions)], []);
@@ -125,13 +55,23 @@ export default function ReviewList() {
     [selectedFirstLocation],
   );
 
+  // 임시 날짜 상태
+  const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
+
+  // useInfiniteQuery를 사용해 모든 리뷰 데이터 가져오기
+  const { isLoading, isError, isFetchingNextPage } = useReview({
+    category: selectedCategory,
+    city: selectedFirstLocation,
+    town: selectedSecondLocation,
+    targetAt: selectedDate,
+    initialReviews: initialReviews.reviews,
+  });
+
   useEffect(() => {
     setSelectedCategory(searchParams.get('category') || '전체');
     setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
     setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
-    setSelectedDate(
-      searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
-    );
+    setSelectedFilter(searchParams.get('order') || '');
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
@@ -178,32 +118,20 @@ export default function ReviewList() {
     updateSearchParams('location_2', selected);
   };
 
-  // 날짜 변경 핸들러
-  const handleDateChange = (date: Date | null) => {
-    if (date?.toDateString() === selectedDate?.toDateString()) {
-      setSelectedDate(null);
-      updateSearchParams('targetAt', '');
-    } else if (date) {
-      const fixedDate = new Date(date);
-      fixedDate.setHours(12, 0, 0, 0); // **12시로 고정** (UTC 보정용)
-      setSelectedDate(fixedDate);
-      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`); // ISO 포맷 유지
-    } else {
-      setSelectedDate(null);
-      updateSearchParams('targetAt', '');
+  // 날짜 확인 핸들러
+  const handleDateConfirm = () => {
+    setSelectedDate(tempDate);
+    if (tempDate) {
+      const fixedDate = new Date(tempDate);
+      fixedDate.setHours(12, 0, 0, 0); // UTC 보정
+      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`);
     }
   };
 
   // 마감 임박, 참여 인원 필터링 클릭 핸들러
-  // TODO: 실제 api에 맞는 params 참조
   const handleSelectFilter = (selected: string) => {
     setSelectedFilter(selected);
-    updateSearchParams('filter', selected);
-  };
-
-  // 캘린더 모달 핸들러
-  const handleClickCalendar = () => {
-    openModal('calender');
+    updateSearchParams('order', selected);
   };
 
   // 날짜 필터링 초기화 클릭 핸들러
@@ -215,27 +143,45 @@ export default function ReviewList() {
   // 마감 임박, 참여 인원 필터링 초기화 클릭 핸들러
   const handleResetFilter = () => {
     setSelectedFilter('');
-    updateSearchParams('filter', '');
+    updateSearchParams('order', '');
+  };
+
+  // 캘린더 내부 스타일
+  const getDayStyle = (date: Date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const isToday = date.getTime() === today.getTime();
+    const isSelected = tempDate?.getTime() === date.getTime();
+    const isFiltered = selectedDate?.getTime() === date.getTime();
+
+    return {
+      width: '32px',
+      height: '32px',
+      display: 'flex',
+      padding: '10px',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: '5px',
+      color: '#8c8c8c',
+
+      ...(isToday && { fontWeight: 'bold', color: 'black' }),
+      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
+    };
   };
 
   return (
-    <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
-      {/* 제목 */}
-      <div className="mb-[52px] flex flex-col gap-4">
-        <Image src="/assets/logo.svg" alt="logo" width={100} height={100} />
-        <div>번개팅을 이용한 분들은 이렇게 느꼈어요 🫶</div>
-      </div>
-
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
             onClick={() => handleCategoryClick(category)}
-            className="cursor-pointer focus:outline-none"
+            className="cursor-pointer font-semibold focus:outline-none"
           >
-            <Chip
+            <CategoryFilter
               text={category}
               size="lg"
               mode={selectedCategory === category ? 'dark' : 'light'}
@@ -245,15 +191,13 @@ export default function ReviewList() {
       </div>
 
       {/* 리뷰 점수 */}
-      <div className="flex justify-center">
-        <div className="mb-10 flex w-[1000px] items-center justify-center border-y-gray-200">
-          <ReviewStatus reviews={reviews} />
-        </div>
+      <div className="mb-[30px] flex max-w-[1200px] md:mb-6 lg:mb-10">
+        <ReviewStatus reviews={reviews} />
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -265,47 +209,59 @@ export default function ReviewList() {
             onSelect={handleSelectSecondLocation}
           />
           <DropDown
+            align="middle"
             options={
-              <DatePicker
-                locale={ko}
-                inline
-                selected={selectedDate}
-                onChange={handleDateChange}
-                minDate={new Date()}
-                dayClassName={(date) => {
-                  const today = new Date();
-                  today.setHours(0, 0, 0, 0);
-
-                  const isToday = date.getTime() === today.getTime();
-                  const isSelected = selectedDate?.getTime() === date.getTime();
-
-                  if (isSelected) return 'custom-selected'; // 선택된 날짜
-                  if (isToday) return 'custom-today'; // 오늘 날짜
-                  return 'custom-default'; // 기본 날짜
-                }}
-                calendarClassName="custom-calendar"
-              />
-            }
-            trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
-                <div onClick={handleResetDate}>
-                  <Icon path={selectedDate ? 'x' : 'chevron_down'} />
+              <div className="flex flex-col gap-[10px] p-3">
+                <DatePicker
+                  locale={ko}
+                  inline
+                  selected={tempDate}
+                  onChange={setTempDate}
+                  calendarClassName="custom-calendar"
+                  renderDayContents={(day, date) => <div style={getDayStyle(date)}>{day}</div>}
+                />
+                <div className="flex justify-between">
+                  <button
+                    type="button"
+                    onClick={handleResetDate}
+                    className="inline-flex items-center justify-center gap-2.5 self-stretch overflow-hidden rounded-xl border border-[#1e1e1e] bg-white  py-2.5"
+                  >
+                    <div className="relative w-[145px] justify-start text-center font-['Pretendard'] text-sm font-semibold leading-tight text-[#1e1e1e]">
+                      초기화
+                    </div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleDateConfirm}
+                    className="inline-flex w-[145px] items-center justify-center gap-2.5 self-stretch overflow-hidden rounded-xl bg-black py-2.5"
+                  >
+                    <div className="relative justify-start text-center font-['Pretendard'] text-sm font-semibold leading-tight text-white">
+                      완료
+                    </div>
+                  </button>
                 </div>
               </div>
             }
-            onSelect={handleClickCalendar}
+            trigger={
+              <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate ? formatShortDate(selectedDate.toISOString()) : '날짜'}
+                <div onClick={handleResetDate}>
+                  <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
+                </div>
+              </div>
+            }
+            onSelect={() => openModal('calendar')}
           />
         </div>
         <DropDown
-          options={['최신순', '리뷰 높은 순', '참여 인원 순']}
+          align="right"
+          options={['리뷰 높은 순', '참여 인원 순']}
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-              {selectedFilter || '최신순'}
+            <div className="inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
               <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
-                <Icon path={selectedFilter ? 'x' : 'chevron_down'} />
+                <Icon path={selectedFilter ? 'exit' : 'sort'} />
               </div>
             </div>
           }
@@ -314,18 +270,22 @@ export default function ReviewList() {
       </div>
 
       {/* 리뷰 리스트 */}
-      <div className="flex flex-col gap-y-6">
-        {reviews.map((review) => (
-          <ReviewItem key={review.id} reviews={review} />
-        ))}
+      <div>
+        {isLoading && <ReviewSkeleton />}
+        {isError && <ReviewSkeleton />}
+        {!isLoading && !isError && reviews.length === 0 && (
+          <EmptyMessage firstLine="아직 작성한 리뷰가 없어요" />
+        )}
+        <div className="flex flex-col gap-y-6">
+          {reviews.map((review, index) => (
+            <ReviewItem key={review.reviewId} review={review} priority={index < 10} />
+          ))}
+        </div>
       </div>
 
       {/* 무한 스크롤 트리거 */}
-      {/* TODO: isLoading에 따른 스켈레톤 처리 */}
-      <ReviewSkeleton />
       <div ref={observerRef} className="h-10" />
-      {/* TODO: 무한 스크롤 처리 */}
-      {/* {isFetchingNextPage && <MeetingCardLoading />} */}
+      {isFetchingNextPage && <ReviewSkeleton />}
     </div>
   );
 }

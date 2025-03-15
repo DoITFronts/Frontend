@@ -16,8 +16,10 @@ export interface Participant {
   lighteningId: number;
   userId: number;
   name: string;
-  profileImage?: string;
+  image?: string;
   isHost: boolean;
+  email: string;
+  description: string;
 }
 
 export interface Host {
@@ -28,12 +30,6 @@ export interface Host {
   userBio: string;
 }
 
-export interface Description {
-  id: string;
-  title: string;
-  description: string;
-}
-
 export interface Meeting {
   id: string;
   category: MeetingCategory;
@@ -41,22 +37,26 @@ export interface Meeting {
   summary: string;
   imageUrl: string;
   targetAt: string;
+  endAt: string;
   city: string;
   town: string;
   participantCount: number;
   capacity: number;
+  minCapacity: number;
   isLiked: boolean;
   isJoined: boolean;
   isConfirmed: boolean;
   isCompleted: boolean;
+  chatRoomId: number;
   participants: Participant[];
 }
 
 export interface MeetingDetail extends Meeting {
   placeName: string;
+  latitude: string;
+  longitude: string;
   address: string;
-  host: Host;
-  description: Description;
+  description: string;
 }
 
 export interface CreateMeetingParams {
@@ -65,13 +65,23 @@ export interface CreateMeetingParams {
   address: string;
   city: string;
   town: string;
+  placeName: string;
+  latitude: string;
+  longitude: string;
   category: MeetingCategory;
   targetAt: string;
   endAt: string;
   capacity: number;
   minCapacity: number;
-  placeName: string;
-  latitude: string;
-  longitude: string;
   image?: File;
+}
+
+export interface FetchMeetingListParams {
+  category: string;
+  city: string;
+  town: string;
+  targetAt: Date | null;
+  page?: number;
+  size?: number;
+  order?: string;
 }
