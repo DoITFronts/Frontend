@@ -13,8 +13,8 @@ import {
 import Card from '@/components/ui/card/Card';
 import Category from '@/components/ui/card/component/Category';
 import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
-import categoryMap from '@/types/categoryMap';
-import { Participant } from '@/types/meeting';
+import categoryMap from '@/types/map/categoryMap';
+import { Participant } from '@/types/meeting/meeting';
 
 export default function DetailCard() {
   const params = useParams();
@@ -30,7 +30,7 @@ export default function DetailCard() {
 
   return (
     <Card mode="detail">
-      <div className="mt-14 flex w-full gap-6 flex-col md:flex-row lg:min-h-[17rem]">
+      <div className="mt-14 flex w-full flex-col gap-6 md:flex-row lg:min-h-[17rem]">
         <motion.div
           whileHover={{
             scaleX: 1.05,
@@ -38,7 +38,7 @@ export default function DetailCard() {
             translateX: '-2%',
           }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
-          className="relative flex w-full md:w-[24rem] lg:w-[32rem] items-center justify-center overflow-hidden"
+          className="relative flex w-full items-center justify-center overflow-hidden md:w-96 lg:w-[32rem]"
         >
           <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
           <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
@@ -48,7 +48,7 @@ export default function DetailCard() {
             width={384}
             height={200}
             alt="thumbnail"
-            className="w-full h-auto object-cover aspect-[4/3]"
+            className="aspect-[4/3] h-auto w-full object-cover"
           />
           <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
           <div className="absolute right-[0.8rem] top-4">

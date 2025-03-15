@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import fetchMeetingById from '@/api/client/meeting/fetchMeetingById';
 import updateMeetingDescription from '@/api/client/meeting/updateMeetingDescription';
-import { MeetingDetail } from '@/types/meeting';
+import { MeetingDetail } from '@/types/meeting/meeting';
 
 interface UpdateMeetingParams {
   meetingId: string;

@@ -13,9 +13,9 @@ import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';
 import useLikeToggle from '@/hooks/like/useLikeToggle';
 import useModalStore from '@/store/useModalStore';
-import categoryMap from '@/types/categoryMap';
-import { Meeting } from '@/types/meeting';
-import { cityMap } from '@/types/regions';
+import categoryMap from '@/types/map/categoryMap';
+import { Meeting } from '@/types/meeting/meeting';
+import { cityMap } from '@/types/map/regions';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 import ChipDate from '../chip/ChipDate';

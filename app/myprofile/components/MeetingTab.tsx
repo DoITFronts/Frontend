@@ -12,7 +12,7 @@ import Card from '@/components/ui/card/Card';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import ChipDate from '@/components/ui/chip/ChipDate';
 import useMeetingToggle from '@/hooks/meeting/useMeetingToggle';
-import { Meeting } from '@/types/meeting';
+import { Meeting } from '@/types/meeting/meeting';
 
 // 응답 타입 정의
 interface MeetingsResponse {

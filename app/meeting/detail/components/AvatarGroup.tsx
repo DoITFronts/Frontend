@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 import ProfileIcon from '@/components/utils/BaseProfile';
-import { Participant } from '@/types/meeting';
+import { Participant } from '@/types/meeting/meeting';
 
 interface AvatarGroupProps {
   count: number;

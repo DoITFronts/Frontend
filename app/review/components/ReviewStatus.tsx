@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
-import { Reviews } from '@/types/review';
+import { Reviews } from '@/types/review/review';
 
 export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
   // 점수별 개수 집계

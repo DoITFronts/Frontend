@@ -1,4 +1,4 @@
-import { CreateMeetingParams } from '@/types/createMeeting';
+import { CreateMeetingParams } from '@/types/meeting/createMeeting';
 
 import axiosInstance from '../../middleware/api';
 
