@@ -13,7 +13,7 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useLikeMeeting from '@/hooks/useLikeMeeting';
+import useLikeMeeting from '@/hooks/like/useLikeMeeting';
 import {
   defaultFilter,
   defaultFirstOption,

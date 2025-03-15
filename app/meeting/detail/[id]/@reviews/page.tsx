@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useParams } from 'next/navigation';
 import React, { useState } from 'react';
 
-import fetchDetailReview from '@/api/review/fetchDetailReview';
+import fetchDetailReview from '@/api/client/review/fetchDetailReview';
 import { ReviewListSkeleton } from '@/app/meeting/detail/components/skeleton/ReviewSkeleton';
 import Pagination from '@/components/ui/pagination/pagination';
 import ReviewItem from '@/components/ui/review/ReviewItem';

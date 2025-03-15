@@ -4,10 +4,12 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import createMeeting from '@/api/meeting/createMeeting';
+import { connectWebSocket } from '@/api/socket/websocket';
+import createMeeting from '@/api/client/meeting/createMeeting';
 import Button from '@/components/ui/button/Button';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import Icon from '@/components/utils/Icon';
+import chatStore from '@/store/chatStore';
 import useModalStore from '@/store/useModalStore';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
 
@@ -149,6 +151,8 @@ export default function CreateMeetingModal() {
       const response = await createMeeting(meetingData);
 
       if (response.id) {
+        chatStore.getState().openChat(response.chatRoomId);
+        connectWebSocket();
         router.push(`/meeting/detail/${response.id}`);
         toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
         closeModal();

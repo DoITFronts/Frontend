@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
 
-import { updateProfile } from '@/api/myPage/myPage';
+import { updateProfile } from '@/api/client/myPage/myPage';
 import Icon from '@/components/utils/Icon';
 import userProfile from '@/public/userProfile.svg';
 import useModalStore from '@/store/useModalStore';

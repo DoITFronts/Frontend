@@ -3,9 +3,9 @@
 import { motion } from 'framer-motion';
 
 import { LocationSkeleton } from '@/app/meeting/detail/components/skeleton/LocationSkeleton';
-import useKakaoMap from '@/hooks/useKakaoMap';
-import useKakaoPlaceInfo from '@/hooks/useKakaoPlaceInfo';
-import { useMeetingDetail } from '@/hooks/useMeetingDetail';
+import useKakaoMap from '@/hooks/map/useKakaoMap';
+import useKakaoPlaceInfo from '@/hooks/map/useKakaoPlaceInfo';
+import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
 
 declare global {
   interface Window {
