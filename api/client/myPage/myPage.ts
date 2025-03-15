@@ -1,5 +1,5 @@
 import useProfileStore from '@/store/useProfileStore';
-import categoryMap from '@/types/categoryMap';
+import categoryMap from '@/types/map/categoryMap';
 
 import axiosInstance from '../../middleware/api';
 

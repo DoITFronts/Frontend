@@ -11,7 +11,7 @@ import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import Icon from '@/components/utils/Icon';
 import chatStore from '@/store/chatStore';
 import useModalStore from '@/store/useModalStore';
-import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
+import { CreateMeetingParams, MeetingCategory } from '@/types/meeting/meeting';
 
 import CustomDatePicker from '../datePicker';
 

@@ -14,8 +14,8 @@ import useReview from '@/hooks/review/useReview';
 import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
-import { regions } from '@/types/regions';
-import { Reviews } from '@/types/review';
+import { regions } from '@/types/map/regions';
+import { Reviews } from '@/types/review/review';
 import { formatShortDate } from '@/utils/formatDateTime';
 
 import ReviewItem from './ReviewItem';

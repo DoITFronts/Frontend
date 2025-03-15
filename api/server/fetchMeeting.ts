@@ -1,5 +1,5 @@
 import fetchData from '@/api/middleware/request';
-import { FetchMeetingListParams } from '@/types/meeting';
+import { FetchMeetingListParams } from '@/types/meeting/meeting';
 
 export const fetchMeetingList = async (params: FetchMeetingListParams) =>
   fetchData('/api/v1/lightenings', params);

@@ -22,8 +22,8 @@ import {
 } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
-import { Meeting } from '@/types/meeting';
-import { regions } from '@/types/regions';
+import { Meeting } from '@/types/meeting/meeting';
+import { regions } from '@/types/map/regions';
 import { formatShortDate } from '@/utils/formatDateTime';
 
 import {

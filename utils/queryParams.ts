@@ -1,6 +1,6 @@
-import categoryMap from '@/types/categoryMap';
-import orderMap from '@/types/orderMap';
-import { cityMap } from '@/types/regions';
+import categoryMap from '@/types/map/categoryMap';
+import orderMap from '@/types/map/orderMap';
+import { cityMap } from '@/types/map/regions';
 
 const buildQueryParams = ({
   category,
