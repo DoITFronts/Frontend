@@ -11,7 +11,6 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useLikeMutation from '@/hooks/useLikeMutation';
 import useMeetingList from '@/hooks/useMeetingList';
 import {
   defaultFilter,
@@ -201,8 +200,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     };
   };
 
-  const { likeMutation } = useLikeMutation();
-
   return (
     <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
@@ -316,7 +313,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => likeMutation.mutate(meeting.id)}
+                onClick={() => null}
                 priority={index < 10}
               />
             ))}

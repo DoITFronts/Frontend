@@ -6,7 +6,7 @@ import { Meeting } from '@/types/meeting';
 const useLikeMutation = () => {
   const queryClient = useQueryClient();
 
-  const likeMutation = useMutation({
+  return useMutation({
     mutationFn: (meetingId: string) => toggleLike(meetingId),
     onMutate: async (meetingId: string) => {
       await queryClient.cancelQueries({ queryKey: ['meetings'] });
@@ -38,8 +38,6 @@ const useLikeMutation = () => {
       queryClient.invalidateQueries({ queryKey: ['meetings'] });
     },
   });
-
-  return { likeMutation };
 };
 
 export default useLikeMutation;
