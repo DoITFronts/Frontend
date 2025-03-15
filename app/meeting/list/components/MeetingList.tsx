@@ -18,8 +18,8 @@ import {
   defaultFirstOption,
   defaultSecondOption,
   participantFilter,
-} from '@/lib/constants';
-import meetingCategory from '@/lib/constants/meeting';
+} from '@/lib/constants/meeting';
+import meetingCategory from '@/lib/constants/meeting/meeting';
 import useModalStore from '@/store/useModalStore';
 import { Meeting } from '@/types/meeting/meeting';
 import { regions } from '@/types/map/regions';
