@@ -1,62 +1,23 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
-executors:
-  node-executor:
-    docker:
-      - image: circleci/node:18
+# Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
+# See: https://circleci.com/docs/orb-intro/
+orbs:
+  # See the Node orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
+  node: circleci/node@5.2
 
-jobs:
-  install-dependencies:
-    executor: node-executor
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
-      - run:
-          name: Install Dependencies
-          command: npm ci
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
-
-  run-tests:
-    executor: node-executor
-    steps:
-      - checkout
-      - run:
-          name: Run Tests with Coverage
-          command: npm test -- --coverage
-      - run:
-          name: Upload Coverage to Codecov
-          command: bash <(curl -s https://codecov.io/bash) -t $CODECOV_TOKEN
-
-  deploy:
-    executor: node-executor
-    steps:
-      - checkout
-      - run:
-          name: Build Project
-          command: npm run build
-      - run:
-          name: Deploy to Netlify
-          command: npm run deploy
-      - run:
-          name: Notify Sentry about Deployment
-          command: |
-            npx @sentry/cli releases new "v${CIRCLE_SHA1}"
-            npx @sentry/cli releases set-commits "v${CIRCLE_SHA1}" --auto
-            npx @sentry/cli releases finalize "v${CIRCLE_SHA1}"
-
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  version: 2
-  build-test-deploy:
+  sample: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - install-dependencies
-      - run-tests:
-          requires:
-            - install-dependencies
-      - deploy:
-          requires:
-            - run-tests
+      - node/test:
+          # This is the node version to use for the `cimg/node` tag
+          # Relevant tags can be found on the CircleCI Developer Hub
+          # https://circleci.com/developer/images/image/cimg/node
+          version: '20.18.3'
+          # If you are using yarn, change the line below from "npm" to "yarn"
+          pkg-manager: npm
