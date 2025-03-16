@@ -1,28 +1,25 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { toast } from 'react-toastify';
+import { useState } from "react";
+import { toast } from "react-toastify";
 
-import createReview from '@/api/client/review/createReview';
-import Button from '@/components/ui/button/Button';
-import ReviewHeartSelectable from '@/components/ui/review/ReviewHeartSelectable'; // 새로운 별점 컴포넌트
-import Icon from '@/components/utils/Icon';
-import modalStore from '@/store/modalStore';
+import createReview from "@/api/client/review/createReview";
+import Button from "@/components/ui/button/Button";
+import ReviewHeartSelectable from "@/components/ui/review/ReviewHeartSelectable";
+import Icon from "@/components/utils/Icon";
 import {
   REVIEW_SUBMIT_SUCCESS,
   REVIEW_RATING_ERROR,
   REVIEW_SUBMISSION_ERROR,
   REVIEW_EMPTY_ERROR,
-} from '@/lib/constants/toast';
+} from "@/lib/constants/toast";
+import modalStore from "@/store/modalStore";
 
-interface CreateReviewModalProps {
-  meetingId: string;
-}
-
-export default function CreateReviewModal({ meetingId }: CreateReviewModalProps) {
-  const { closeModal } = modalStore();
+export default function CreateReviewModal() {
+  const { closeModal, modalProps } = modalStore();
+  const meetingId = modalProps?.meetingId;
   const [score, setScore] = useState(0);
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const maxLength = 50;
 
   const handleSubmit = async () => {
@@ -47,7 +44,9 @@ export default function CreateReviewModal({ meetingId }: CreateReviewModalProps)
   return (
     <div className="flex max-h-[95vh] w-[400px] flex-col rounded-xl border border-black bg-white p-6 shadow-lg">
       <div className="flex items-center justify-between">
-        <span className="font-dunggeunmo text-xl text-black">{'< 리뷰쓰기 >'}</span>
+        <span className="font-dunggeunmo text-xl text-black">
+          {"< 리뷰쓰기 >"}
+        </span>
         <button type="button" onClick={closeModal}>
           <Icon path="X" width="24" height="24" />
         </button>
@@ -74,10 +73,21 @@ export default function CreateReviewModal({ meetingId }: CreateReviewModalProps)
         </div>
       </div>
       <div className="mt-6 flex justify-between gap-2">
-        <Button color="white" type="button" size="sm" className="w-full" onClick={closeModal}>
+        <Button
+          color="white"
+          type="button"
+          size="sm"
+          className="w-full"
+          onClick={closeModal}
+        >
           취소
         </Button>
-        <Button color="filled" type="button" className="w-full" onClick={handleSubmit}>
+        <Button
+          color="filled"
+          type="button"
+          className="w-full"
+          onClick={handleSubmit}
+        >
           완료
         </Button>
       </div>
