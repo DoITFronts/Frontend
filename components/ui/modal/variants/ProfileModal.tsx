@@ -11,6 +11,8 @@ import profileStore from '@/store/profileStore';
 
 import Button from '../../button/Button';
 
+import { PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_ERROR } from '@/lib/constants/toast';
+
 const MAX_NICKNAME_LENGTH = 8;
 const MAX_DESCRIPTION_LENGTH = 50;
 
@@ -59,10 +61,10 @@ export default function ProfileModal() {
         },
         selectedImage,
       );
-      toast.success('프로필이 성공적으로 수정되었습니다.', { autoClose: 900 });
+      toast.success(PROFILE_UPDATE_SUCCESS);
       closeModal();
     } catch (error) {
-      toast.error('프로필 수정에 실패했습니다.', { autoClose: 900 });
+      toast.error(PROFILE_UPDATE_ERROR);
     } finally {
       setIsSubmitting(false);
     }

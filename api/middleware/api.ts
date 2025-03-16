@@ -41,14 +41,9 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   async (error: AxiosError) => {
-    // error Toast 띄우기
-    toast.error((error.response?.data as { message?: string })?.message || '오류가 발생했습니다', {
-      hideProgressBar: true,
-      autoClose: 900,
-      position: 'top-center',
-      theme: 'colored',
-    });
-    toast.clearWaitingQueue(); // toast 여러번 눌렀을때, 뒤에 대기중인 toast 지우기 (1번만 실행되게)
+    // 백엔드 에러 메세지 받아서 -> 전역으로 Toast 띄우기
+    // toast.error((error.response?.data as { message?: string })?.message || '오류가 발생했습니다');
+    // toast.clearWaitingQueue(); // toast 여러번 눌렀을때, 뒤에 대기중인 toast 지우기 (1번만 실행되게)
 
     if (!error.response) {
       console.error('No response from server');

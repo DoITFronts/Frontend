@@ -15,7 +15,7 @@ import {
 import Button from "@/components/ui/button/Button";
 import MeetingStatus from "@/components/ui/card/component/MeetingStatus";
 import DeleteMeetingModal from "@/components/ui/modal/variants/DeleteMeetingModal";
-import useLikeToggle from "@/hooks/like/useLikeToggle";
+// import useLikeToggle from '@/hooks/like/useLikeToggle';
 import modalStore from "@/store/modalStore";
 import categoryMap from "@/types/map/categoryMap";
 import { Meeting } from "@/types/meeting/meeting";
@@ -33,6 +33,13 @@ import profileStore from "@/store/profileStore";
 import Category from "./component/Category";
 import HostInfo from "./component/HostInfo";
 
+import {
+  MEETING_JOIN_SUCCESS,
+  MEETING_CANCEL_SUCCESS,
+  MEETING_DELETE_SUCCESS,
+  GENERAL_ERROR,
+} from "@/lib/constants/toast";
+
 interface Props {
   meeting: Meeting;
   onClick: () => void;
@@ -41,11 +48,9 @@ interface Props {
 
 export default function CardItem({ meeting, onClick, priority }: Props) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
-  const { isLiked, handleLikeClick } = useLikeToggle(
-    meeting.id,
-    meeting.isLiked,
-    onClick,
-  );
+
+  // const { isLiked, handleLikeClick } = useLikeToggle(meeting.id, meeting.isLiked, onClick);
+
   const [isConfirmed, setIsConfirmed] = useState(meeting.isConfirmed);
   const [isCompleted, setIsCompleted] = useState(meeting.isCompleted);
   const [isJoined, setIsJoined] = useState(meeting.isJoined);
@@ -85,20 +90,23 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
         setIsCompleted(participantCount - 1 >= meeting.capacity);
         setIsConfirmed(participantCount - 1 >= meeting.minCapacity);
         await leaveLightning(meeting.id);
-        toast.success("모임 참여를 취소했습니다.", { autoClose: 900 });
+
+        toast.success(MEETING_CANCEL_SUCCESS);
       } else {
         setIsJoined(true);
         setParticipantCount((prevCount) => prevCount + 1);
         setIsCompleted(participantCount + 1 >= meeting.capacity);
         setIsConfirmed(participantCount + 1 >= meeting.minCapacity);
         await joinLightning(meeting.id);
-        toast.success("모임에 참여했습니다.", { autoClose: 900 });
+
+        toast.success(MEETING_JOIN_SUCCESS);
       }
     } catch (error) {
       setIsJoined(meeting.isJoined);
       setParticipantCount(meeting.participantCount);
       setIsConfirmed(meeting.isConfirmed);
-      toast.error("오류가 발생했습니다.");
+
+      toast.error(GENERAL_ERROR);
     }
   };
 
@@ -109,7 +117,9 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
     }
 
     await deleteLightning(meeting?.id as string);
-    toast.success("모임을 삭제했습니다.", { autoClose: 900 });
+
+    toast.success(MEETING_DELETE_SUCCESS);
+
     // 추가적인 삭제 후 처리 로직이 필요할 수 있습니다.
   };
 
@@ -172,11 +182,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               {/* 이미지 */}
               <div className="relative flex h-[172px] w-full items-center justify-center overflow-hidden md:h-[200px]">
                 <div className="absolute left-0 top-0 z-10">
-                  <Card.Like
-                    isLiked={isLiked}
-                    onClick={handleLikeClick}
-                    meetingId={meeting.id}
-                  />
+                  <Card.Like isLiked={meeting.isLiked} meetingId={meeting.id} />
                 </div>
                 <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />

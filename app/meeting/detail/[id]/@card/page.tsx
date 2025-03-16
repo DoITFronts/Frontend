@@ -40,7 +40,7 @@ export default function DetailCard() {
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className="relative flex w-full items-center justify-center overflow-hidden md:w-96 lg:w-[32rem]"
         >
-          <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
+          <Card.Like meetingId={data.id} isLiked={data.isLiked} />
           <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
           <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
           <Image
@@ -50,7 +50,7 @@ export default function DetailCard() {
             alt="thumbnail"
             className="aspect-[4/3] h-auto w-full object-cover"
           />
-          <Card.Like meetingId={data.id} isLiked={data.isLiked} onClick={() => null} />
+          <Card.Like meetingId={data.id} isLiked={data.isLiked} />
           <div className="absolute right-[0.8rem] top-4">
             <Category type={reverseCategoryMap[data.category]} />
           </div>

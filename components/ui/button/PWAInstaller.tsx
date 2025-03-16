@@ -4,11 +4,10 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
+import Button from '@/components/ui/button/Button';
 import { PWA_INSTALL_ERROR } from '@/lib/constants/toast/text/errorText';
 import { PWA_DEVICE_WARNIG } from '@/lib/constants/toast/text/warningText';
 import usePWA from '@/lib/pwa';
-
-import Button from '@/components/ui/button/Button';
 
 const fadeInVariant = {
   hidden: { opacity: 0, y: 50 },
@@ -16,13 +15,11 @@ const fadeInVariant = {
 };
 
 export default function PWAInstaller() {
-  const { isInstallable, isAppleDevice, handleInstall } = usePWA();
-  const [isDesktop, setIsDesktop] = useState(false);
+  const { isAppleDevice, handleInstall } = usePWA();
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isMobile = /iphone|ipad|ipod|android/.test(userAgent);
-    setIsDesktop(!isMobile);
   }, []);
 
   const onInstallClick = async () => {
@@ -33,8 +30,6 @@ export default function PWAInstaller() {
       if (!installed) toast.error(PWA_INSTALL_ERROR);
     }
   };
-
-  if (!isInstallable || isDesktop) return null;
   return (
     <motion.section
       initial="hidden"
