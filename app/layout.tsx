@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   openGraph: {
     type: 'website',
-    url: 'https://yourwebsite.com',
+    url: 'https://doitz.netlify.app',
     title: '번개의 시작, 번개팅',
     description: '번개팅을 통해 다양한 번개 모임을 가져보세요!',
     siteName: '번개팅',
