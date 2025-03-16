@@ -79,6 +79,7 @@ export default function GNB() {
         {isUserLoggedIn() ? (
           <div>
             <DropDown
+              align="right"
               trigger={
                 imageUrl ? (
                   <div className="mt-1 flex items-center overflow-hidden gap-1 md:gap-[0.625rem] ml-1 md:ml-5">
