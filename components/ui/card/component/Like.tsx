@@ -1,5 +1,5 @@
 import HeartIcon from '@/components/Icons/HeartIcon';
-import useLikeMutation from '@/hooks/useLikeMutation';
+import useLikeMutation from '@/hooks/like/useLikeMutation';
 
 function Like({
   meetingId,

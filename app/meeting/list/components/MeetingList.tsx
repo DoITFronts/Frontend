@@ -11,8 +11,8 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useLikeMutation from '@/hooks/useLikeMutation';
-import useMeetingList from '@/hooks/useMeetingList';
+import useLikeMutation from '@/hooks/like/useLikeMutation';
+import useMeetingList from '@/hooks/meeting/useMeetingList';
 import {
   defaultFilter,
   defaultFirstOption,
@@ -21,8 +21,8 @@ import {
 } from '@/lib/constants';
 import meetingCategory from '@/lib/constants/meeting';
 import useModalStore from '@/store/useModalStore';
-import { Meeting } from '@/types/meeting';
-import { regions } from '@/types/regions';
+import { Meeting } from '@/types/meeting/meeting';
+import { regions } from '@/types/map/regions';
 import { formatShortDate } from '@/utils/formatDateTime';
 
 import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';

@@ -2,9 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import useUserStore from '@/store/user/userStore';
-import { signinUser } from '@/api/user/auth';
+import { signinUser } from '@/api/client/user/auth';
 import { setToken, decodeToken } from '@/utils/auth/tokenUtils';
-import { fetchProfile } from '@/api/myPage/myPage';
+import { fetchProfile } from '@/api/client/myPage/myPage';
 
 export const useSignin = () => {
   const router = useRouter();
