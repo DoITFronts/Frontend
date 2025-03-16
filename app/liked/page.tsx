@@ -13,17 +13,17 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useLikeMeeting from '@/hooks/useLikeMeeting';
+import useLikeMeeting from '@/hooks/like/useLikeMeeting';
 import {
   defaultFilter,
   defaultFirstOption,
   defaultSecondOption,
   participantFilter,
-} from '@/lib/constants';
-import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
-import { Meeting } from '@/types/meeting';
-import { regions } from '@/types/regions';
+} from '@/lib/constants/meeting';
+import meetingCategory from '@/lib/constants/meeting/meeting';
+import modalStore from '@/store/modalStore';
+import { Meeting } from '@/types/meeting/meeting';
+import { regions } from '@/types/map/regions';
 import { formatShortDate } from '@/utils/formatDateTime';
 
 import {
@@ -32,7 +32,7 @@ import {
 } from '../meeting/list/components/skeleton/MeetingCardSkeleton';
 
 export default function LikedPage() {
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 

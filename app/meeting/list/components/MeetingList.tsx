@@ -11,18 +11,17 @@ import DropDown from '@/components/ui/dropdown/DropDown';
 import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
-import useLikeMutation from '@/hooks/useLikeMutation';
-import useMeetingList from '@/hooks/useMeetingList';
+import useMeetingList from '@/hooks/meeting/useMeetingList';
 import {
   defaultFilter,
   defaultFirstOption,
   defaultSecondOption,
   participantFilter,
-} from '@/lib/constants';
-import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
-import { Meeting } from '@/types/meeting';
-import { regions } from '@/types/regions';
+} from '@/lib/constants/meeting';
+import meetingCategory from '@/lib/constants/meeting/meeting';
+import modalStore from '@/store/modalStore';
+import { Meeting } from '@/types/meeting/meeting';
+import { regions } from '@/types/map/regions';
 import { formatShortDate } from '@/utils/formatDateTime';
 
 import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
@@ -48,7 +47,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   );
   const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
 
   // 임시 날짜 상태
   const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
@@ -201,8 +200,6 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
     };
   };
 
-  const { likeMutation } = useLikeMutation();
-
   return (
     <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
@@ -316,7 +313,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
               <CardItem
                 key={`${meeting.id}-${index}`}
                 meeting={meeting}
-                onClick={() => likeMutation.mutate(meeting.id)}
+                onClick={() => null}
                 priority={index < 10}
               />
             ))}

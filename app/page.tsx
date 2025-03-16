@@ -22,7 +22,7 @@ export default function Page() {
   const router = useRouter();
 
   return (
-    <div className="w-full bg-black font-['Pretendard'] text-white">
+    <div className="pb-10 w-full bg-black font-['Pretendard'] text-white">
       <motion.section
         initial="hidden"
         whileInView="visible"

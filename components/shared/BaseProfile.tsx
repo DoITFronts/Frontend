@@ -1,5 +1,5 @@
 import { useThemeStore } from '@/store/themeStore';
-import useProfileStore from '@/store/useProfileStore';
+import profileStore from '@/store/profileStore';
 
 interface ProfileIconProps {
   size?: number | 'small' | 'medium' | 'large';
@@ -7,7 +7,7 @@ interface ProfileIconProps {
 }
 
 function ProfileIcon({ size = 'medium', id }: ProfileIconProps) {
-  const { imageUrl } = useProfileStore();
+  const { imageUrl } = profileStore();
   const userTheme = useThemeStore((state) => state.theme);
 
   const isOdd = id ? Number(id) % 2 !== 0 : userTheme === 'light';

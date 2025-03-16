@@ -8,8 +8,8 @@ import Category from '@/components/ui/card/component/Category';
 import HostInfo from '@/components/ui/card/component/HostInfo';
 import ChipDate from '@/components/ui/chip/ChipDate';
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
-import categoryMap from '@/types/categoryMap';
-import { Reviews } from '@/types/review';
+import categoryMap from '@/types/map/categoryMap';
+import { Reviews } from '@/types/review/review';
 
 export default function ReviewItem({ review, priority }: { review: Reviews; priority: boolean }) {
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });

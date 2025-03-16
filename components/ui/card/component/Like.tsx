@@ -1,16 +1,11 @@
-import HeartIcon from '@/components/Icons/HeartIcon';
-import useLikeMutation from '@/hooks/useLikeMutation';
+import HeartIcon from "@/components/Icons/HeartIcon";
+import useLikeMutation from "@/hooks/like/useLikeMutation";
+import { useState } from "react";
 
-function Like({
-  meetingId,
-  isLiked,
-  onClick,
-}: {
-  meetingId: string;
-  isLiked: boolean;
-  onClick: (meetingId: string) => void;
-}) {
-  const { likeMutation } = useLikeMutation();
+function Like({ meetingId, isLiked }: { meetingId: string; isLiked: boolean }) {
+  const { mutate } = useLikeMutation();
+  const [liked, setLiked] = useState(isLiked);
+
   return (
     <button
       type="button"
@@ -18,11 +13,11 @@ function Like({
       onClick={(event) => {
         event.stopPropagation(); // 부모 이벤트 전파 방지
         event.preventDefault(); // Link의 기본 동작(페이지 이동) 방지
-        onClick(meetingId);
-        likeMutation.mutate(meetingId); // 좋아요 기능 동작하도록 함
+        setLiked((prev) => !prev);
+        mutate(meetingId); // 좋아요 기능 동작하도록 함
       }}
     >
-      <HeartIcon variant={isLiked ? 'active' : 'inactive'} />
+      <HeartIcon variant={liked ? "active" : "inactive"} />
     </button>
   );
 }
