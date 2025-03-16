@@ -11,9 +11,9 @@ import FilterDropdown from '@/components/ui/dropdown/FilterDropdown';
 import EmptyMessage from '@/components/ui/list/EmptyMessage';
 import Icon from '@/components/utils/Icon';
 import useReview from '@/hooks/review/useReview';
-import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
-import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
+import { defaultFirstOption, defaultSecondOption } from '@/lib/constants/meeting';
+import meetingCategory from '@/lib/constants/meeting/meeting';
+import modalStore from '@/store/modalStore';
 import { regions } from '@/types/map/regions';
 import { Reviews } from '@/types/review/review';
 import { formatShortDate } from '@/utils/formatDateTime';
@@ -30,7 +30,7 @@ interface InitialReviewsProps {
 }
 
 export default function ReviewList({ initialReviews }: InitialReviewsProps) {
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { reviews } = initialReviews;

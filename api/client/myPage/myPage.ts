@@ -1,4 +1,4 @@
-import useProfileStore from '@/store/useProfileStore';
+import profileStore from '@/store/profileStore';
 import categoryMap from '@/types/map/categoryMap';
 
 import axiosInstance from '../../middleware/api';
@@ -11,7 +11,7 @@ interface FetchMyPageMeetingsParams {
 export const fetchProfile = async () => {
   try {
     const response = await axiosInstance.get('/api/v1/my-page/user');
-    useProfileStore.getState().setInitialProfile(response.data);
+    profileStore.getState().setInitialProfile(response.data);
     return response.data;
   } catch (error) {
     console.error('프로필 정보를 불러오는데 실패했습니다.: ', error);
@@ -35,7 +35,7 @@ export const updateProfile = async (
       },
     });
     const profileResponse = await axiosInstance.get('/api/v1/my-page/user');
-    useProfileStore.getState().setInitialProfile(profileResponse.data);
+    profileStore.getState().setInitialProfile(profileResponse.data);
     return response.data;
   } catch (error) {
     console.error('프로필 정보 수정에 실패했습니다.: ', error);

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import useLikeMeeting from '@/hooks/like/useLikeMeeting';
-import useLikeCountStore from '@/store/useLikeCountStore';
+import likeCountStore from '@/store/likeCountStore';
 
 const useLikedCount = () => {
   const { data } = useLikeMeeting({
@@ -12,7 +12,7 @@ const useLikedCount = () => {
     initialMeetings: [],
   });
 
-  const { setLikedMeetings } = useLikeCountStore();
+  const { setLikedMeetings } = likeCountStore();
 
   useEffect(() => {
     if (data?.pages) {

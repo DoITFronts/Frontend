@@ -1,0 +1,1 @@
+export const PWA_INSTALL_SUCCESS = '앱 설치가 완료되었습니다.';

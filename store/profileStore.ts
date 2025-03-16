@@ -16,7 +16,7 @@ const initialProfileState: User = {
   imageUrl: '',
 };
 
-const useProfileStore = create<ProfileStore>()(
+const profileStore = create<ProfileStore>()(
   persist(
     (set) => ({
       ...initialProfileState,
@@ -40,4 +40,4 @@ const useProfileStore = create<ProfileStore>()(
   ),
 );
 
-export default useProfileStore;
+export default profileStore;

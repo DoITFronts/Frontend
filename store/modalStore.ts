@@ -20,7 +20,7 @@ interface ModalStore extends ModalState {
   closeModal: () => void;
 }
 
-const useModalStore = create<ModalStore>((set) => ({
+const modalStore = create<ModalStore>((set) => ({
   isOpen: false,
   modalType: null,
   modalProps: null,
@@ -42,4 +42,4 @@ const useModalStore = create<ModalStore>((set) => ({
   },
 }));
 
-export default useModalStore;
+export default modalStore;

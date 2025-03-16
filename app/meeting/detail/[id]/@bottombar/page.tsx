@@ -10,7 +10,7 @@ import {
 import Button from '@/components/ui/button/Button';
 import useJoinLightning from '@/hooks/meeting/useJoinLightning';
 import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
@@ -36,7 +36,7 @@ export default function BottomFloatingBar() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
   const { joinMutation, leaveMutation } = useJoinLightning(meeting?.id as string);
   const [isJoined, setIsJoined] = useState(false);
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
 
   const handleJoinToggle = async () => {
     if (!isUserLoggedIn()) {

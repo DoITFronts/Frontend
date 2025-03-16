@@ -10,7 +10,7 @@ import Button from '@/components/ui/button/Button';
 import PlaceSearch from '@/components/ui/modal/SearchPlace';
 import Icon from '@/components/utils/Icon';
 import chatStore from '@/store/chatStore';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 import { CreateMeetingParams, MeetingCategory } from '@/types/meeting/meeting';
 
 import CustomDatePicker from '../datePicker';
@@ -24,7 +24,7 @@ const categoryKoreanMap = {
 };
 
 export default function CreateMeetingModal() {
-  const { closeModal } = useModalStore();
+  const { closeModal } = modalStore();
   const [meetingName, setMeetingName] = useState('');
   const [meetingSummary, setMeetingSummary] = useState('');
   const [meetingPlace, setMeetingPlace] = useState('');
