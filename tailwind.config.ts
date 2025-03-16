@@ -67,7 +67,7 @@ const config: Config = {
       },
       fontFamily: {
         dunggeunmo: ['DungGeunMo', 'sans-serif'],
-        pretandard: ['Pretendard', 'sans-serif'],
+        pretendard: ['var(--font-pretendard)', 'sans-serif'],
       },
       screens: {
         sm: { min: '361px' },
