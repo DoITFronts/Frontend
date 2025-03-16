@@ -68,7 +68,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <body className="custom-cursor">
         <link rel="preconnect" href="/" />
         <RootLayout>{children}</RootLayout>
-        <ToastContainer limit={1} />
+        <ToastContainer
+          position="top-center"
+          autoClose={900}
+          hideProgressBar
+          closeButton={false}
+          limit={1}
+        />
       </body>
     </html>
   );
