@@ -40,6 +40,9 @@ function MeetingList({
     data: meetingsData,
     isLoading,
     error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useMyPageMeetings({
     type: menuTab,
     category: activityTab || undefined,
@@ -47,18 +50,33 @@ function MeetingList({
 
   // 토글 관련 훅 사용
   const [meetings, setMeetings] = useState<Meeting[]>([]);
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const { ref: animationRef, inView: animationInView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+  const { ref: infiniteScrollRef, inView: infiniteScrollInView } = useInView({
+    threshold: 0.1,
+  });
   const { toggleMeeting } = useMeetingToggle(setMeetings);
   const { openModal } = modalStore();
 
   // 외부에서 데이터가 바뀌면 로컬 상태 업데이트
   useEffect(() => {
-    if (meetingsData && meetingsData.lighteningResponses) {
-      setMeetings(meetingsData.lighteningResponses);
+    if (meetingsData?.pages) {
+      const allMeetings = meetingsData.pages.flatMap(
+        (page) => page.lighteningResponses || [],
+      );
+      setMeetings(allMeetings);
     } else {
       setMeetings([]);
     }
   }, [meetingsData]);
+
+  useEffect(() => {
+    if (infiniteScrollInView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [infiniteScrollInView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const joinMutation = useToggleJoinMutation(joinLightning);
   const leaveMutation = useToggleJoinMutation(leaveLightning);
@@ -119,10 +137,10 @@ function MeetingList({
     <>
       {meetings.map((meeting) => (
         <motion.div
-          ref={ref}
+          ref={animationRef}
           key={meeting.id}
           initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
+          animate={animationInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.4, ease: "easeOut" }}
           className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
         >
@@ -202,6 +220,22 @@ function MeetingList({
           </Card>
         </motion.div>
       ))}
+      {hasNextPage && (
+        <div ref={infiniteScrollRef} className="my-4 flex justify-center">
+          {isFetchingNextPage ? (
+            <p>더 불러오는 중...</p>
+          ) : (
+            <p>더 불러오려면 스크롤하세요</p>
+          )}
+        </div>
+      )}
+      {!hasNextPage && meetings.length > 0 && (
+        <div className="col-span-3 flex h-20 items-center justify-center">
+          <p className="text-center text-base font-medium text-[#C0C1C2]">
+            모든 목록을 불러왔습니다
+          </p>
+        </div>
+      )}
     </>
   );
 }
