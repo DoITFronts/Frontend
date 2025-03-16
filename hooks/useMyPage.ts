@@ -4,7 +4,7 @@ import {
   fetchMyPageReviews,
   FetchParams,
 } from "@/api/client/myPage/myPage";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
 
 export const useMyPageMeetings = (params: FetchMyPageMeetingsParams) => {
   return useQuery({
