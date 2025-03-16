@@ -68,8 +68,10 @@ export default function ButtonBox({
   const handleChatClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
+    console.log(`🟢 채팅 버튼 클릭됨! Room ID: ${roomId}`); // ✅ 로그 추가
     if (roomId) {
       openChat(roomId);
+      console.log(`✅ chatStore 상태 업데이트: roomId=${roomId}, isOpen=true`);
     }
   };
 
@@ -80,6 +82,7 @@ export default function ButtonBox({
     <div className="flex size-auto gap-3">
       {showReviewButton ? (
         <button
+          type="button"
           className="w-[100px] whitespace-nowrap rounded-[12px] border border-yellow-600 bg-white px-5 py-2.5 text-base font-semibold text-yellow-600"
           onClick={handleReview}
         >
@@ -87,6 +90,7 @@ export default function ButtonBox({
         </button>
       ) : isHost ? (
         <button
+          type="button"
           className="w-[100px] whitespace-nowrap rounded-[12px] border border-red-500 bg-white px-5 py-2.5 text-base font-semibold text-red-500"
           onClick={handleDelete}
         >
@@ -94,6 +98,7 @@ export default function ButtonBox({
         </button>
       ) : isCompleted && !isJoined ? (
         <button
+          type="button"
           className="w-[100px] whitespace-nowrap rounded-[12px] border border-black bg-white px-5 py-2.5 text-base font-semibold text-black"
           disabled
         >
@@ -101,6 +106,7 @@ export default function ButtonBox({
         </button>
       ) : isJoined ? (
         <button
+          type="button"
           className="w-[100px] whitespace-nowrap rounded-[12px] border border-black bg-white px-5 py-2.5 text-base font-semibold text-black"
           onClick={handleCancel}
         >
@@ -108,6 +114,7 @@ export default function ButtonBox({
         </button>
       ) : (
         <button
+          type="button"
           className="flex w-[100px] rounded-[12px] bg-black px-5 py-2.5 text-base text-white"
           onClick={handleJoin}
         >
@@ -121,7 +128,7 @@ export default function ButtonBox({
           className="h-[44px] w-auto rounded-[12px] bg-yellow-6 p-2.5"
           onClick={handleChatClick}
         >
-          <Icon path="chat" width="28px" height="24px" />
+          <Icon path="chat/chat" width="28px" height="24px" />
         </button>
       )}
     </div>

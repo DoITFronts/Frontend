@@ -31,6 +31,7 @@
     "es-hangul": "^2.3.0",
     "framer-motion": "^12.4.7",
     "husky": "^9.1.7",
+    "immer": "^10.1.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
     "lottie-react": "^2.4.1",

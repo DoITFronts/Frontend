@@ -1,18 +1,15 @@
-import axios from 'axios';
+import axiosInstance from "@/api/middleware/api";
 
-const API_BASE_URL = '/api/v1/chat';
-
-export const fetchChatRooms = async () => {
-  const response = await axios.get(`${API_BASE_URL}/rooms`);
-  return response.data;
+const fetchChatMessages = async (roomId: number) => {
+  try {
+    const response = await axiosInstance.get(
+      `/api/v1/chat/rooms/${roomId}/messages`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("채팅 메시지 불러오기 실패:", error);
+    throw error;
+  }
 };
 
-export const fetchChatMessages = async (roomId: string) => {
-  const response = await axios.get(`${API_BASE_URL}/rooms/${roomId}/messages`);
-  return response.data;
-};
-
-export const joinChatRoom = async (roomId: string) => {
-  const response = await axios.post(`${API_BASE_URL}/rooms/${roomId}/join`);
-  return response.data;
-};
+export default fetchChatMessages;

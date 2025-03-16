@@ -3,7 +3,11 @@ import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 
 import withWebSocketAuth from "@/api/middleware/websocketMiddleware";
-import { CHAT_ENTER_SUCCESS, CHAT_SEND_ERROR, CHAT_SOCKET_ERROR } from "@/lib/constants/toast";
+import {
+  CHAT_ENTER_SUCCESS,
+  CHAT_SEND_ERROR,
+  CHAT_SOCKET_ERROR,
+} from "@/lib/constants/toast";
 import chatStore from "@/store/chatStore";
 
 let stompClient: Client | null = null;
@@ -62,15 +66,22 @@ export const disconnectWebSocket = () => {
 };
 
 export const sendMessage = (message: string) => {
-  const { currentRoomId } = chatStore.getState();
-  if (stompClient && stompClient.connected && message.trim() && currentRoomId) {
-    console.log(`📤 메시지 전송: ${message}`);
-    stompClient.publish({
-      destination: `/app/room/${currentRoomId}/sendMessage`,
-      body: JSON.stringify({ content: message }),
-    });
-  } else {
-    console.error("메시지 전송 실패: WebSocket이 연결되지 않음");
+  const { currentRoomId, addMessage } = chatStore.getState();
+
+  if (
+    !stompClient ||
+    !stompClient.connected ||
+    !message.trim() ||
+    !currentRoomId
+  ) {
+    console.error("❌ 메시지 전송 실패: WebSocket이 연결되지 않음");
     toast.error(CHAT_SEND_ERROR);
+    return;
   }
+  addMessage(message);
+  console.log("📤 메시지 즉시 추가됨:", message);
+  stompClient.publish({
+    destination: `/app/room/${currentRoomId}/sendMessage`,
+    body: JSON.stringify({ content: message }),
+  });
 };
