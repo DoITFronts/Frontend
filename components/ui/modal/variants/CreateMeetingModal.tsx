@@ -15,6 +15,14 @@ import { CreateMeetingParams, MeetingCategory } from '@/types/meeting/meeting';
 
 import CustomDatePicker from '../datePicker';
 
+import {
+  MEETING_CREATE_SUCCESS,
+  GENERAL_ERROR,
+  IMAGE_SIZE_ERROR,
+  SELECT_PLACE_ERROR,
+  SELECT_MEETING_TYPE_ERROR,
+} from '@/lib/constants/toast';
+
 const meetingCategories = Object.values(MeetingCategory);
 const categoryKoreanMap = {
   [MeetingCategory.GOURMET]: '맛집',
@@ -115,17 +123,17 @@ export default function CreateMeetingModal() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!meetingType) {
-      console.error('모임 유형을 선택해주세요');
+      toast.error(SELECT_MEETING_TYPE_ERROR);
       return;
     }
 
     if (!selectedPlace) {
-      console.error('장소를 선택해주세요');
+      toast.error(SELECT_PLACE_ERROR);
       return;
     }
 
     if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 900 });
+      toast.error(IMAGE_SIZE_ERROR);
       return;
     }
 
@@ -154,11 +162,11 @@ export default function CreateMeetingModal() {
         chatStore.getState().openChat(response.chatRoomId);
         connectWebSocket();
         router.push(`/meeting/detail/${response.id}`);
-        toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
+        toast.success(MEETING_CREATE_SUCCESS);
         closeModal();
       }
     } catch (error) {
-      toast.error('에러가 발생했습니다.', { autoClose: 900 });
+      toast.error(GENERAL_ERROR);
       console.error('Error: ', error);
     }
   };

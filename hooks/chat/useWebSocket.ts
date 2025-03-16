@@ -16,7 +16,7 @@ const useWebSocket = (token: string) => {
 
       socketRef.current.onopen = () => {
         console.log('WebSocket 연결됨');
-        toast.success('채팅방에 입장했습니다.', { autoClose: 900 });
+        toast.success('채팅방에 입장했습니다.');
 
         const subscribeMessage = JSON.stringify({
           type: 'SUBSCRIBE',

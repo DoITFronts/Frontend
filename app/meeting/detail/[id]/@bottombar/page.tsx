@@ -13,6 +13,13 @@ import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
 import modalStore from '@/store/modalStore';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
+import {
+  MEETING_JOIN_SUCCESS,
+  MEETING_CANCEL_SUCCESS,
+  URL_COPY_SUCCESS,
+  URL_COPY_ERROR,
+} from '@/lib/constants/toast';
+
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
   ALCOHOL: {
     title: '퇴근 후, 함께하는 가볍고 기분 좋은 한 잔! 🍻',
@@ -45,10 +52,10 @@ export default function BottomFloatingBar() {
     }
     if (isJoined) {
       await leaveMutation.mutate();
-      toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+      toast.success(MEETING_CANCEL_SUCCESS);
     } else {
       await joinMutation.mutate();
-      toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      toast.success(MEETING_JOIN_SUCCESS);
     }
     setIsJoined(!isJoined);
   };
@@ -57,10 +64,10 @@ export default function BottomFloatingBar() {
     navigator.clipboard
       .writeText(window.location.href)
       .then(() => {
-        toast.success('URL이 클립보드에 복사되었습니다.', { autoClose: 900 });
+        toast.success(URL_COPY_SUCCESS);
       })
       .catch(() => {
-        toast.error('URL 복사에 실패했습니다.', { autoClose: 900 });
+        toast.error(URL_COPY_ERROR);
       });
   };
 
