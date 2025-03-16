@@ -44,7 +44,13 @@ export default function DetailCard() {
           <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
           <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
           <Image
-            src={data.imageUrl || `/fallback/fallback_image_${data?.category?.toLowerCase()}.png`}
+            src={
+              data.imageUrl ||
+              `/fallback/fallback_default.png` ||
+              `/fallback/fallback_${data?.category?.toLowerCase()}.png`}
+            width={384}
+            height={200}
+            alt="thumbnail"
             width={384}
             height={200}
             alt="thumbnail"
