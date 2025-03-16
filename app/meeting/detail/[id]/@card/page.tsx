@@ -51,9 +51,6 @@ export default function DetailCard() {
             width={384}
             height={200}
             alt="thumbnail"
-            width={384}
-            height={200}
-            alt="thumbnail"
             className="aspect-[4/3] h-auto w-full object-cover"
           />
           <Card.Like meetingId={data.id} isLiked={data.isLiked} />
