@@ -43,7 +43,18 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
-  /*cursor: url('../public/assets/logo/cursor.png'), auto;*/
+}
+
+.custom-cursor {
+  cursor: url('/assets/cursor/cursor.svg') 30 30, auto !important;
+}
+
+.custom-cursor:hover {
+  cursor: url('/assets/cursor/cursor-hover.svg') 30 30, auto !important;
+}
+
+.custom-cursor:active {
+  cursor: url('/assets/cursor/cursor-click.svg') 30 30, auto !important;
 }
 
 .react-datepicker {

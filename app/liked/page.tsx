@@ -19,9 +19,9 @@ import {
   defaultFirstOption,
   defaultSecondOption,
   participantFilter,
-} from '@/lib/constants';
-import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
+} from '@/lib/constants/meeting';
+import meetingCategory from '@/lib/constants/meeting/meeting';
+import modalStore from '@/store/modalStore';
 import { Meeting } from '@/types/meeting/meeting';
 import { regions } from '@/types/map/regions';
 import { formatShortDate } from '@/utils/formatDateTime';
@@ -32,7 +32,7 @@ import {
 } from '../meeting/list/components/skeleton/MeetingCardSkeleton';
 
 export default function LikedPage() {
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
 

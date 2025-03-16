@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { PWA_INSTALL_ERROR } from '@/constants/errorText';
-import { PWA_DEVICE_WARNIG } from '@/constants/warningText';
+import { PWA_INSTALL_ERROR } from '@/lib/constants/toast/text/errorText';
+import { PWA_DEVICE_WARNIG } from '@/lib/constants/toast/text/warningText';
 import usePWA from '@/lib/pwa';
 
 import Button from '@/components/ui/button/Button';

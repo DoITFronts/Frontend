@@ -12,7 +12,7 @@ import Button from '@/components/ui/button/Button';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';
 import useLikeToggle from '@/hooks/like/useLikeToggle';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 import categoryMap from '@/types/map/categoryMap';
 import { Meeting } from '@/types/meeting/meeting';
 import { cityMap } from '@/types/map/regions';
@@ -37,7 +37,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
   const [isCompleted, setIsCompleted] = useState(meeting.isCompleted);
   const [isJoined, setIsJoined] = useState(meeting.isJoined);
   const [participantCount, setParticipantCount] = useState(meeting.participantCount);
-  const openModal = useModalStore((state) => state.openModal);
+  const openModal = modalStore((state) => state.openModal);
   const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {

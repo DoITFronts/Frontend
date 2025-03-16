@@ -7,7 +7,7 @@ interface LikeStore {
   likedCount: () => number;
 }
 
-const useLikeCountStore = create<LikeStore>((set, get) => ({
+const likeCountStore = create<LikeStore>((set, get) => ({
   likedMeetings: new Set(),
 
   toggleLike: (meetingId) =>
@@ -23,4 +23,4 @@ const useLikeCountStore = create<LikeStore>((set, get) => ({
   likedCount: () => get().likedMeetings.size,
 }));
 
-export default useLikeCountStore;
+export default likeCountStore;

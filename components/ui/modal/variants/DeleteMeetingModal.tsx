@@ -2,12 +2,12 @@
 
 import Button from '@/components/ui/button/Button';
 import Icon from '@/components/utils/Icon';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 
 export default function DeleteMeetingModal() {
-  const isOpen = useModalStore((state) => state.isOpen && state.modalType === 'delete');
-  const closeModal = useModalStore((state) => state.closeModal);
-  const modalProps = useModalStore((state) => state.modalProps);
+  const isOpen = modalStore((state) => state.isOpen && state.modalType === 'delete');
+  const closeModal = modalStore((state) => state.closeModal);
+  const modalProps = modalStore((state) => state.modalProps);
 
   const handleConfirm = () => {
     if (modalProps?.onConfirm) {

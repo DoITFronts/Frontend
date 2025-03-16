@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import useLikeCountStore from '@/store/useLikeCountStore';
+import likeCountStore from '@/store/likeCountStore';
 
 export default function useLikeToggle(
   meetingId: string,
   initialLiked: boolean,
   onClick: () => void,
 ) {
-  const { likedMeetings, toggleLike } = useLikeCountStore();
+  const { likedMeetings, toggleLike } = likeCountStore();
   const [isLiked, setIsLiked] = useState<boolean>(initialLiked);
 
   useEffect(() => {

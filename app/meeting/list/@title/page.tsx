@@ -1,10 +1,10 @@
 'use client';
 
 import Button from '@/components/ui/button/Button';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 
 export default function Header() {
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
 
   return (
     <div className="flex flex-col items-start justify-between sm:flex-row">

@@ -7,14 +7,14 @@ import createReview from '@/api/client/review/createReview';
 import Button from '@/components/ui/button/Button';
 import ReviewHeartSelectable from '@/components/ui/review/ReviewHeartSelectable'; // 새로운 별점 컴포넌트
 import Icon from '@/components/utils/Icon';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 
 interface CreateReviewModalProps {
   meetingId: string;
 }
 
 export default function CreateReviewModal({ meetingId }: CreateReviewModalProps) {
-  const { closeModal } = useModalStore();
+  const { closeModal } = modalStore();
   const [score, setScore] = useState(0);
   const [content, setContent] = useState('');
   const maxLength = 50;
