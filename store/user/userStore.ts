@@ -1,7 +1,8 @@
-import { create } from 'zustand';
-import { removeToken } from '@/utils/auth/tokenUtils';
+import { create } from "zustand";
 
-//TODO 타입으로 따로 분리
+import { removeToken } from "@/utils/auth/tokenUtils";
+
+// TODO 타입으로 따로 분리
 interface UserState {
   userId: number | null;
   nickname: string | null;

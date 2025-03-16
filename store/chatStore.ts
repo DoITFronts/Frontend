@@ -19,6 +19,7 @@ interface ChatState {
   closeChat: () => void;
   addMessage: (message: ChatMessage) => void;
   clearMessages: () => void;
+  setMessages: (messages: ChatMessage[]) => void;
 }
 
 const chatStore = create<ChatState>((set) => ({
@@ -27,18 +28,21 @@ const chatStore = create<ChatState>((set) => ({
   messages: [],
 
   openChat: (roomId) => {
-    console.log(`🟢 openChat 호출됨! roomId=${roomId}`);
+    console.log(`openChat 호출됨! roomId=${roomId}`);
     set({ isOpen: true, currentRoomId: roomId });
   },
 
   closeChat: () => {
-    console.log("🔴 채팅창 닫힘!");
+    console.log("채팅창 닫힘!");
     set({ isOpen: false, currentRoomId: null, messages: [] });
   },
 
   addMessage: (message) =>
     set(
       produce((state: ChatState) => {
+        if (!Array.isArray(state.messages)) {
+          state.messages = [];
+        }
         state.messages.push(message);
       }),
     ),
@@ -47,6 +51,13 @@ const chatStore = create<ChatState>((set) => ({
     set(
       produce((state: ChatState) => {
         state.messages = [];
+      }),
+    ),
+
+  setMessages: (messages) =>
+    set(
+      produce((state: ChatState) => {
+        state.messages = Array.isArray(messages) ? messages : [];
       }),
     ),
 }));

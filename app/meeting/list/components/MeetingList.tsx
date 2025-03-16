@@ -22,7 +22,7 @@ import meetingCategory from '@/lib/constants/meeting/meeting';
 import modalStore from '@/store/modalStore';
 import { Meeting } from '@/types/meeting/meeting';
 import { regions } from '@/types/map/regions';
-import { formatShortDate } from '@/utils/formatDateTime';
+import { formatShortDate } from '@/utils/timeUtils/formatDateTime';
 
 import { MeetingCardLoading } from './skeleton/MeetingCardSkeleton';
 
