@@ -9,7 +9,7 @@ import userProfile from '@/public/assets/userProfile.svg';
 import modalStore from '@/store/modalStore';
 import profileStore from '@/store/profileStore';
 
-import Button from '../../button/Button';
+import Button from '../../ui/button/Button';
 
 import { PROFILE_UPDATE_SUCCESS, PROFILE_UPDATE_ERROR } from '@/lib/constants/toast';
 

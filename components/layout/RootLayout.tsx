@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import Gnb from '@/components/layout/Gnb';
-import Modal from '@/components/ui/modal/Modal';
+import Modal from '@/components/modal/Modal';
 import Spinner from '../skeleton/LoadingSpinner';
 import SplashScreen from './SplashScreen';
 

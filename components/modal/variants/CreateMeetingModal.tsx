@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { connectWebSocket } from "@/api/socket/websocket";
 import createMeeting from "@/api/client/meeting/createMeeting";
 import Button from "@/components/ui/button/Button";
-import PlaceSearch from "@/components/ui/modal/SearchPlace";
+import PlaceSearch from "@/components/modal/SearchPlace";
 import Icon from "@/components/utils/Icon";
 import chatStore from "@/store/chatStore";
 import modalStore from "@/store/modalStore";

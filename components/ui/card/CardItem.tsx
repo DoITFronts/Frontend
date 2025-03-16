@@ -14,7 +14,7 @@ import {
 } from "@/api/client/meeting/joinMeeting";
 import Button from "@/components/ui/button/Button";
 import MeetingStatus from "@/components/ui/card/component/MeetingStatus";
-import DeleteMeetingModal from "@/components/ui/modal/variants/DeleteMeetingModal";
+import DeleteMeetingModal from "@/components/modal/variants/DeleteMeetingModal";
 // import useLikeToggle from '@/hooks/like/useLikeToggle';
 import modalStore from "@/store/modalStore";
 import categoryMap from "@/types/map/categoryMap";

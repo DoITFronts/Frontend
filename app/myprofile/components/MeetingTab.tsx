@@ -193,7 +193,7 @@ function MeetingList({
                 }
                 onJoin={() => handleJoin(meeting.id)}
                 onCancel={() => handleCancel(meeting.id)}
-                onReview={() => openModal("createReview")}
+                onReview={() => openModal("createReview", { meetingId: meeting.id })}
               />
             </div>
           </div>
