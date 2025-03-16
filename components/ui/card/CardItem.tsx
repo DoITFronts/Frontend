@@ -242,22 +242,22 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               isConfirmed={isConfirmed}
               isCompleted={isCompleted}
             />
-            {/* <Button
+            <Button
               color={isJoined ? 'white' : 'filled'}
               type="button"
               onClick={buttonClickHandler}
               disabled={isCompleted && !isJoined}
             >
               {buttonText}
-            </Button> */}
-            <ButtonBox
+            </Button>
+{/*             <ButtonBox
               isJoined={meeting.isJoined}
               isHost={isCurrentUserHost}
               isCompleted={meeting.isCompleted}
               onJoin={() => handleJoin(meeting.id)}
               onCancel={() => handleCancel(meeting.id)}
               chatIconDisabled={true}
-            />
+            /> */}
           </div>
         </div>
       </Card>
