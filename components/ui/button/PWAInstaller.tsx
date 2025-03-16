@@ -15,7 +15,7 @@ const fadeInVariant = {
 };
 
 export default function PWAInstaller() {
-  const { isInstallable, isAppleDevice, handleInstall } = usePWA();
+  const { isAppleDevice, handleInstall } = usePWA();
 
   useEffect(() => {
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -30,8 +30,6 @@ export default function PWAInstaller() {
       if (!installed) toast.error(PWA_INSTALL_ERROR);
     }
   };
-
-  if (!isInstallable) return null;
   return (
     <motion.section
       initial="hidden"
