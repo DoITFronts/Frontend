@@ -1,4 +1,4 @@
-import createMeeting from "@/api/meeting/createMeeting";
+import createMeeting from "@/api/client/meeting/createMeeting";
 import { CreateMeetingParams } from "@/types/meeting/meeting";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 

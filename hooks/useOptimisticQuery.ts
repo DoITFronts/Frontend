@@ -1,5 +1,9 @@
-import { useMutation, useQueryClient, InfiniteData } from '@tanstack/react-query';
-import { Meeting } from '@/types/meeting';
+import {
+  useMutation,
+  useQueryClient,
+  InfiniteData,
+} from "@tanstack/react-query";
+import { Meeting } from "@/types/meeting/meeting";
 
 // 낙관적 업데이트를 위한 타입 정의
 type UpdateFunction<T> = (item: T) => T;
@@ -30,12 +34,12 @@ function useOptimisticMutation<T, P = any, R = T>(
     retryDelay: 300,
     onMutate: async (params: P) => {
       // 진행 중인 쿼리 취소
-      await queryClient.cancelQueries({ queryKey: ['meetings'] });
+      await queryClient.cancelQueries({ queryKey: ["meetings"] });
 
       // 모든 meetings 관련 쿼리 키 찾기
       const queryCache = queryClient.getQueryCache();
       const meetingsQueries = queryCache.findAll({
-        queryKey: ['meetings'],
+        queryKey: ["meetings"],
         exact: false,
       });
 
@@ -49,7 +53,9 @@ function useOptimisticMutation<T, P = any, R = T>(
         queryClient.setQueryData(query.queryKey, (oldData: any) => {
           if (!oldData) return oldData;
 
-          const findItemFn = options?.findItem || ((item: any, params: any) => item.id === params);
+          const findItemFn =
+            options?.findItem ||
+            ((item: any, params: any) => item.id === params);
 
           // 데이터 구조 확인
           if (oldData.pages && Array.isArray(oldData.pages)) {
@@ -58,11 +64,15 @@ function useOptimisticMutation<T, P = any, R = T>(
               ...oldData,
               pages: oldData.pages.map((page: any) => {
                 // lighteningResponses가 있는 경우
-                if (page.lighteningResponses && Array.isArray(page.lighteningResponses)) {
+                if (
+                  page.lighteningResponses &&
+                  Array.isArray(page.lighteningResponses)
+                ) {
                   return {
                     ...page,
-                    lighteningResponses: page.lighteningResponses.map((item: T) =>
-                      findItemFn(item, params) ? updateFunction(item) : item,
+                    lighteningResponses: page.lighteningResponses.map(
+                      (item: T) =>
+                        findItemFn(item, params) ? updateFunction(item) : item,
                     ),
                   };
                 }
@@ -78,7 +88,10 @@ function useOptimisticMutation<T, P = any, R = T>(
             };
           }
           // 마이페이지 구조 (객체 내 lighteningResponses 배열)
-          else if (oldData.lighteningResponses && Array.isArray(oldData.lighteningResponses)) {
+          else if (
+            oldData.lighteningResponses &&
+            Array.isArray(oldData.lighteningResponses)
+          ) {
             return {
               ...oldData,
               lighteningResponses: oldData.lighteningResponses.map((item: T) =>
@@ -102,23 +115,27 @@ function useOptimisticMutation<T, P = any, R = T>(
     },
     onError: (_err, _params, context) => {
       if (context?.prevDataMap) {
-        Object.entries(context.prevDataMap).forEach(([queryKeyString, data]) => {
-          const queryKey = JSON.parse(queryKeyString);
-          queryClient.setQueryData(queryKey, data);
-        });
+        Object.entries(context.prevDataMap).forEach(
+          ([queryKeyString, data]) => {
+            const queryKey = JSON.parse(queryKeyString);
+            queryClient.setQueryData(queryKey, data);
+          },
+        );
       }
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['meetings'] });
+      queryClient.invalidateQueries({ queryKey: ["meetings"] });
     },
   });
 
   return mutation;
 }
 // 좋아요 토글을 위한 특화된 훅
-export function useToggleLikeMutation(toggleLikeApi: (meetingId: string) => Promise<any>) {
+export function useToggleLikeMutation(
+  toggleLikeApi: (meetingId: string) => Promise<any>,
+) {
   return useOptimisticMutation<Meeting, string>(
-    ['meetings'],
+    ["meetings"],
     toggleLikeApi,
     (meeting) => ({ ...meeting, isLiked: !meeting.isLiked }),
     {
@@ -128,9 +145,11 @@ export function useToggleLikeMutation(toggleLikeApi: (meetingId: string) => Prom
 }
 
 // 미팅 참여/취소를 위한 특화된 훅
-export function useToggleJoinMutation(toggleJoinApi: (meetingId: string) => Promise<boolean>) {
+export function useToggleJoinMutation(
+  toggleJoinApi: (meetingId: string) => Promise<boolean>,
+) {
   return useOptimisticMutation<Meeting, string, boolean>(
-    ['meetings'],
+    ["meetings"],
     toggleJoinApi,
     (meeting) => ({ ...meeting, isJoined: !meeting.isJoined }),
     {

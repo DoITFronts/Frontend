@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { forwardRef } from "react";
 
-import calendar from "@/public/calendar.svg";
+import calendar from "@/public/assets/calendar.svg";
 
 const CustomInput = forwardRef(({ value, onClick }: any, ref) => (
   <div

@@ -19,7 +19,8 @@ import {
 } from "@/api/client/meeting/joinMeeting";
 import { useMyPageMeetings } from "@/hooks/useMyPage";
 import { MeetingCardLoading } from "./MeetingCardSkeleton";
-import useProfileStore from "@/store/useProfileStore";
+import profileStore from "@/store/profileStore";
+import modalStore from "@/store/modalStore";
 
 interface MeetingTabsProps {
   menuTab: string;
@@ -48,6 +49,7 @@ function MeetingList({
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const { toggleMeeting } = useMeetingToggle(setMeetings);
+  const { openModal } = modalStore();
 
   // 외부에서 데이터가 바뀌면 로컬 상태 업데이트
   useEffect(() => {
@@ -69,7 +71,7 @@ function MeetingList({
     leaveMutation.mutate(meetingId);
   };
 
-  const currentUserId = useProfileStore((state) => state.id);
+  const currentUserId = profileStore((state) => state.id);
   const isCurrentUserHost =
     meetings.some((meeting) =>
       meeting.participants?.some(
@@ -180,6 +182,8 @@ function MeetingList({
               <ButtonBox
                 isJoined={meeting.isJoined}
                 isCompleted={meeting.isCompleted}
+                isConfirmed={meeting.isConfirmed}
+                targetAt={meeting.targetAt}
                 isHost={
                   meeting.participants?.some(
                     (participant) =>
@@ -189,6 +193,7 @@ function MeetingList({
                 }
                 onJoin={() => handleJoin(meeting.id)}
                 onCancel={() => handleCancel(meeting.id)}
+                onReview={() => openModal("createReview")}
               />
             </div>
           </div>

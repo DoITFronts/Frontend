@@ -2,26 +2,44 @@ import React from "react";
 
 import Icon from "@/components/shared/Icon";
 import chatStore from "@/store/chatStore";
+import modalStore from "@/store/modalStore";
 
 export default function ButtonBox({
   isJoined,
   isCompleted,
   isHost,
+  isConfirmed,
+  targetAt,
   onJoin,
   onCancel,
   onDelete,
+  onReview,
   chatIconDisabled,
   roomId,
 }: {
   isJoined?: boolean;
   isCompleted?: boolean;
   isHost?: boolean;
+  isConfirmed?: boolean;
+  targetAt?: string;
   onJoin?: () => void;
   onCancel?: () => void;
   onDelete?: () => void;
+  onReview?: () => void;
   chatIconDisabled?: boolean;
   roomId?: number;
 }) {
+  const { openChat } = chatStore();
+  const { openModal } = modalStore();
+
+  // 현재 날짜와 타겟 날짜 비교해서 지났는지 확인
+  const isTargetDatePassed = () => {
+    if (!targetAt) return false;
+    const currentDate = new Date();
+    const meetingDate = new Date(targetAt);
+    return currentDate > meetingDate;
+  };
+
   // 클릭 핸들러들 - 단순히 props로 전달받은 함수를 호출
   const handleJoin = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -41,6 +59,12 @@ export default function ButtonBox({
     if (onDelete) onDelete();
   };
 
+  const handleReview = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (onReview) onReview();
+  };
+
   const handleChatClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -49,9 +73,19 @@ export default function ButtonBox({
     }
   };
 
+  // 리뷰 버튼을 표시해야하는지 확인
+  const showReviewButton = isConfirmed && isTargetDatePassed() && isJoined;
+
   return (
     <div className="flex size-auto gap-3">
-      {isHost ? (
+      {showReviewButton ? (
+        <button
+          className="w-[100px] whitespace-nowrap rounded-[12px] border border-yellow-600 bg-white px-5 py-2.5 text-base font-semibold text-yellow-600"
+          onClick={handleReview}
+        >
+          리뷰쓰기
+        </button>
+      ) : isHost ? (
         <button
           className="w-[100px] whitespace-nowrap rounded-[12px] border border-red-500 bg-white px-5 py-2.5 text-base font-semibold text-red-500"
           onClick={handleDelete}
