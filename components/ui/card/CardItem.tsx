@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { toast } from "react-toastify";
 
@@ -26,8 +26,6 @@ import ChipDate from "../chip/ChipDate";
 
 import Card from "./Card";
 
-import ButtonBox from "../button/ButtonBox";
-import { useToggleJoinMutation } from "@/hooks/useOptimisticQuery";
 import profileStore from "@/store/profileStore";
 
 import Category from "./component/Category";
@@ -58,16 +56,6 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
     meeting.participantCount,
   );
   const openModal = modalStore((state) => state.openModal);
-  const [isHost, setIsHost] = useState(false);
-
-  useEffect(() => {
-    const userId =
-      typeof window !== "undefined" ? localStorage.getItem("sub") : null;
-    const host = meeting.participants?.find(
-      (participant) => participant.isHost,
-    );
-    setIsHost(Number(userId) === host?.userId);
-  }, [meeting.participants]);
 
   const reverseCityMap: Record<string, string> = Object.fromEntries(
     Object.entries(cityMap).map(([kor, eng]) => [eng, kor]),
@@ -123,15 +111,6 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
     // 추가적인 삭제 후 처리 로직이 필요할 수 있습니다.
   };
 
-  const buttonTextMap = {
-    completed: "마감",
-    joined: isHost ? "번개 삭제" : "참여 취소",
-    default: "참여하기",
-  };
-
-  const joinMutation = useToggleJoinMutation(joinLightning);
-  const leaveMutation = useToggleJoinMutation(leaveLightning);
-
   const currentUserId = profileStore((state) => state.id);
 
   const isCurrentUserHost =
@@ -140,12 +119,10 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
         participant.isHost && participant.userId === currentUserId,
     ) || false;
 
-  const handleJoin = (meetingId: string) => {
-    joinMutation.mutate(meetingId);
-  };
-
-  const handleCancel = (meetingId: string) => {
-    leaveMutation.mutate(meetingId);
+  const buttonTextMap = {
+    completed: "마감",
+    joined: isCurrentUserHost ? "번개 삭제" : "참여 취소",
+    default: "참여하기",
   };
 
   let buttonText;
@@ -155,7 +132,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
     buttonClickHandler = () => {};
   } else if (isJoined) {
     buttonText = buttonTextMap.joined;
-    buttonClickHandler = isHost
+    buttonClickHandler = isCurrentUserHost
       ? () => openModal("delete", { onConfirm: handleDeleteMeeting })
       : handleJoinToggle;
   } else {
@@ -250,14 +227,6 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
             >
               {buttonText}
             </Button>
-{/*             <ButtonBox
-              isJoined={meeting.isJoined}
-              isHost={isCurrentUserHost}
-              isCompleted={meeting.isCompleted}
-              onJoin={() => handleJoin(meeting.id)}
-              onCancel={() => handleCancel(meeting.id)}
-              chatIconDisabled={true}
-            /> */}
           </div>
         </div>
       </Card>
