@@ -1,4 +1,10 @@
-@import url('https://fonts.cdnfonts.com/css/dunggeunmo');
+@font-face {
+  font-family: 'DungGeunMo';
+  src: url('/fonts/DungGeunMo.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap; /* FOUT 방지 */
+}
 
 :root {
   --background: #ffffff;
@@ -32,6 +38,7 @@
   --font-bold: 700;
 
   --font-family-pretandard: 'Pretendard', sans-serif;
+  --font-family-dunggeunmo: 'DungGeunMo', sans-serif;
 }
 
 @tailwind base;
