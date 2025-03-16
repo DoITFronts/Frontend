@@ -10,7 +10,7 @@
 
 import React, { useEffect } from 'react';
 
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 
 import CreateMeetingModal from './variants/CreateMeetingModal';
 import CreateReviewModal from './variants/CreateReviewModal';
@@ -39,7 +39,7 @@ function ModalContent({ modalType, modalProps }: { modalType: string; modalProps
 }
 
 export default function Modal() {
-  const { isOpen, modalType, modalProps, closeModal } = useModalStore();
+  const { isOpen, modalType, modalProps, closeModal } = modalStore();
 
   useEffect(() => {
     if (isOpen) {

@@ -8,8 +8,8 @@ import Icon from '@/components/shared/Icon';
 import DropDown from '@/components/ui/dropdown/DropDown';
 import useLikedCount from '@/hooks/like/useLikeCount';
 import Logo from '@/public/assets/logo/logoWhite.svg';
-import useLikeCountStore from '@/store/useLikeCountStore';
-import useProfileStore from '@/store/useProfileStore';
+import likeCountStore from '@/store/likeCountStore';
+import profileStore from '@/store/profileStore';
 import { useSignout } from '@/hooks/user/useSignout';
 import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
@@ -40,7 +40,7 @@ export default function GNB() {
   const pathname = usePathname();
   const router = useRouter();
   const { mutate: logout } = useSignout();
-  const { nickname, imageUrl } = useProfileStore(); // 유저정보
+  const { nickname, imageUrl } = profileStore(); // 유저정보
 
   useLikedCount(); // 좋아요 개수 동기화
 
@@ -52,7 +52,7 @@ export default function GNB() {
       logout(); // 로그아웃 처리
     }
   };
-  const { likedCount } = useLikeCountStore();
+  const { likedCount } = likeCountStore();
 
   return (
     <nav className="flex items-center justify-center fixed left-0 top-0 z-50 h-[3.5625rem] sm:h-[3.75rem] w-full  bg-black shadow-md px-[1.1875rem] sm:px-[1.4375rem]">

@@ -20,7 +20,7 @@ import {
   participantFilter,
 } from '@/lib/constants/meeting';
 import meetingCategory from '@/lib/constants/meeting/meeting';
-import useModalStore from '@/store/useModalStore';
+import modalStore from '@/store/modalStore';
 import { Meeting } from '@/types/meeting/meeting';
 import { regions } from '@/types/map/regions';
 import { formatShortDate } from '@/utils/formatDateTime';
@@ -48,7 +48,7 @@ export default function MeetingList({ initialMeetings }: InitialMeetingsProps) {
   );
   const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
   const observerRef = useRef<HTMLDivElement | null>(null);
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
 
   // 임시 날짜 상태
   const [tempDate, setTempDate] = useState<Date | null>(selectedDate);
