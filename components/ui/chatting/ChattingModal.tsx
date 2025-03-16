@@ -5,9 +5,9 @@ import { sendMessage } from "@/api/socket/websocket";
 import Icon from "@/components/shared/Icon";
 import chatStore from "@/store/chat/chatStore";
 import useWebSocketStore from "@/store/chat/websocketStore";
+import { getToken } from "@/utils/auth/tokenUtils";
 
 import ChatMessageList from "./ChatMessageList";
-import { getToken } from "@/utils/auth/tokenUtils";
 
 export default function ChatModal() {
   const [isClient, setIsClient] = useState(false);
