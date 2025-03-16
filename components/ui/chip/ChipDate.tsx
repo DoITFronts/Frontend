@@ -1,4 +1,4 @@
-import { formatDateTime } from '@/utils/formatDateTime';
+import { formatDateTime } from '@/utils/timeUtils/formatDateTime';
 
 interface ChipInfoProps {
   datetime: string;

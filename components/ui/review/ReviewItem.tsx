@@ -1,7 +1,7 @@
 import ReviewHeart from "@/components/ui/review/ReviewHeart";
 import ProfileIcon from "@/components/utils/BaseProfile";
 
-import { formatDate } from "@/utils/formatDateTime";
+import { formatDate } from "@/utils/timeUtils/formatDateTime";
 
 interface ReviewItemProps {
   count: number;

@@ -16,7 +16,7 @@ import meetingCategory from '@/lib/constants/meeting/meeting';
 import modalStore from '@/store/modalStore';
 import { regions } from '@/types/map/regions';
 import { Reviews } from '@/types/review/review';
-import { formatShortDate } from '@/utils/formatDateTime';
+import { formatShortDate } from '@/utils/timeUtils/formatDateTime';
 
 import ReviewItem from './ReviewItem';
 import ReviewStatus from './ReviewStatus';

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 
-import useChatStore from '@/store/chatStore';
+import useChatStore from '@/store/chat/chatStore';
 
 const WS_BASE_URL = 'wss://coen.store/api/v1/ws';
 
