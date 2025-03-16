@@ -71,23 +71,23 @@ export default function CustomTimeInput({ date, onTimeChange, value, onChange }:
   };
 
   return (
-    <div className="flex items-start gap-4 h-full">
+    <div className="flex h-full items-start gap-4">
       {/* 시간 선택 */}
-      <div ref={hoursRef} className="flex flex-col h-[242px] overflow-y-scroll">
-        <div className="w-[42px] h-[33px] bg-black rounded-lg mb-2 flex justify-center items-center flex-shrink-0">
-          <div className="text-center text-white text-sm font-medium">
+      <div ref={hoursRef} className="flex h-[242px] flex-col overflow-y-scroll">
+        <div className="mb-2 flex h-[33px] w-[42px] shrink-0 items-center justify-center rounded-lg bg-black">
+          <div className="text-center text-sm font-medium text-white">
             {String(displayHour).padStart(2, '0')}
           </div>
         </div>
-        <div className="flex flex-col gap-2.5 h-auto flex-shrink-0">
+        <div className="flex h-auto shrink-0 flex-col gap-2.5">
           {hours.map((hour) => (
             <button
               type="button"
               key={hour}
               onClick={() => handleHourChange(hour)}
-              className="w-[42px] h-[33px] rounded-lg flex justify-center items-center flex-shrink-0 hover:bg-gray-50"
+              className="flex h-[33px] w-[42px] shrink-0 items-center justify-center rounded-lg hover:bg-gray-50"
             >
-              <div className="text-center text-gray-900 text-sm font-medium">
+              <div className="text-center text-sm font-medium text-gray-900">
                 {String(hour).padStart(2, '0')}
               </div>
             </button>
@@ -96,24 +96,24 @@ export default function CustomTimeInput({ date, onTimeChange, value, onChange }:
       </div>
 
       {/* 세로 구분선 */}
-      <div className="w-[1px] h-full bg-gray-200 my-2" />
+      <div className="my-2 h-full w-px bg-gray-200" />
 
       {/* 분 선택 */}
-      <div ref={minutesRef} className="flex flex-col h-[242px] overflow-y-scroll">
-        <div className="w-[42px] h-[33px] bg-black rounded-lg mb-2 flex justify-center items-center flex-shrink-0">
-          <div className="text-center text-white text-sm font-medium">
+      <div ref={minutesRef} className="flex h-[242px] flex-col overflow-y-scroll">
+        <div className="mb-2 flex h-[33px] w-[42px] shrink-0 items-center justify-center rounded-lg bg-black">
+          <div className="text-center text-sm font-medium text-white">
             {String(currentMinute).padStart(2, '0')}
           </div>
         </div>
-        <div className="flex flex-col gap-2.5 h-auto flex-shrink-0">
+        <div className="flex h-auto shrink-0 flex-col gap-2.5">
           {minutes.map((minute) => (
             <button
               type="button"
               key={minute}
               onClick={() => handleMinuteChange(minute)}
-              className="w-[42px] h-[33px] rounded-lg flex justify-center items-center hover:bg-gray-50"
+              className="flex h-[33px] w-[42px] items-center justify-center rounded-lg hover:bg-gray-50"
             >
-              <div className="text-center text-gray-900 text-sm font-medium">
+              <div className="text-center text-sm font-medium text-gray-900">
                 {String(minute).padStart(2, '0')}
               </div>
             </button>
@@ -122,27 +122,27 @@ export default function CustomTimeInput({ date, onTimeChange, value, onChange }:
       </div>
 
       {/* 세로 구분선 */}
-      <div className="w-[1px] h-full bg-gray-200 my-2" />
+      <div className="my-2 h-full w-px bg-gray-200" />
 
       {/* AM/PM 선택 */}
       <div className="flex flex-col">
-        <div className="w-[42px] h-[33px] bg-black rounded-lg mb-2 flex justify-center items-center">
-          <div className="text-center text-white text-sm font-medium">{isPm ? 'PM' : 'AM'}</div>
+        <div className="mb-2 flex h-[33px] w-[42px] items-center justify-center rounded-lg bg-black">
+          <div className="text-center text-sm font-medium text-white">{isPm ? 'PM' : 'AM'}</div>
         </div>
         <div className="flex flex-col gap-1">
           <button
             type="button"
             onClick={() => handleAmPmChange(false)}
-            className="w-[42px] h-[33px] rounded-lg flex justify-center items-center hover:bg-gray-50"
+            className="flex h-[33px] w-[42px] items-center justify-center rounded-lg hover:bg-gray-50"
           >
-            <div className="text-center text-gray-900 text-sm font-medium">AM</div>
+            <div className="text-center text-sm font-medium text-gray-900">AM</div>
           </button>
           <button
             type="button"
             onClick={() => handleAmPmChange(true)}
-            className="w-[42px] h-[33px] rounded-lg flex justify-center items-center hover:bg-gray-50"
+            className="flex h-[33px] w-[42px] items-center justify-center rounded-lg hover:bg-gray-50"
           >
-            <div className="text-center text-gray-900 text-sm font-medium">PM</div>
+            <div className="text-center text-sm font-medium text-gray-900">PM</div>
           </button>
         </div>
       </div>

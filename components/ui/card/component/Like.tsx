@@ -1,6 +1,6 @@
-import HeartIcon from '@/components/Icons/HeartIcon';
-import useLikeMutation from '@/hooks/like/useLikeMutation';
-import { useState } from 'react';
+import HeartIcon from "@/components/Icons/HeartIcon";
+import useLikeMutation from "@/hooks/like/useLikeMutation";
+import { useState } from "react";
 
 function Like({ meetingId, isLiked }: { meetingId: string; isLiked: boolean }) {
   const { mutate } = useLikeMutation();
@@ -17,7 +17,7 @@ function Like({ meetingId, isLiked }: { meetingId: string; isLiked: boolean }) {
         mutate(meetingId); // 좋아요 기능 동작하도록 함
       }}
     >
-      <HeartIcon variant={liked ? 'active' : 'inactive'} />
+      <HeartIcon variant={liked ? "active" : "inactive"} />
     </button>
   );
 }

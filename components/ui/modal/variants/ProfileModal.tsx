@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import { useState, useEffect, ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
 
@@ -145,7 +146,7 @@ export default function ProfileModal() {
           />
         </div>
         <div className="flex h-auto w-full justify-between gap-2.5">
-          <Button color="white" type="button" size="sm" className="w-full">
+          <Button color="white" type="button" size="sm" className="w-full" onClick={closeModal}>
             취소
           </Button>
           <Button color="filled" type="button" className="w-full" onClick={handleSubmit}>

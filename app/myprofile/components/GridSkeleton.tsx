@@ -1,4 +1,5 @@
-import { MeetingCardLoading } from './MeetingCardSkeleton';
+// import { MeetingCardLoading } from './MeetingCardSkeleton';
+import { MeetingCardLoading } from '@/app/meeting/list/components/skeleton/MeetingCardSkeleton';
 
 export function GridSkeleton() {
   return (

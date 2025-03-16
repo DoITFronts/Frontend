@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import { forwardRef } from 'react';
+import Image from "next/image";
+import { forwardRef } from "react";
 
-import calendar from '@/public/assets/calendar.svg';
+import calendar from "@/public/assets/calendar.svg";
 
 const CustomInput = forwardRef(({ value, onClick }: any, ref) => (
   <div
     tabIndex={0}
     role="button"
     onKeyDown={(e) => {
-      if (e.key === 'Enter') onClick();
+      if (e.key === "Enter") onClick();
     }}
     className="flex size-auto justify-between rounded-[12px] bg-gray-50 px-4 py-2.5"
     onClick={onClick}

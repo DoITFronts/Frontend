@@ -1,10 +1,14 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
-export default function SplashScreen({ onCompleteAction }: { onCompleteAction: () => void }) {
+export default function SplashScreen({
+  onCompleteAction,
+}: {
+  onCompleteAction: () => void;
+}) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -28,11 +32,16 @@ export default function SplashScreen({ onCompleteAction }: { onCompleteAction: (
         }}
         transition={{
           duration: 1,
-          ease: 'easeInOut',
+          ease: "easeInOut",
           times: [0, 0.15, 0.3, 0.5, 0.7, 0.85, 1],
         }}
       >
-        <Image src="/assets/logo/splash.svg" alt="Splash" width={76} height={60} />
+        <Image
+          src="/assets/logo/splash.svg"
+          alt="Splash"
+          width={76}
+          height={60}
+        />
       </motion.div>
     </div>
   );

@@ -3,9 +3,15 @@ import categoryMap from '@/types/map/categoryMap';
 
 import axiosInstance from '../../middleware/api';
 
-interface FetchMyPageMeetingsParams {
+export interface FetchMyPageMeetingsParams {
   type: string; // '나의 번개' | '내가 만든 번개'
   category?: string; // '술' | '카페' | '보드 게임' | '맛집'
+  size?: number;
+}
+
+export interface FetchParams {
+  category?: string;
+  type?: string;
 }
 
 export const fetchProfile = async () => {
@@ -42,9 +48,9 @@ export const updateProfile = async (
   }
 };
 
-export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeetingsParams) => {
+export const fetchMyPageMeetings = async ({ type, category, size }: FetchMyPageMeetingsParams) => {
   try {
-    const params: Record<string, string> = {};
+    const params: Record<string, string | number> = {};
     if (category) {
       params.category = categoryMap[category] || 'ALCOHOL';
     }
@@ -67,10 +73,18 @@ export const fetchMyPageMeetings = async ({ type, category }: FetchMyPageMeeting
   }
 };
 
-export const fetchMyPageReviews = async () => {
-  const response = await fetch('/api/mypage/reviews');
-
-  if (!response.ok) throw new Error(`API Error: ${response.status}`);
-
-  return response.json();
+export const fetchMyPageReviews = async (params: FetchParams = {}) => {
+  try {
+    const apiParams: Record<string, string> = {};
+    if (params.category) {
+      const mappedCategory = categoryMap[params.category] || 'ALCOHOL';
+      apiParams.category = mappedCategory;
+    }
+    const response = await axiosInstance.get('/api/v1/my-page/reviews/created', {
+      params: apiParams,
+    });
+    return response.data;
+  } catch (error) {
+    console.error('내가 작성한 리뷰를 불러오는데 실패하였습니다.: ', error);
+  }
 };
