@@ -8,8 +8,8 @@ import {
   CHAT_SEND_ERROR,
   CHAT_SOCKET_ERROR,
 } from "@/lib/constants/toast";
-import chatStore from "@/store/chatStore";
-import userStore from "@/store/user/userStore";
+import chatStore from "@/store/chat/chatStore";
+// import userStore from "@/store/user/userStore";
 
 let stompClient: Client | null = null;
 let subscribedRoomId: number | null = null;
@@ -30,7 +30,14 @@ export const connectWebSocket = withWebSocketAuth((token) => {
       stompClient.subscribe(`/topic/room/${currentRoomId}`, (response) => {
         console.log("📩 메시지 수신:", response.body);
         const message = JSON.parse(response.body);
-        addMessage(message);
+        const { messages } = chatStore.getState();
+        const isDuplicate = messages.some((msg) => msg.id === message.id);
+
+        if (!isDuplicate) {
+          addMessage(message);
+        } else {
+          console.warn("⚠ 중복 메시지 방지:", message);
+        }
       });
     }
     return;
@@ -83,40 +90,24 @@ export const disconnectWebSocket = () => {
   }
 };
 
-export const sendMessage = (content: string) => {
-  const { currentRoomId, addMessage } = chatStore.getState();
-  const { userId, nickname, profileImage } =
-    userStore.getState() as unknown as {
-      userId: number;
-      nickname: string;
-      profileImage: string;
-    };
+export const sendMessage = (message: string) => {
+  const { currentRoomId } = chatStore.getState();
 
   if (
     !stompClient ||
     !stompClient.connected ||
-    !content.trim() ||
+    !message.trim() ||
     !currentRoomId
   ) {
-    console.error("메시지 전송 실패: WebSocket이 연결되지 않음");
+    console.error("❌ 메시지 전송 실패: WebSocket이 연결되지 않음");
     toast.error(CHAT_SEND_ERROR);
     return;
   }
 
-  const newMessage = {
-    id: Date.now(),
-    roomId: currentRoomId,
-    userId,
-    userNickname: nickname,
-    content,
-    createdAt: new Date().toISOString(),
-    userImage: profileImage,
-  };
+  console.log("📤 메시지 전송:", message);
 
-  addMessage(newMessage);
-  console.log("📤 즉시 UI 업데이트 메시지:", content);
   stompClient.publish({
     destination: `/app/room/${currentRoomId}/sendMessage`,
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content: message }),
   });
 };

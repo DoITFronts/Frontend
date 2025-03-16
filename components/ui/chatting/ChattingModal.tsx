@@ -3,9 +3,11 @@ import { useStore } from "zustand";
 
 import { sendMessage } from "@/api/socket/websocket";
 import Icon from "@/components/shared/Icon";
-import chatStore from "@/store/chatStore";
+import chatStore from "@/store/chat/chatStore";
+import useWebSocketStore from "@/store/chat/websocketStore";
 
 import ChatMessageList from "./ChatMessageList";
+import { getToken } from "@/utils/auth/tokenUtils";
 
 export default function ChatModal() {
   const [isClient, setIsClient] = useState(false);
@@ -14,9 +16,24 @@ export default function ChatModal() {
   const isOpen = useStore(chatStore, (state) => state.isOpen);
   const currentRoomId = useStore(chatStore, (state) => state.currentRoomId);
   const closeChat = useStore(chatStore, (state) => state.closeChat);
+  const { connectWebSocket, isConnected } = useWebSocketStore();
+
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  useEffect(() => {
+    if (isOpen && currentRoomId) {
+      console.log("🔄 채팅방 열림, WebSocket 상태 확인!");
+      if (!isConnected) {
+        const token = getToken();
+        if (token) {
+          connectWebSocket(token);
+        }
+      }
+    }
+  }, [isOpen, currentRoomId, isConnected]);
+
   if (!isClient || !isOpen || !currentRoomId) return null;
   const handleSendMessage = () => {
     if (message.trim()) {

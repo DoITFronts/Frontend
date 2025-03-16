@@ -3,7 +3,7 @@ import { useStore } from "zustand";
 
 import ChatMessage from "@/components/ui/chatting/ChattingMessage";
 import useChatMessages from "@/hooks/chat/useChatMessages";
-import chatStore from "@/store/chatStore";
+import chatStore from "@/store/chat/chatStore";
 import formatRelativeTime from "@/utils/timeUtils/formatRelativeTime";
 
 interface ChatMessageListProps {

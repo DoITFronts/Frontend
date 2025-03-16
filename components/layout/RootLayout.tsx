@@ -11,6 +11,7 @@ import ChatModal from "@/components/ui/chatting/ChattingModal";
 import Spinner from "../skeleton/LoadingSpinner";
 
 import SplashScreen from "./SplashScreen";
+import WebSocketInitializer from "@/components/utils/WebSocketInitializer";
 
 export default function RootLayout({
   children,
@@ -69,6 +70,7 @@ export default function RootLayout({
             </div>
             <Modal />
             <ChatModal />
+            <WebSocketInitializer />
           </>
         )}
       </div>

@@ -1,7 +1,7 @@
 import React from "react";
 
 import Icon from "@/components/shared/Icon";
-import chatStore from "@/store/chatStore";
+import chatStore from "@/store/chat/chatStore";
 import modalStore from "@/store/modalStore";
 
 export default function ButtonBox({
