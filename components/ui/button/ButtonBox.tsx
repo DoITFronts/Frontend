@@ -1,5 +1,7 @@
-import React from 'react';
-import Icon from '@/components/shared/Icon';
+import React from "react";
+
+import Icon from "@/components/shared/Icon";
+import chatStore from "@/store/chatStore";
 
 export default function ButtonBox({
   isJoined,
@@ -9,6 +11,7 @@ export default function ButtonBox({
   onCancel,
   onDelete,
   chatIconDisabled,
+  roomId,
 }: {
   isJoined?: boolean;
   isCompleted?: boolean;
@@ -17,6 +20,7 @@ export default function ButtonBox({
   onCancel?: () => void;
   onDelete?: () => void;
   chatIconDisabled?: boolean;
+  roomId?: number;
 }) {
   // 클릭 핸들러들 - 단순히 props로 전달받은 함수를 호출
   const handleJoin = (e: React.MouseEvent) => {
@@ -35,6 +39,14 @@ export default function ButtonBox({
     e.stopPropagation();
     e.preventDefault();
     if (onDelete) onDelete();
+  };
+
+  const handleChatClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (roomId) {
+      openChat(roomId);
+    }
   };
 
   return (
@@ -68,12 +80,15 @@ export default function ButtonBox({
           번개 참여
         </button>
       )}
-      {chatIconDisabled ? (
-        ''
-      ) : (
-        <div className="h-[44px] w-auto rounded-[12px] bg-yellow-6 p-2.5">
+
+      {!chatIconDisabled && roomId && (
+        <button
+          type="button"
+          className="h-[44px] w-auto rounded-[12px] bg-yellow-6 p-2.5"
+          onClick={handleChatClick}
+        >
           <Icon path="chat" width="28px" height="24px" />
-        </div>
+        </button>
       )}
     </div>
   );

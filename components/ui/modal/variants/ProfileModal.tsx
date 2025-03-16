@@ -3,11 +3,11 @@ import Image from 'next/image';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
 
-import { updateProfile } from '@/api/myPage/myPage';
+import { updateProfile } from '@/api/client/myPage/myPage';
 import Icon from '@/components/utils/Icon';
-import userProfile from '@/public/userProfile.svg';
-import useModalStore from '@/store/useModalStore';
-import useProfileStore from '@/store/useProfileStore';
+import userProfile from '@/public/assets/userProfile.svg';
+import modalStore from '@/store/modalStore';
+import profileStore from '@/store/profileStore';
 
 import Button from '../../button/Button';
 
@@ -15,9 +15,9 @@ const MAX_NICKNAME_LENGTH = 8;
 const MAX_DESCRIPTION_LENGTH = 50;
 
 export default function ProfileModal() {
-  const { closeModal } = useModalStore();
+  const { closeModal } = modalStore();
 
-  const { nickname: storeNickname, description: storeDescription, imageUrl } = useProfileStore();
+  const { nickname: storeNickname, description: storeDescription, imageUrl } = profileStore();
 
   const [nickname, setNickname] = useState(storeNickname); // TODO: 데이터 연동 시 기본값으로 해당 유저 닉네임으로 설정
   const [description, setDescription] = useState(storeDescription || '');

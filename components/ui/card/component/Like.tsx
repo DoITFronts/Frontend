@@ -1,8 +1,8 @@
-import toggleLike from '@/api/meeting/toggleLike';
-import HeartIcon from '@/components/shared/Icons/HeartIcon';
+import toggleLike from "@/api/client/meeting/toggleLike";
+import HeartIcon from "@/components/shared/Icons/HeartIcon";
 
-import useLikeMutation from '@/hooks/useLikeMutation';
-import { useToggleLikeMutation } from '@/hooks/useOptimisticQuery';
+import useLikeMutation from "@/hooks/like/useLikeMutation";
+import { useToggleLikeMutation } from "@/hooks/useOptimisticQuery";
 
 function Like({
   meetingId,
@@ -25,7 +25,7 @@ function Like({
         likeMutation.mutate(meetingId); // 좋아요 기능 동작하도록 함
       }}
     >
-      <HeartIcon variant={isLiked ? 'active' : 'inactive'} />
+      <HeartIcon variant={isLiked ? "active" : "inactive"} />
     </button>
   );
 }

@@ -10,10 +10,13 @@ import Card from "@/components/ui/card/Card";
 import ButtonBox from "@/components/ui/button/ButtonBox";
 import MeetingStatus from "@/components/ui/card/component/MeetingStatus";
 import ChipDate from "@/components/ui/chip/ChipDate";
-import useMeetingToggle from "@/hooks/useMeetingToggle";
-import { Meeting } from "@/types/meeting";
+import useMeetingToggle from "@/hooks/meeting/useMeetingToggle";
+import { Meeting } from "@/types/meeting/meeting";
 import { useToggleJoinMutation } from "@/hooks/useOptimisticQuery";
-import { joinLightning, leaveLightning } from "@/api/meeting/joinMeeting";
+import {
+  joinLightning,
+  leaveLightning,
+} from "@/api/client/meeting/joinMeeting";
 import { useMyPageMeetings } from "@/hooks/useMyPage";
 import { MeetingCardLoading } from "./MeetingCardSkeleton";
 import useProfileStore from "@/store/useProfileStore";

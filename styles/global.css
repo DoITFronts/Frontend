@@ -45,6 +45,18 @@ html {
   padding: 0;
 }
 
+.custom-cursor {
+  cursor: url('/assets/cursor/cursor.svg') 30 30, auto !important;
+}
+
+.custom-cursor:hover {
+  cursor: url('/assets/cursor/cursor-hover.svg') 30 30, auto !important;
+}
+
+.custom-cursor:active {
+  cursor: url('/assets/cursor/cursor-click.svg') 30 30, auto !important;
+}
+
 .react-datepicker {
   @apply p-3 !important;
   font-family: 'Pretendard', serif !important;

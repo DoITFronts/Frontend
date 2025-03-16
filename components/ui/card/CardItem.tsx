@@ -7,16 +7,16 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning, deleteLightning } from '@/api/meeting/joinMeeting';
+import { joinLightning, leaveLightning, deleteLightning } from '@/api/client/meeting/joinMeeting';
 import Button from '@/components/ui/button/Button';
 import MeetingStatus from '@/components/ui/card/component/MeetingStatus';
 import DeleteMeetingModal from '@/components/ui/modal/variants/DeleteMeetingModal';
-import useLikeToggle from '@/hooks/useLikeToggle';
-import useModalStore from '@/store/useModalStore';
-import categoryMap from '@/types/categoryMap';
-import { Meeting } from '@/types/meeting';
-import { cityMap } from '@/types/regions';
-import { isUserLoggedIn } from '@/utils/authUtils';
+import useLikeToggle from '@/hooks/like/useLikeToggle';
+import modalStore from '@/store/modalStore';
+import categoryMap from '@/types/map/categoryMap';
+import { Meeting } from '@/types/meeting/meeting';
+import { cityMap } from '@/types/map/regions';
+import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 import ChipDate from '../chip/ChipDate';
 
@@ -42,7 +42,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
   const [isCompleted, setIsCompleted] = useState(meeting.isCompleted);
   const [isJoined, setIsJoined] = useState(meeting.isJoined);
   const [participantCount, setParticipantCount] = useState(meeting.participantCount);
-  const openModal = useModalStore((state) => state.openModal);
+  const openModal = modalStore((state) => state.openModal);
   const [isHost, setIsHost] = useState(false);
 
   useEffect(() => {
@@ -65,16 +65,28 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
       return;
     }
 
-    if (isJoined) {
-      await leaveLightning(meeting?.id as string);
-      toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
-      setParticipantCount(participantCount - 1);
-    } else {
-      await joinLightning(meeting?.id as string);
-      toast.success('모임에 참여했습니다.', { autoClose: 900 });
-      setParticipantCount(participantCount + 1);
+    try {
+      if (isJoined) {
+        setIsJoined(false);
+        setParticipantCount((prevCount) => prevCount - 1);
+        setIsCompleted(participantCount - 1 >= meeting.capacity);
+        setIsConfirmed(participantCount - 1 >= meeting.minCapacity);
+        await leaveLightning(meeting.id);
+        toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+      } else {
+        setIsJoined(true);
+        setParticipantCount((prevCount) => prevCount + 1);
+        setIsCompleted(participantCount + 1 >= meeting.capacity);
+        setIsConfirmed(participantCount + 1 >= meeting.minCapacity);
+        await joinLightning(meeting.id);
+        toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      }
+    } catch (error) {
+      setIsJoined(meeting.isJoined);
+      setParticipantCount(meeting.participantCount);
+      setIsConfirmed(meeting.isConfirmed);
+      toast.error('오류가 발생했습니다.');
     }
-    setIsJoined(!isJoined);
   };
 
   const handleDeleteMeeting = async () => {
@@ -90,7 +102,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
 
   const buttonTextMap = {
     completed: '마감',
-    joined: isHost ? '번개 삭제하기' : '참여 취소하기',
+    joined: isHost ? '번개 삭제' : '참여 취소',
     default: '참여하기',
   };
 
@@ -114,7 +126,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
 
   let buttonText;
   let buttonClickHandler;
-  if (isCompleted) {
+  if (isCompleted && !isJoined) {
     buttonText = buttonTextMap.completed;
     buttonClickHandler = () => {};
   } else if (isJoined) {
@@ -141,14 +153,20 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
             <div className="flex flex-col justify-between gap-4 overflow-hidden">
               {/* 이미지 */}
               <div className="relative flex h-[172px] w-full items-center justify-center overflow-hidden md:h-[200px]">
-                <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                <div className="absolute left-0 top-0 z-10">
+                  <Card.Like isLiked={isLiked} onClick={handleLikeClick} meetingId={meeting.id} />
+                </div>
                 <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
                 <Image
-                  src={meeting.imageUrl || '/assets/card/example_image.png'}
-                  fill
+                  src={
+                    meeting.imageUrl ||
+                    `/fallback/fallback_default.png` ||
+                    `/fallback/fallback_${meeting?.category?.toLowerCase()}.png`
+                  }
                   alt="thumbnail"
-                  className="object-cover"
+                  fill
+                  className="z-0 object-cover"
                   priority={priority}
                 />
                 <div className="absolute right-[14px] top-[17.5px]">
@@ -157,12 +175,12 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               </div>
 
               {/* 상세 정보 */}
-              <div className="flex h-[152px] flex-col justify-between p-4 pt-0 md:h-[145px]">
+              <div className="flex h-[152px] flex-col justify-between p-4 py-0">
                 <div className="flex flex-col gap-[10px]">
                   <div className="flex flex-col gap-2">
                     <Card.Title
-                      name={meeting.title}
-                      location={`${reverseCityMap[meeting.city] || meeting.city} ${reverseCityMap[meeting.town] || meeting.town}`}
+                      name={meeting.title || '제목 없음'}
+                      location={`${reverseCityMap[meeting.city] || meeting.city || '지역 1'} ${reverseCityMap[meeting.town] || meeting.town || '지역 2'}`}
                     />
                     {meeting.participants
                       ?.filter((participant) => participant.isHost)
@@ -175,10 +193,10 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                       ))}
 
                     <div className="flex h-[22px] flex-row items-center gap-1">
-                      <ChipDate datetime={meeting.targetAt} />
+                      <ChipDate datetime={meeting.targetAt || new Date().toString()} />
                     </div>
                   </div>
-                  <div className="line-clamp-1 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
+                  <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
                     {meeting.summary}
                   </div>
                 </div>
@@ -198,7 +216,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               color={isJoined ? 'white' : 'filled'}
               type="button"
               onClick={buttonClickHandler}
-              disabled={isCompleted}
+              disabled={isCompleted && !isJoined}
             >
               {buttonText}
             </Button> */}

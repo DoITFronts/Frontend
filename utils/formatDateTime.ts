@@ -25,3 +25,16 @@ export function formatDate(dateStr: string, locale = 'ko-KR'): string {
     day: '2-digit',
   });
 }
+
+// 형태 LocalDateTime -> MM.DD
+export function formatShortDate(dateStr: string, locale = 'ko-KR'): string {
+  const date = new Date(`${dateStr}`);
+
+  return date
+    .toLocaleDateString(locale, {
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/\./g, '')
+    .trim();
+}

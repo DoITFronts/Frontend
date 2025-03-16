@@ -1,41 +1,41 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-import createMeeting from '@/api/meeting/createMeeting';
+import { connectWebSocket } from "@/api/socket/websocket";
+import createMeeting from "@/api/client/meeting/createMeeting";
+import Button from "@/components/ui/button/Button";
+import PlaceSearch from "@/components/ui/modal/SearchPlace";
+import Icon from "@/components/utils/Icon";
+import chatStore from "@/store/chatStore";
+import modalStore from "@/store/modalStore";
+import { CreateMeetingParams, MeetingCategory } from "@/types/meeting/meeting";
 
-import Button from '@/components/ui/button/Button';
-import PlaceSearch from '@/components/ui/modal/SearchPlace';
-import Icon from '@/components/utils/Icon';
+import CustomDatePicker from "../datePicker";
 
-import useModalStore from '@/store/useModalStore';
-import { CreateMeetingParams, MeetingCategory } from '@/types/meeting';
-
-import CustomDatePicker from '../datePicker';
-
-import useCreateMeeting from '@/hooks/useMeetingCreate';
+import useCreateMeeting from "@/hooks/useMeetingCreate";
 
 const meetingCategories = Object.values(MeetingCategory);
 const categoryKoreanMap = {
-  [MeetingCategory.GOURMET]: '맛집',
-  [MeetingCategory.CAFE]: '카페',
-  [MeetingCategory.BOARD_GAME]: '보드게임',
-  [MeetingCategory.ALCOHOL]: '술',
+  [MeetingCategory.GOURMET]: "맛집",
+  [MeetingCategory.CAFE]: "카페",
+  [MeetingCategory.BOARD_GAME]: "보드게임",
+  [MeetingCategory.ALCOHOL]: "술",
 };
 
 export default function CreateMeetingModal() {
-  const { closeModal } = useModalStore();
-  const [meetingName, setMeetingName] = useState('');
-  const [meetingSummary, setMeetingSummary] = useState('');
-  const [meetingPlace, setMeetingPlace] = useState('');
+  const { closeModal } = modalStore();
+  const [meetingName, setMeetingName] = useState("");
+  const [meetingSummary, setMeetingSummary] = useState("");
+  const [meetingPlace, setMeetingPlace] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [meetingDate, setMeetingDate] = useState(new Date());
   const [deadlineDate, setDeadlineDate] = useState(new Date());
   const [meetingType, setMeetingType] = useState<MeetingCategory | null>(null);
-  const [participantCount, setParticipantCount] = useState('');
-  const [minParticipants, setMinParticipants] = useState('');
+  const [participantCount, setParticipantCount] = useState("");
+  const [minParticipants, setMinParticipants] = useState("");
   const [selectedPlace, setSelectedPlace] = useState<{
     placeName: string;
     address: string;
@@ -104,11 +104,11 @@ export default function CreateMeetingModal() {
 
   const formatDateToString = (date: Date) => {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const seconds = String(date.getSeconds()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
 
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
   };
@@ -121,7 +121,9 @@ export default function CreateMeetingModal() {
     }
   };
 
-  const handleMinParticipantsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMinParticipantsChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const { value } = e.target;
     if (/^\d*$/.test(value)) {
       setMinParticipants(value);
@@ -131,17 +133,19 @@ export default function CreateMeetingModal() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!meetingType) {
-      console.error('모임 유형을 선택해주세요');
+      console.error("모임 유형을 선택해주세요");
       return;
     }
 
     if (!selectedPlace) {
-      console.error('장소를 선택해주세요');
+      console.error("장소를 선택해주세요");
       return;
     }
 
     if (imageFile && imageFile.size > 5 * 1024 * 1024) {
-      toast.error('이미지 크기는 5MB를 초과할 수 없습니다.', { autoClose: 900 });
+      toast.error("이미지 크기는 5MB를 초과할 수 없습니다.", {
+        autoClose: 900,
+      });
       return;
     }
 
@@ -168,14 +172,16 @@ export default function CreateMeetingModal() {
       onSuccess: (response) => {
         if (response.id) {
           // router.push(`/meeting/detail/${response.id}`);
-          toast.success('모임 만들기에 성공했습니다!', { autoClose: 900 });
+          chatStore.getState().openChat(response.chatRoomId);
+          connectWebSocket();
+          toast.success("모임 만들기에 성공했습니다!", { autoClose: 900 });
           closeModal();
           router.push(`/meeting/detail/${response.id}`);
         }
       },
       onError: (error) => {
-        toast.error('에러가 발생했습니다.', { autoClose: 900 });
-        console.error('Error: ', error);
+        toast.error("에러가 발생했습니다.", { autoClose: 900 });
+        console.error("Error: ", error);
       },
     });
   };
@@ -195,15 +201,23 @@ export default function CreateMeetingModal() {
   return (
     <div className="oveflow-hidden inline-flex max-h-[95vh] w-[520px] flex-col items-start justify-start gap-2.5 rounded-xl border border-black bg-white p-6 shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
       <div className="flex h-auto w-full flex-col gap-6 overflow-y-auto [&::-webkit-scrollbar]:hidden">
-        <div className="flex w-full justify-between ">
-          <span className="font-dunggeunmo text-xl text-black">{'< 모임 만들기 >'}</span>
+        <div className="flex w-full justify-between">
+          <span className="font-dunggeunmo text-xl text-black">
+            {"< 모임 만들기 >"}
+          </span>
           <button onClick={closeModal}>
             <Icon path="X" width="24" height="24" />
           </button>
         </div>
-        <form className="flex h-auto w-full flex-col gap-6" onSubmit={handleSubmit}>
+        <form
+          className="flex h-auto w-full flex-col gap-6"
+          onSubmit={handleSubmit}
+        >
           <div className="flex w-full flex-col gap-3">
-            <label htmlFor="meetingName" className="font-dunggeunmo text-base text-black-11">
+            <label
+              htmlFor="meetingName"
+              className="font-dunggeunmo text-base text-black-11"
+            >
               모임 이름
             </label>
             <input
@@ -214,7 +228,10 @@ export default function CreateMeetingModal() {
             />
           </div>
           <div className="flex w-full flex-col gap-3">
-            <label htmlFor="meetingSummary" className="font-dunggeunmo text-base text-black-11">
+            <label
+              htmlFor="meetingSummary"
+              className="font-dunggeunmo text-base text-black-11"
+            >
               모임 소개글
             </label>
             <input
@@ -225,7 +242,10 @@ export default function CreateMeetingModal() {
             />
           </div>
           <div className="flex w-full flex-col gap-3">
-            <label htmlFor="meetingPlace" className="font-dunggeunmo text-base text-black-11">
+            <label
+              htmlFor="meetingPlace"
+              className="font-dunggeunmo text-base text-black-11"
+            >
               장소
             </label>
             <PlaceSearch onPlaceSelect={handlePlaceSelect} />
@@ -238,35 +258,39 @@ export default function CreateMeetingModal() {
 
           {/* TODO: 파일명 제출 버튼 위치 바꾸기 */}
           <div className="flex w-full flex-col gap-3">
-            <span className="font-dunggeunmo text-base text-black-11">이미지</span>
+            <span className="font-dunggeunmo text-base text-black-11">
+              이미지
+            </span>
             <div className="relative flex w-full justify-between">
               <input
                 type="file"
                 id="image"
                 onChange={handleImageChange}
                 accept="image/*"
-                className="absolute w-[360px] cursor-pointer opacity-0 file:hidden "
+                className="absolute w-[360px] cursor-pointer opacity-0 file:hidden"
               />
               <div
-                className={`w-[360px] rounded-[12px] bg-black-2 px-4 py-2.5  ${imageFile ? 'text-black-8' : 'text-black-6'}`}
+                className={`w-[360px] rounded-[12px] bg-black-2 px-4 py-2.5 ${imageFile ? "text-black-8" : "text-black-6"}`}
               >
-                {imageFile ? imageFile.name : '이미지를 첨부해 주세요'}
+                {imageFile ? imageFile.name : "이미지를 첨부해 주세요"}
               </div>
               <label
                 htmlFor="image"
-                className={`flex h-auto w-[100px] cursor-pointer items-center justify-center rounded-[12px] border py-2.5 text-sm font-semibold  ${imageFile ? 'border-black text-black' : 'border-black-6 text-black-6'}`}
+                className={`flex h-auto w-[100px] cursor-pointer items-center justify-center rounded-[12px] border py-2.5 text-sm font-semibold ${imageFile ? "border-black text-black" : "border-black-6 text-black-6"}`}
               >
                 파일 찾기
               </label>
             </div>
           </div>
           <div className="flex w-full flex-col gap-3">
-            <span className="text-blac-11k font-dunggeunmo text-base">카테고리</span>
+            <span className="text-blac-11k font-dunggeunmo text-base">
+              카테고리
+            </span>
             <div className="flex w-full justify-between gap-3">
               {meetingCategories.map((type) => (
                 <div
                   key={type}
-                  className={`flex w-full cursor-pointer items-center rounded-[12px] border border-black-6 py-2 pl-[6px] pr-2.5 ${meetingType === type ? 'border-black-10 bg-black-10' : ''}`}
+                  className={`flex w-full cursor-pointer items-center rounded-[12px] border border-black-6 py-2 pl-[6px] pr-2.5 ${meetingType === type ? "border-black-10 bg-black-10" : ""}`}
                   onClick={() => handleMeetingType(type)}
                 >
                   <div className="flex w-full items-center justify-between">
@@ -289,12 +313,12 @@ export default function CreateMeetingModal() {
                             />
                           </svg>
                         ) : (
-                          ''
+                          ""
                         )}
                       </div>
                     </div>
                     <div
-                      className={`text-sm ${meetingType === type ? 'text-white' : 'text-black-6'}`}
+                      className={`text-sm ${meetingType === type ? "text-white" : "text-black-6"}`}
                     >
                       {categoryKoreanMap[type]}
                     </div>
@@ -320,7 +344,10 @@ export default function CreateMeetingModal() {
             </div>
           </div>
           <div className="flex w-full flex-col gap-3">
-            <label htmlFor="모집 정원" className="font-dunggeunmo text-base text-black-11">
+            <label
+              htmlFor="모집 정원"
+              className="font-dunggeunmo text-base text-black-11"
+            >
               모집 정원
             </label>
             <input
@@ -332,7 +359,10 @@ export default function CreateMeetingModal() {
             />
           </div>
           <div className="flex w-full flex-col gap-3">
-            <label htmlFor="최소 인원" className="font-dunggeunmo text-base text-black-11">
+            <label
+              htmlFor="최소 인원"
+              className="font-dunggeunmo text-base text-black-11"
+            >
               최소 인원
             </label>
             <input

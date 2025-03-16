@@ -5,8 +5,9 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import Gnb from '@/components/layout/Gnb';
-import SplashScreen from '@/components/layout/SplashScreen';
 import Modal from '@/components/ui/modal/Modal';
+import Spinner from '../skeleton/LoadingSpinner';
+import SplashScreen from './SplashScreen';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -14,14 +15,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const [showSplash, setShowSplash] = useState(false);
 
   useEffect(() => {
-    // 브라우저 환경일 때만 실행
     if (typeof window === 'undefined') return;
-
-    // 이미 로드된 경우 건너뜀
-    if (window.kakao?.maps) return;
-
-    // 이미 스크립트 태그가 있는 경우 건너뜀
-    if (document.getElementById('kakao-map-script')) return;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then(() => console.log('[Service Worker] 등록 성공'))
+        .catch((error) => console.error('[Service Worker] 등록 실패', error));
+    }
+    if (window.kakao?.maps || document.getElementById('kakao-map-script')) return;
 
     const script = document.createElement('script');
     script.id = 'kakao-map-script';
@@ -52,13 +53,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <>
             {!pathname.includes('/user') && pathname !== '/' && <Gnb />}
             <div
-              className={`flex-1 overflow-auto ${!pathname.includes('/user') && pathname !== '/' ? 'mt-16' : ''}`}
+              className={`flex-1 overflow-auto ${
+                !pathname.includes('/user') && pathname !== '/' ? 'mt-16' : ''
+              }`}
             >
-              <React.Suspense
-                fallback={<div className="p-4 text-center">⏳ 데이터 불러오는 중...</div>}
-              >
-                {children}
-              </React.Suspense>
+              <React.Suspense fallback={<Spinner />}>{children}</React.Suspense>
             </div>
             <Modal />
           </>

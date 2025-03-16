@@ -2,18 +2,18 @@
 
 import { useEffect, useState } from "react";
 
-import { fetchProfile } from "@/api/myPage/myPage";
+import { fetchProfile } from "@/api/client/myPage/myPage";
 import EditingIcon from "@/app/meeting/detail/components/EditingIcon";
 import ProfileIcon from "@/components/utils/BaseProfile";
-import useModalStore from "@/store/useModalStore";
-import useProfileStore from "@/store/useProfileStore";
+import modalStore from "@/store/modalStore";
+import profileStore from "@/store/profileStore";
 
 export default function Page() {
   const [iconStatus, setIconStatus] = useState<"default" | "hover" | "editing">(
     "default",
   );
-  const { nickname, email, description, imageUrl } = useProfileStore();
-  const { openModal } = useModalStore();
+  const { nickname, email, description, imageUrl } = profileStore();
+  const { openModal } = modalStore();
 
   return (
     <div className="relative flex h-auto w-full gap-2.5 justify-self-start lg:flex lg:items-center lg:gap-6">

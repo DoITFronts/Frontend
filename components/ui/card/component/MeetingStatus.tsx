@@ -18,10 +18,10 @@ export default function MeetingStatus({
   optionClass,
 }: MeetingStatusProps) {
   return (
-    <div className="flex w-full flex-row items-center">
+    <div className="flex w-full flex-row">
       <div className="flex grow flex-col gap-3">
         <div className={`${optionClass} flex items-center gap-2`}>
-          <div className="flex flex-row gap-2">
+          <div className="flex min-h-6 flex-row gap-2">
             <Card.Participant participantCount={participantCount} capacity={capacity} />
             {children}
           </div>

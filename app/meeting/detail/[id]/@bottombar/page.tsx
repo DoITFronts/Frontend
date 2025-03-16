@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import {
   BottomFloatingBarError,
   BottomFloatingBarSkeleton,
 } from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
 import Button from '@/components/ui/button/Button';
-import { useMeetingDetail } from '@/hooks/useMeetingDetail';
-import useModalStore from '@/store/useModalStore';
-import { isUserLoggedIn } from '@/utils/authUtils';
+import useJoinLightning from '@/hooks/meeting/useJoinLightning';
+import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
+import modalStore from '@/store/modalStore';
+import { isUserLoggedIn } from '@/utils/auth/loginUtils';
 
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
   ALCOHOL: {
@@ -34,23 +34,34 @@ const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
 
 export default function BottomFloatingBar() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
+  const { joinMutation, leaveMutation } = useJoinLightning(meeting?.id as string);
   const [isJoined, setIsJoined] = useState(false);
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
 
   const handleJoinToggle = async () => {
     if (!isUserLoggedIn()) {
       openModal('loginCheck');
       return;
     }
-
     if (isJoined) {
-      await leaveLightning(meeting?.id as string);
+      await leaveMutation.mutate();
       toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
     } else {
-      await joinLightning(meeting?.id as string);
+      await joinMutation.mutate();
       toast.success('모임에 참여했습니다.', { autoClose: 900 });
     }
     setIsJoined(!isJoined);
+  };
+
+  const handleShareToggle = () => {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        toast.success('URL이 클립보드에 복사되었습니다.', { autoClose: 900 });
+      })
+      .catch(() => {
+        toast.error('URL 복사에 실패했습니다.', { autoClose: 900 });
+      });
   };
 
   if (isLoading) return <BottomFloatingBarSkeleton />;
@@ -69,9 +80,14 @@ export default function BottomFloatingBar() {
             {CATEGORY_TEXTS[category]?.subtitle}
           </div>
         </div>
-        <Button color={isJoined ? 'white' : 'filled'} type="button" onClick={handleJoinToggle}>
-          {isJoined ? '참여 취소하기' : '참여하기'}
-        </Button>
+        <div className="flex gap-2.5">
+          <Button color={isJoined ? 'filled' : 'white'} type="button" onClick={handleShareToggle}>
+            공유하기
+          </Button>
+          <Button color={isJoined ? 'white' : 'filled'} type="button" onClick={handleJoinToggle}>
+            {isJoined ? '참여 취소하기' : '참여하기'}
+          </Button>
+        </div>
       </div>
     </div>
   );
