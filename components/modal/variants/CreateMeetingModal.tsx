@@ -9,7 +9,7 @@ import createMeeting from "@/api/client/meeting/createMeeting";
 import Button from "@/components/ui/button/Button";
 import PlaceSearch from "@/components/modal/SearchPlace";
 import Icon from "@/components/utils/Icon";
-import chatStore from "@/store/chatStore";
+import chatStore from "@/store/chat/chatStore";
 import modalStore from "@/store/modalStore";
 import { CreateMeetingParams, MeetingCategory } from "@/types/meeting/meeting";
 
