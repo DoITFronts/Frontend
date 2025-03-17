@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { useStore } from "zustand";
 
-import ChatMessage from "@/components/ui/chatting/ChattingMessage";
+import ChatMessage from "@/components/chatting/ChattingMessage";
 import useChatMessages from "@/hooks/chat/useChatMessages";
 import chatStore from "@/store/chat/chatStore";
 import formatRelativeTime from "@/utils/timeUtils/formatRelativeTime";

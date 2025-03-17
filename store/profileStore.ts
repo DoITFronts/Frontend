@@ -1,6 +1,7 @@
-import mockMyProfile from '@/api/mock/mockMyProfile';
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+
+import mockMyProfile from "@/api/mock/mockMyProfile";
 
 interface ProfileStore extends User {
   updateProfile: (profile: Partial<User>) => void;
@@ -10,10 +11,10 @@ interface ProfileStore extends User {
 
 const initialProfileState: User = {
   id: 0,
-  nickname: '',
-  email: '',
+  nickname: "",
+  email: "",
   description: null,
-  imageUrl: '',
+  imageUrl: "",
 };
 
 const profileStore = create<ProfileStore>()(
@@ -22,11 +23,12 @@ const profileStore = create<ProfileStore>()(
       ...initialProfileState,
 
       updateProfile: (profile) => set((state) => ({ ...state, ...profile })),
-      updateProfileImage: (image) => set((state) => ({ ...state, imageUrl: image })),
+      updateProfileImage: (image) =>
+        set((state) => ({ ...state, imageUrl: image })),
       setInitialProfile: (profile) => set(profile),
     }),
     {
-      name: 'profile-storage',
+      name: "profile-storage",
       storage: createJSONStorage(() => localStorage),
       // 메서드를 제외한 데이터만 유지
       partialize: (state) => ({

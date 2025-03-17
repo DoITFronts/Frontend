@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import Gnb from "@/components/layout/Gnb";
 import Modal from "@/components/modal/Modal";
-import ChatModal from "@/components/ui/chatting/ChattingModal";
+import ChatModal from "@/components/chatting/ChattingModal";
 import WebSocketInitializer from "@/components/utils/WebSocketInitializer";
 
 import Spinner from "../skeleton/LoadingSpinner";

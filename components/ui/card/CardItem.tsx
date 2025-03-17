@@ -6,49 +6,45 @@ import Link from "next/link";
 import { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { toast } from "react-toastify";
+import { useStore } from "zustand";
 
+import { joinChatRoom } from "@/api/client/chat/chatApi";
 import {
   joinLightning,
   leaveLightning,
   deleteLightning,
 } from "@/api/client/meeting/joinMeeting";
+import DeleteMeetingModal from "@/components/modal/variants/DeleteMeetingModal";
 import Button from "@/components/ui/button/Button";
 import MeetingStatus from "@/components/ui/card/component/MeetingStatus";
-import DeleteMeetingModal from "@/components/modal/variants/DeleteMeetingModal";
-// import useLikeToggle from '@/hooks/like/useLikeToggle';
-import modalStore from "@/store/modalStore";
-import categoryMap from "@/types/map/categoryMap";
-import { Meeting } from "@/types/meeting/meeting";
-import { cityMap } from "@/types/map/regions";
-import { isUserLoggedIn } from "@/utils/auth/loginUtils";
-
-import ChipDate from "../chip/ChipDate";
-
-import Card from "./Card";
-
-import profileStore from "@/store/profileStore";
-
-import Category from "./component/Category";
-import HostInfo from "./component/HostInfo";
-
 import {
   MEETING_JOIN_SUCCESS,
   MEETING_CANCEL_SUCCESS,
   MEETING_DELETE_SUCCESS,
   GENERAL_ERROR,
 } from "@/lib/constants/toast";
+import chatStore from "@/store/chat/chatStore";
+import modalStore from "@/store/modalStore";
+import profileStore from "@/store/profileStore";
+import categoryMap from "@/types/map/categoryMap";
+import { cityMap } from "@/types/map/regions";
+import { Meeting } from "@/types/meeting/meeting";
+import { isUserLoggedIn } from "@/utils/auth/loginUtils";
+
+import ChipDate from "../chip/ChipDate";
+
+import Card from "./Card";
+import Category from "./component/Category";
+import HostInfo from "./component/HostInfo";
 
 interface Props {
   meeting: Meeting;
-  onClick: () => void;
   priority?: boolean;
 }
 
-export default function CardItem({ meeting, onClick, priority }: Props) {
+export default function CardItem({ meeting, priority }: Props) {
+  const { openChat } = useStore(chatStore);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
-
-  // const { isLiked, handleLikeClick } = useLikeToggle(meeting.id, meeting.isLiked, onClick);
-
   const [isConfirmed, setIsConfirmed] = useState(meeting.isConfirmed);
   const [isCompleted, setIsCompleted] = useState(meeting.isCompleted);
   const [isJoined, setIsJoined] = useState(meeting.isJoined);
@@ -86,7 +82,8 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
         setIsCompleted(participantCount + 1 >= meeting.capacity);
         setIsConfirmed(participantCount + 1 >= meeting.minCapacity);
         await joinLightning(meeting.id);
-
+        await joinChatRoom(Number(meeting.id));
+        openChat(Number(meeting.id));
         toast.success(MEETING_JOIN_SUCCESS);
       }
     } catch (error) {
@@ -209,7 +206,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                       />
                     </div>
                   </div>
-                  <div className="line-clamp-2 overflow-hidden text-ellipsis font-pretandard text-base font-medium text-[#8c8c8c]">
+                  <div className="font-pretandard line-clamp-2 overflow-hidden text-ellipsis text-base font-medium text-[#8c8c8c]">
                     {meeting.summary}
                   </div>
                 </div>
