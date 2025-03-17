@@ -1,8 +1,10 @@
+import path from "path";
+
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
-import path from "path";
+import TerserPlugin from "terser-webpack-plugin";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
 
 const withBundle = withBundleAnalyzer({
@@ -14,10 +16,49 @@ const withPWAWrapper = withPWA({
   disable: process.env.NODE_ENV === "development",
 }) as (config: NextConfig) => NextConfig;
 
-const TerserPlugin = require("terser-webpack-plugin");
-
 const nextConfig: NextConfig = withBundle(
   withPWAWrapper({
+    dest: "public",
+    disable: process.env.NODE_ENV === "development",
+    register: true, // 서비스 워커 자동 등록
+    skipWaiting: true, // 업데이트 즉시 반영
+    publicExcludes: ["!_next/static/**", "!_next/server/**"], // Netlify에서 PWA 적용을 위한 설정 추가
+    runtimeCaching: [
+      {
+        urlPattern:
+          /^https:\/\/codeit-doit.s3.ap-northeast-2.amazonaws.com\/.*/i,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "s3-images",
+          expiration: {
+            maxEntries: 50,
+            maxAgeSeconds: 60 * 60 * 24 * 30, // 30일
+          },
+        },
+      },
+      {
+        urlPattern: /^https:\/\/fonts\.(googleapis|gstatic)\.com\/.*/i,
+        handler: "CacheFirst",
+        options: {
+          cacheName: "google-fonts",
+          expiration: {
+            maxEntries: 30,
+            maxAgeSeconds: 60 * 60 * 24 * 365, // 1년
+          },
+        },
+      },
+      {
+        urlPattern: /^https:\/\/cdnjs\.cloudflare\.com\/.*/i,
+        handler: "StaleWhileRevalidate",
+        options: {
+          cacheName: "cdn-resources",
+          expiration: {
+            maxEntries: 50,
+            maxAgeSeconds: 60 * 60 * 24 * 7, // 7일
+          },
+        },
+      },
+    ],
     reactStrictMode: true,
     images: {
       domains: process.env.NEXT_PUBLIC_IMAGE_DOMAINS?.split(",") || [],
@@ -79,12 +120,12 @@ const nextConfig: NextConfig = withBundle(
                 drop_console: true, // console.log 삭제
               },
             },
-          })
+          }),
         );
       }
 
       return config;
-    };
+    },
   }) as NextConfig,
 );
 
