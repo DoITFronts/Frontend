@@ -1,31 +1,37 @@
-import { useThemeStore } from '@/store/themeStore';
-import userStore from '@/store/userStore';
+import { useThemeStore } from "@/store/themeStore";
+import profileStore from "@/store/profileStore";
 
 interface ProfileIconProps {
-  size?: number | 'small' | 'medium' | 'large';
+  size?: number | "small" | "medium" | "large";
   id?: number;
 }
 
-function ProfileIcon({ size = 'medium', id }: ProfileIconProps) {
-  const { profileImage } = userStore();
+function ProfileIcon({ size = "medium", id }: ProfileIconProps) {
+  // const { imageUrl } = profileStore();
   const userTheme = useThemeStore((state) => state.theme);
 
-  const isOdd = id ? Number(id) % 2 !== 0 : userTheme === 'light';
-  const theme = isOdd ? 'light' : 'dark';
+  const isOdd = id ? Number(id) % 2 !== 0 : userTheme === "light";
+  const theme = isOdd ? "light" : "dark";
 
-  if (profileImage) {
-    return <img src={profileImage} alt="User Profile" className="rounded-full object-cover" />;
+  if (id) {
+    return (
+      <img
+        src={`https://codeit-doit.s3.ap-northeast-2.amazonaws.com/user/${id}/image.jpg`}
+        alt="User Profile"
+        className="h-[1.875rem] w-[1.875rem] rounded-full object-cover"
+      />
+    );
   }
 
-  const backgroundColor = theme === 'dark' ? '#595959' : '#F0F0F0';
-  const pathColor = theme === 'dark' ? '#F0F0F0' : '#BFBFBF';
+  const backgroundColor = theme === "dark" ? "#595959" : "#F0F0F0";
+  const pathColor = theme === "dark" ? "#F0F0F0" : "#BFBFBF";
 
   const predefinedSizes = {
     small: 20,
     medium: 30,
     large: 102,
   };
-  const dimensions = typeof size === 'number' ? size : predefinedSizes[size];
+  const dimensions = typeof size === "number" ? size : predefinedSizes[size];
 
   return (
     <svg

@@ -3,15 +3,22 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { joinLightning, leaveLightning } from '@/api/meeting/joinMeeting';
 import {
   BottomFloatingBarError,
   BottomFloatingBarSkeleton,
 } from '@/app/meeting/detail/components/skeleton/BottomFloatingBarSkeleton';
 import Button from '@/components/ui/button/Button';
-import { useMeetingDetail } from '@/hooks/useMeetingDetail';
-import useModalStore from '@/store/useModalStore';
-import { isUserLoggedIn } from '@/utils/authUtils';
+import useJoinLightning from '@/hooks/meeting/useJoinLightning';
+import { useMeetingDetail } from '@/hooks/meeting/useMeetingDetail';
+import modalStore from '@/store/modalStore';
+import { isUserLoggedIn } from '@/utils/auth/loginUtils';
+
+import {
+  MEETING_JOIN_SUCCESS,
+  MEETING_CANCEL_SUCCESS,
+  URL_COPY_SUCCESS,
+  URL_COPY_ERROR,
+} from '@/lib/constants/toast';
 
 const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
   ALCOHOL: {
@@ -34,23 +41,34 @@ const CATEGORY_TEXTS: Record<string, { title: string; subtitle: string }> = {
 
 export default function BottomFloatingBar() {
   const { data: meeting, isLoading, error } = useMeetingDetail();
+  const { joinMutation, leaveMutation } = useJoinLightning(meeting?.id as string);
   const [isJoined, setIsJoined] = useState(false);
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
 
   const handleJoinToggle = async () => {
     if (!isUserLoggedIn()) {
       openModal('loginCheck');
       return;
     }
-
     if (isJoined) {
-      await leaveLightning(meeting?.id as string);
-      toast.success('모임 참여를 취소했습니다.', { autoClose: 900 });
+      await leaveMutation.mutate();
+      toast.success(MEETING_CANCEL_SUCCESS);
     } else {
-      await joinLightning(meeting?.id as string);
-      toast.success('모임에 참여했습니다.', { autoClose: 900 });
+      await joinMutation.mutate();
+      toast.success(MEETING_JOIN_SUCCESS);
     }
     setIsJoined(!isJoined);
+  };
+
+  const handleShareToggle = () => {
+    navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => {
+        toast.success(URL_COPY_SUCCESS);
+      })
+      .catch(() => {
+        toast.error(URL_COPY_ERROR);
+      });
   };
 
   if (isLoading) return <BottomFloatingBarSkeleton />;
@@ -69,9 +87,14 @@ export default function BottomFloatingBar() {
             {CATEGORY_TEXTS[category]?.subtitle}
           </div>
         </div>
-        <Button color={isJoined ? 'white' : 'filled'} type="button" onClick={handleJoinToggle}>
-          {isJoined ? '참여 취소하기' : '참여하기'}
-        </Button>
+        <div className="flex gap-2.5">
+          <Button color={isJoined ? 'filled' : 'white'} type="button" onClick={handleShareToggle}>
+            공유하기
+          </Button>
+          <Button color={isJoined ? 'white' : 'filled'} type="button" onClick={handleJoinToggle}>
+            {isJoined ? '참여 취소하기' : '참여하기'}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,11 @@
+
+'use client'
+
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 
-import Icon from '../../utils/Icon';
+
+import Icon from "../../utils/Icon";
 
 interface DropDownProps {
   /** 트리거를 컴포넌트로 받음.  */
@@ -15,7 +19,7 @@ interface DropDownProps {
   /** 선택된 옵션 값 */
   selectedValue?: string;
   /** 드롭다운의 정렬방식 */
-  align?: 'left' | 'middle' | 'right';
+  align?: "left" | "middle" | "right";
 }
 
 /**
@@ -47,7 +51,7 @@ export default function DropDown({
   optionClassName,
   trigger,
   selectedValue,
-  align = 'left',
+  align = "left",
 }: DropDownProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -55,13 +59,16 @@ export default function DropDown({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
   const handleSelected = (option: string) => {
@@ -77,9 +84,7 @@ export default function DropDown({
 
       {isOpen && (
         <div
-          className={`scrollbar-none absolute z-10 mt-1 max-h-[350px] w-fit overflow-y-scroll rounded-lg bg-white shadow-lg
-          ${align === 'right' ? 'right-0' : align === 'middle' ? '-left-7 -translate-x-1/2' : 'left-0'}
-        `}
+          className={`scrollbar-none absolute z-50 mt-1 max-h-[350px] w-fit overflow-y-scroll rounded-lg bg-white shadow-lg ${align === "right" ? "right-0" : align === "middle" ? "-left-7 -translate-x-1/2" : "left-0"} `}
         >
           {Array.isArray(options) ? (
             <ul>
@@ -89,8 +94,8 @@ export default function DropDown({
                   onClick={() => handleSelected(option)}
                   className={`${optionClassName} ${
                     selectedValue === option
-                      ? 'rounded-lg bg-black text-white hover:bg-black hover:text-white'
-                      : 'hover:bg-gray-100 hover:text-black'
+                      ? "rounded-lg bg-black text-white hover:bg-black hover:text-white"
+                      : "hover:bg-gray-100 hover:text-black"
                   } cursor-pointer rounded-lg`}
                 >
                   {option}

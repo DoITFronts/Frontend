@@ -1,24 +1,29 @@
-'use client';
+"use client";
 
-import { ko } from 'date-fns/locale';
-import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import DatePicker from 'react-datepicker';
+import { ko } from "date-fns/locale";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import DatePicker from "react-datepicker";
 
-import CategoryFilter from '@/components/ui/chip/CategoryFilter';
-import DropDown from '@/components/ui/dropdown/DropDown';
-import EmptyMessage from '@/components/ui/list/EmptyMessage';
-import Icon from '@/components/utils/Icon';
-import useReview from '@/hooks/useReview';
-import { defaultFirstOption, defaultSecondOption } from '@/lib/constants';
-import meetingCategory from '@/lib/constants/meeting';
-import useModalStore from '@/store/useModalStore';
-import { regions } from '@/types/regions';
-import { Reviews } from '@/types/review';
+import CategoryFilter from "@/components/ui/chip/CategoryFilter";
+import DropDown from "@/components/ui/dropdown/DropDown";
+import FilterDropdown from "@/components/ui/dropdown/FilterDropdown";
+import EmptyMessage from "@/components/ui/list/EmptyMessage";
+import Icon from "@/components/utils/Icon";
+import useReview from "@/hooks/review/useReview";
+import {
+  defaultFirstOption,
+  defaultSecondOption,
+} from "@/lib/constants/meeting";
+import meetingCategory from "@/lib/constants/meeting/meeting";
+import modalStore from "@/store/modalStore";
+import { regions } from "@/types/map/regions";
+import { Reviews } from "@/types/review/review";
+import { formatShortDate } from "@/utils/timeUtils/formatDateTime";
 
-import ReviewItem from './ReviewItem';
-import ReviewStatus from './ReviewStatus';
-import ReviewSkeleton from './skeleton/ReviewSkeleton';
+import ReviewItem from "./ReviewItem";
+import ReviewStatus from "./ReviewStatus";
+import ReviewSkeleton from "./skeleton/ReviewSkeleton";
 
 interface InitialReviewsProps {
   initialReviews: {
@@ -27,53 +32,36 @@ interface InitialReviewsProps {
   };
 }
 
-// 드롭다운 재사용 컴포넌트
-function FilterDropdown({
-  options,
-  selectedValue,
-  onSelect,
-}: {
-  options: string[];
-  selectedValue: string;
-  onSelect: (value: string) => void;
-}) {
-  return (
-    <DropDown
-      options={options}
-      onSelect={onSelect}
-      selectedValue={selectedValue}
-      trigger={
-        <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-          {selectedValue}
-          <Icon path="chevron_down" />
-        </div>
-      }
-      optionClassName="justify-start min-w-[95px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
-    />
-  );
-}
-
 export default function ReviewList({ initialReviews }: InitialReviewsProps) {
-  const { openModal } = useModalStore();
+  const { openModal } = modalStore();
   const searchParams = useSearchParams();
   const router = useRouter();
   const { reviews } = initialReviews;
 
   // URL에서 가져온 검색 조건을 상태로 관리
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '전체');
+  const [selectedCategory, setSelectedCategory] = useState(
+    searchParams.get("category") || "전체",
+  );
   const [selectedFirstLocation, setSelectedFirstLocation] = useState(
-    searchParams.get('location_1') || defaultFirstOption,
+    searchParams.get("location_1") || defaultFirstOption,
   );
   const [selectedSecondLocation, setSelectedSecondLocation] = useState(
-    searchParams.get('location_2') || defaultSecondOption,
+    searchParams.get("location_2") || defaultSecondOption,
   );
   const [selectedDate, setSelectedDate] = useState(
-    searchParams.get('targetAt') ? new Date(searchParams.get('targetAt') as string) : null,
+    searchParams.get("targetAt")
+      ? new Date(searchParams.get("targetAt") as string)
+      : null,
   );
-  const [selectedFilter, setSelectedFilter] = useState(searchParams.get('order') || '');
+  const [selectedFilter, setSelectedFilter] = useState(
+    searchParams.get("order") || "",
+  );
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  const meetingLocationFirst = useMemo(() => [defaultFirstOption, ...Object.keys(regions)], []);
+  const meetingLocationFirst = useMemo(
+    () => [defaultFirstOption, ...Object.keys(regions)],
+    [],
+  );
   const meetingLocationSecond = useMemo(
     () => [defaultSecondOption, ...(regions[selectedFirstLocation] || [])],
     [selectedFirstLocation],
@@ -92,27 +80,33 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   });
 
   useEffect(() => {
-    setSelectedCategory(searchParams.get('category') || '전체');
-    setSelectedFirstLocation(searchParams.get('location_1') || defaultFirstOption);
-    setSelectedSecondLocation(searchParams.get('location_2') || defaultSecondOption);
-    setSelectedFilter(searchParams.get('order') || '');
+    setSelectedCategory(searchParams.get("category") || "전체");
+    setSelectedFirstLocation(
+      searchParams.get("location_1") || defaultFirstOption,
+    );
+    setSelectedSecondLocation(
+      searchParams.get("location_2") || defaultSecondOption,
+    );
+    setSelectedFilter(searchParams.get("order") || "");
   }, [searchParams]);
 
   // URL을 변경하여 상태 업데이트
   const updateSearchParams = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value) {
-      params.set(key === 'date' ? 'targetAt' : key, value);
+      params.set(key === "date" ? "targetAt" : key, value);
     } else {
-      params.delete(key === 'date' ? 'targetAt' : key);
+      params.delete(key === "date" ? "targetAt" : key);
     }
-    router.replace(`?${decodeURIComponent(params.toString())}`, { scroll: false });
+    router.replace(`?${decodeURIComponent(params.toString())}`, {
+      scroll: false,
+    });
   };
 
   //  카테고리 변경 핸들러
   const handleCategoryClick = (category: string) => {
     setSelectedCategory(category);
-    updateSearchParams('category', category === '전체' ? '' : category);
+    updateSearchParams("category", category === "전체" ? "" : category);
   };
 
   // 첫 번째 지역 선택
@@ -121,15 +115,15 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
 
     // 첫 번째 지역을 업데이트
     if (selected === defaultFirstOption) {
-      params.delete('location_1');
-      params.delete('location_2'); // 첫 번째 지역을 초기화하면 두 번째 지역도 초기화
+      params.delete("location_1");
+      params.delete("location_2"); // 첫 번째 지역을 초기화하면 두 번째 지역도 초기화
     } else {
-      params.set('location_1', selected);
+      params.set("location_1", selected);
 
       // 현재 선택된 두 번째 지역이 유효한지 확인 후 유지
       const validSecondLocations = regions[selected] || [];
       if (!validSecondLocations.includes(selectedSecondLocation)) {
-        params.delete('location_2');
+        params.delete("location_2");
       }
     }
 
@@ -139,7 +133,7 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
   // 두 번째 지역 선택
   const handleSelectSecondLocation = (selected: string) => {
     setSelectedSecondLocation(selected);
-    updateSearchParams('location_2', selected);
+    updateSearchParams("location_2", selected);
   };
 
   // 날짜 확인 핸들러
@@ -148,26 +142,29 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
     if (tempDate) {
       const fixedDate = new Date(tempDate);
       fixedDate.setHours(12, 0, 0, 0); // UTC 보정
-      updateSearchParams('targetAt', `${fixedDate.toISOString().split('T')[0]}T00:00:00`);
+      updateSearchParams(
+        "targetAt",
+        `${fixedDate.toISOString().split("T")[0]}T00:00:00`,
+      );
     }
   };
 
   // 마감 임박, 참여 인원 필터링 클릭 핸들러
   const handleSelectFilter = (selected: string) => {
     setSelectedFilter(selected);
-    updateSearchParams('order', selected);
+    updateSearchParams("order", selected);
   };
 
   // 날짜 필터링 초기화 클릭 핸들러
   const handleResetDate = () => {
     setSelectedDate(null);
-    updateSearchParams('targetAt', '');
+    updateSearchParams("targetAt", "");
   };
 
   // 마감 임박, 참여 인원 필터링 초기화 클릭 핸들러
   const handleResetFilter = () => {
-    setSelectedFilter('');
-    updateSearchParams('order', '');
+    setSelectedFilter("");
+    updateSearchParams("order", "");
   };
 
   // 캘린더 내부 스타일
@@ -180,50 +177,50 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
     const isFiltered = selectedDate?.getTime() === date.getTime();
 
     return {
-      width: '32px',
-      height: '32px',
-      display: 'flex',
-      padding: '10px',
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderRadius: '5px',
-      color: '#8c8c8c',
+      width: "32px",
+      height: "32px",
+      display: "flex",
+      padding: "10px",
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: "5px",
+      color: "#8c8c8c",
 
-      ...(isToday && { fontWeight: 'bold', color: 'black' }),
-      ...(isSelected || isFiltered ? { backgroundColor: 'black', color: 'white' } : {}),
+      ...(isToday && { fontWeight: "bold", color: "black" }),
+      ...(isSelected || isFiltered
+        ? { backgroundColor: "black", color: "white" }
+        : {}),
     };
   };
 
   return (
-    <div className="container mx-auto mt-[72px] max-w-[1200px] px-4">
+    <div className="container mx-auto mt-6 max-w-[1200px] md:mt-[50px]">
       {/* 번개 카테고리 */}
-      <div className="mb-10 flex gap-3">
+      <div className="mb-3 flex gap-[10px] md:mb-5 md:gap-3">
         {meetingCategory.map((category) => (
           <button
             key={category}
             type="button"
             onClick={() => handleCategoryClick(category)}
-            className="cursor-pointer focus:outline-none"
+            className="cursor-pointer font-semibold focus:outline-none"
           >
             <CategoryFilter
               text={category}
               size="lg"
-              mode={selectedCategory === category ? 'dark' : 'light'}
+              mode={selectedCategory === category ? "dark" : "light"}
             />
           </button>
         ))}
       </div>
 
       {/* 리뷰 점수 */}
-      <div className="flex justify-center">
-        <div className="mb-10 flex w-[1000px] items-center justify-center border-y-gray-200">
-          <ReviewStatus reviews={reviews} />
-        </div>
+      <div className="mb-[30px] flex max-w-[1200px] md:mb-6 lg:mb-10">
+        <ReviewStatus reviews={reviews} />
       </div>
 
       {/* 필터링 드롭다운 */}
-      <div className="flex justify-between">
-        <div className="flex-start mb-10 flex gap-3">
+      <div className="mb-[30px] flex justify-between md:mb-10">
+        <div className="flex-start flex gap-[6px] md:gap-3">
           <FilterDropdown
             options={meetingLocationFirst}
             selectedValue={selectedFirstLocation}
@@ -244,13 +241,15 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
                   selected={tempDate}
                   onChange={setTempDate}
                   calendarClassName="custom-calendar"
-                  renderDayContents={(day, date) => <div style={getDayStyle(date)}>{day}</div>}
+                  renderDayContents={(day, date) => (
+                    <div style={getDayStyle(date)}>{day}</div>
+                  )}
                 />
                 <div className="flex justify-between">
                   <button
                     type="button"
                     onClick={handleResetDate}
-                    className="inline-flex items-center justify-center gap-2.5 self-stretch overflow-hidden rounded-xl border border-[#1e1e1e] bg-white  py-2.5"
+                    className="inline-flex items-center justify-center gap-2.5 self-stretch overflow-hidden rounded-xl border border-[#1e1e1e] bg-white py-2.5"
                   >
                     <div className="relative w-[145px] justify-start text-center font-['Pretendard'] text-sm font-semibold leading-tight text-[#1e1e1e]">
                       초기화
@@ -269,29 +268,35 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
               </div>
             }
             trigger={
-              <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-                {selectedDate ? selectedDate.toLocaleDateString() : '날짜'}
+              <div className="font-pretandard inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+                {selectedDate
+                  ? formatShortDate(selectedDate.toISOString())
+                  : "날짜"}
                 <div onClick={handleResetDate}>
-                  <Icon path={selectedDate ? 'exit' : 'chevron_down'} />
+                  <Icon path={selectedDate ? "exit" : "chevron_down"} />
                 </div>
               </div>
             }
-            onSelect={() => openModal('calendar')}
+            onSelect={() => openModal("calendar")}
           />
         </div>
         <DropDown
           align="right"
-          options={['리뷰 높은 순', '참여 인원 순']}
+          options={["리뷰 높은 순", "참여 인원 순"]}
           selectedValue={selectedFilter}
           onSelect={handleSelectFilter}
           trigger={
-            <div className="inline-flex h-10 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center font-pretandard text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white">
-              <div onClick={handleResetFilter} aria-label="필터 초기화" className="cursor-pointer">
-                <Icon path={selectedFilter ? 'exit' : 'sort'} />
+            <div className="font-pretandard inline-flex h-9 flex-row items-center justify-center rounded-xl border border-[#8c8c8c] bg-white px-2.5 py-2 text-center text-sm font-medium leading-tight text-[#8c8c8c] hover:bg-[#595959] hover:text-white md:h-10">
+              <div
+                onClick={handleResetFilter}
+                aria-label="필터 초기화"
+                className="cursor-pointer"
+              >
+                <Icon path={selectedFilter ? "exit" : "sort"} />
               </div>
             </div>
           }
-          optionClassName="justify-start min-w-[115px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
+          optionClassName="justify-start min-w-[145px] py-[10px] px-4 text-[#8c8c8c] text-base font-semibold font-pretandard leading-normal"
         />
       </div>
 
@@ -304,7 +309,11 @@ export default function ReviewList({ initialReviews }: InitialReviewsProps) {
         )}
         <div className="flex flex-col gap-y-6">
           {reviews.map((review, index) => (
-            <ReviewItem key={review.reviewId} review={review} priority={index < 10} />
+            <ReviewItem
+              key={review.reviewId}
+              review={review}
+              priority={index < 10}
+            />
           ))}
         </div>
       </div>

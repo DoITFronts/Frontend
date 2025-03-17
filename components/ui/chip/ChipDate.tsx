@@ -1,4 +1,4 @@
-import { formatDateTime } from '../../../../../../../../Library/Mobile Documents/.Trash/utils/formatDateTime';
+import { formatDateTime } from '@/utils/timeUtils/formatDateTime';
 
 interface ChipInfoProps {
   datetime: string;

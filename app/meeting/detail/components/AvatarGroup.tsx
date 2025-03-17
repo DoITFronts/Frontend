@@ -1,46 +1,86 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { useState } from "react";
 
-import ProfileIcon from '@/components/utils/BaseProfile';
+import ProfileIcon from "@/components/utils/BaseProfile";
+import { Participant } from "@/types/meeting/meeting";
 
-// TODO hover action 추가 필요
 interface AvatarGroupProps {
   count: number;
   maxCount?: number;
-  participantId?: number[];
+  participants: Participant[];
 }
 
 const profileVariants = {
-  hover: { y: [-2, 2, -2], transition: { duration: 0.4, repeat: Infinity } },
+  hover: { scale: 1.15, transition: { duration: 0.2 } },
 };
 
-const avatarVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: 'easeOut' } },
+const tooltipVariants = {
+  hidden: { opacity: 0, y: 10, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
 };
 
 const moreVariants = {
   hidden: { scale: 0.8, opacity: 0 },
-  visible: { scale: 1, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
+  visible: {
+    scale: 1,
+    opacity: 1,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
 };
 
-function AvatarGroup({ count, maxCount = 4, participantId = [] }: AvatarGroupProps) {
+function AvatarGroup({
+  count,
+  maxCount = 4,
+  participants = [],
+}: AvatarGroupProps) {
   const visibleIcons = Math.min(count, maxCount);
   const remaining = count - maxCount;
   const showMore = count > maxCount;
+  const [hoveredUser, setHoveredUser] = useState<Participant | null>(null);
 
   return (
-    <div className="flex h-[60px] items-center space-x-[-5px]">
-      {Array.from({ length: visibleIcons }, (_, i) => (
+    <div className="relative flex h-[60px] items-center space-x-[-5px]">
+      {participants.slice(0, visibleIcons).map((participant) => (
         <motion.div
-          key={i}
-          className="overflow-hidden rounded-full"
-          variants={avatarVariants}
+          key={participant.userId}
+          className="relative z-50"
+          variants={profileVariants}
           initial="hidden"
-          whileInView="visible"
+          animate="visible"
+          whileHover="hover"
+          onMouseEnter={() => setHoveredUser(participant)}
+          onMouseLeave={() => setHoveredUser(null)}
         >
-          <motion.div whileHover="hover" variants={profileVariants}>
-            <ProfileIcon id={participantId[i] || i} />
-          </motion.div>
+          <ProfileIcon id={participant.userId} />
+          {hoveredUser?.userId === participant.userId && (
+            <motion.div
+              key={participant.userId}
+              className="relative"
+              variants={profileVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              {hoveredUser?.userId === participant.userId && (
+                <div className="relative">
+                  <div className="absolute left-1/2 top-full mt-2 min-w-[150px] -translate-x-1/2">
+                    <div className="border-2-gray flex flex-col items-center justify-center gap-2 rounded-xl border bg-white p-3 shadow-md">
+                      <p className="min-w-max font-pretendard text-sm font-bold text-black">
+                        {hoveredUser.name}
+                      </p>
+                      <p className="line-clamp-3 break-words font-pretendard text-xs text-gray-500">
+                        {hoveredUser.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
         </motion.div>
       ))}
 

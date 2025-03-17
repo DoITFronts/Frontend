@@ -1,6 +1,6 @@
 import { expect, describe, it } from '@jest/globals';
 
-import { formatDateTime, formatDate } from '@/utils/formatDateTime';
+import { formatDateTime, formatDate } from '@/utils/timeUtils/formatDateTime';
 
 describe('formatDateTime', () => {
   it("YYYY-MM-DDTHH:mm:ss 형식을 '2월 14일 · 10:30' 형태로 변환해야 함", () => {

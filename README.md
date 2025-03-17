@@ -68,6 +68,7 @@
  <img src="https://img.shields.io/badge/JSON Server-323232?style=flat&logo=JSON&logoColor=white"> 
  <img src="https://img.shields.io/badge/Axios-5A29E4?style=flat&logo=Axios&logoColor=white">
  <img src="https://img.shields.io/badge/Fetch API-2396F3?style=flat&logo=javascript&logoColor=white">
+ <img src="https://img.shields.io/badge/PWA-5A0FC8?style=flat&logo=PWA&logoColor=white">
 </div>
 
 
@@ -86,10 +87,23 @@
  <img src="https://img.shields.io/badge/Husky-000000?style=flat&logo=Husky&logoColor=white"> 
 </div>
 
+### 🛠 테스트 및 분석
+<div style="flex"> 
+ <img src="https://img.shields.io/badge/Jest-C21325?style=flat&logo=Jest&logoColor=white"> 
+ <img src="https://img.shields.io/badge/RTL-E33332?style=flat&logo=TestingLibrary&logoColor=white"> 
+ <img src="https://img.shields.io/badge/Codecov-F01F7A?style=flat&logo=Codecov&logoColor=white"> 
+ <img src="https://img.shields.io/badge/Lighthouse-F44B21?style=flat&logo=Lighthouse&logoColor=white">
+</div>
+
 #### 🚀 CI/CD
 <div style="flex">
  <img src="https://img.shields.io/badge/Netlify-00C7B7?style=flat&logo=Netlify&logoColor=white">
  <img src="https://img.shields.io/badge/Vercel-000000?style=flat&logo=Vercel&logoColor=white">
+</div>
+
+#### 📊 분석 및 모니터링
+<div style="flex"> 
+ <img src="https://img.shields.io/badge/Google Analytics-4285F4?style=flat&logo=GoogleAnalytics&logoColor=white"> 
 </div>
 
 

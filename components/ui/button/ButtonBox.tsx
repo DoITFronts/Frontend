@@ -1,62 +1,125 @@
-import Icon from '../../../../../../../../Library/Mobile Documents/.Trash/components/utils/Icon';
-import { useEffect, useState } from 'react';
+import React from "react";
+
+import Icon from "@/components/shared/Icon";
+import chatStore from "@/store/chat/chatStore";
+import modalStore from "@/store/modalStore";
+import Button from "./Button";
 
 export default function ButtonBox({
   isJoined,
-  onClick,
+  isCompleted,
+  isHost,
+  isConfirmed,
+  targetAt,
+  onJoin,
+  onCancel,
+  onDelete,
+  onReview,
   chatIconDisabled,
+  roomId,
 }: {
   isJoined?: boolean;
-  onClick?: () => Promise<boolean>;
+  isCompleted?: boolean;
+  isHost?: boolean;
+  isConfirmed?: boolean;
+  targetAt?: string;
+  onJoin?: () => void;
+  onCancel?: () => void;
+  onDelete?: () => void;
+  onReview?: () => void;
   chatIconDisabled?: boolean;
+  roomId?: number;
 }) {
-  const [localIsJoined, setLocalIsJoined] = useState(isJoined);
+  const { openChat } = chatStore();
+  const { openModal } = modalStore();
 
-  useEffect(() => {
-    setLocalIsJoined(isJoined);
-  }, [isJoined]);
+  // 현재 날짜와 타겟 날짜 비교해서 지났는지 확인
+  const isTargetDatePassed = () => {
+    if (!targetAt) return false;
+    const currentDate = new Date();
+    const meetingDate = new Date(targetAt);
+    return currentDate > meetingDate;
+  };
 
-  const handleClick = async (e: React.MouseEvent) => {
+  // 클릭 핸들러들 - 단순히 props로 전달받은 함수를 호출
+  const handleJoin = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    setLocalIsJoined(!localIsJoined);
+    if (onJoin) onJoin();
+  };
 
-    if (onClick) {
-      try {
-        const success = await onClick();
+  const handleCancel = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (onCancel) onCancel();
+  };
 
-        if (!success) {
-          setLocalIsJoined(localIsJoined);
-        }
-      } catch {
-        setLocalIsJoined(localIsJoined);
-      }
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (onDelete) onDelete();
+  };
+
+  const handleReview = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (onReview) onReview();
+  };
+
+  const handleChatClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log(`🟢 채팅 버튼 클릭됨! Room ID: ${roomId}`); // ✅ 로그 추가
+    if (roomId) {
+      openChat(roomId);
+      console.log(`✅ chatStore 상태 업데이트: roomId=${roomId}, isOpen=true`);
     }
   };
 
+  // 리뷰 버튼을 표시해야하는지 확인
+  const showReviewButton = isConfirmed && isTargetDatePassed() && isJoined;
+
   return (
-    <div className="w-auto h-auto flex gap-3">
-      {localIsJoined ? (
+    <div className="flex size-auto gap-3">
+      {showReviewButton ? (
         <button
-          className="px-5 py-2.5 bg-white text-black text-base font-semibold rounded-[12px] w-[100px] border border-black whitespace-nowrap"
-          onClick={handleClick}
+          type="button"
+          className="flex w-auto items-center gap-2.5 whitespace-nowrap rounded-[12px] bg-yellow-1 px-[14px] py-2.5 text-base font-semibold text-yellow-6"
+          onClick={handleReview}
         >
+          <span>리뷰쓰기</span>
+          <Icon path="review/reviewIcon" width="14px" height="16px" />
+        </button>
+      ) : isHost ? (
+        <Button
+          color="white"
+          className="w-[100px] border-red-500 text-red-500"
+          onClick={handleDelete}
+        >
+          번개 삭제
+        </Button>
+      ) : isCompleted && !isJoined ? (
+        <Button color="white" className="w-[100px]" disabled>
+          마감
+        </Button>
+      ) : isJoined ? (
+        <Button color="white" className="w-[100px]" onClick={handleCancel}>
           번개 취소
-        </button>
+        </Button>
       ) : (
-        <button
-          className="px-5 py-2.5 bg-black text-white text-base rounded-[12px] w-[100px] flex"
-          onClick={handleClick}
-        >
+        <Button color="filled" className="w-[100px]" onClick={handleJoin}>
           번개 참여
-        </button>
+        </Button>
       )}
-      {chatIconDisabled ? (
-        ''
-      ) : (
-        <div className="w-auto h-[44px] p-2.5 bg-yellow-6 rounded-[12px]">
-          <Icon path="chat" width="28px" height="24px" />
-        </div>
+
+      {!chatIconDisabled && roomId && (
+        <button
+          type="button"
+          className="h-[44px] w-auto rounded-[12px] bg-yellow-6 p-2.5"
+          onClick={handleChatClick}
+        >
+          <Icon path="chat/chat" width="28px" height="24px" />
+        </button>
       )}
     </div>
   );

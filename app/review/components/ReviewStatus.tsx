@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 
 import ReviewHeart from '@/components/ui/review/ReviewHeart';
-import { Reviews } from '@/types/review';
+import { Reviews } from '@/types/review/review';
 
 export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
   // 점수별 개수 집계
@@ -25,13 +25,13 @@ export default function ReviewStatus({ reviews }: { reviews: Reviews[] }) {
   const totalPossibleReviews = reviews.length;
 
   return (
-    <div className="flex w-[70%] flex-col items-center justify-between gap-4 sm:flex-row">
-      <div className="flex flex-col items-center">
+    <div className="flex w-full flex-col items-center gap-4 md:flex-row">
+      <div className="flex w-full max-w-[580px] flex-col items-center p-6 md:p-10">
         <div className="flex flex-row">
-          <p className="relative justify-start font-['Pretendard'] text-[40px] font-bold leading-loose text-black">
+          <p className="relative justify-start font-['Pretendard'] text-[40px] font-bold leading-normal text-black">
             {average}
           </p>
-          <p className="relative justify-start font-['Pretendard'] text-[40px] font-semibold leading-loose text-[#bfbfbf]">
+          <p className="relative justify-start font-['Pretendard'] text-[40px] font-semibold leading-normal text-[#bfbfbf]">
             /5
           </p>
         </div>

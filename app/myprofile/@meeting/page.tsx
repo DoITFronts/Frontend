@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import { Suspense, useState } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { Suspense, useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 
-import CategoryFilter from '@/components/ui/chip/CategoryFilter';
+import CategoryFilter from "@/components/ui/chip/CategoryFilter";
 
-import { GridSkeleton } from '../components/GridSkeleton';
-import { MeetingCardError } from '../components/MeetingCardSkeleton';
-import MeetingTabs from '../components/MeetingTab';
+import { GridSkeleton } from "../components/GridSkeleton";
+import { MeetingCardError } from "../components/MeetingCardSkeleton";
+import MeetingTabs from "../components/MeetingTab";
 
-const MENU_TABS = ['나의 번개', '내가 만든 번개', '리뷰', '채팅'];
-const ACTIVITY_TABS = ['술', '카페', '보드게임', '맛집'];
+const MENU_TABS = ["나의 번개", "내가 만든 번개", "리뷰"];
+const ACTIVITY_TABS = ["술", "카페", "보드게임", "맛집"];
 
 export default function MyPage() {
-  const [selectedMenuTab, setSelecetedMenuTab] = useState('나의 번개');
-  const [selectedActivityTab, setSelectedActivityTab] = useState('');
+  const [selectedMenuTab, setSelecetedMenuTab] = useState("나의 번개");
+  const [selectedActivityTab, setSelectedActivityTab] = useState("");
 
   const handleMenuClick = (tab: string) => {
     if (tab === selectedMenuTab) {
-      setSelecetedMenuTab('');
+      setSelecetedMenuTab("");
     } else {
       setSelecetedMenuTab(tab);
     }
@@ -26,7 +26,7 @@ export default function MyPage() {
 
   const handleActivityClick = (tab: string) => {
     if (tab === selectedActivityTab) {
-      setSelectedActivityTab('');
+      setSelectedActivityTab("");
     } else {
       setSelectedActivityTab(tab);
     }
@@ -36,22 +36,26 @@ export default function MyPage() {
     <div className="flex h-auto w-full flex-col gap-10">
       {/* 헤더 및 필터 영역 */}
       <div className="flex size-auto flex-col gap-5">
-        <div className="flex size-auto items-center gap-3">
+        <div className="flex size-auto items-center gap-2.5 md:gap-3 lg:gap-3">
           {MENU_TABS.map((tab) => (
-            <button className="cursor-pointer" key={tab} onClick={() => handleMenuClick(tab)}>
+            <button
+              className="cursor-pointer"
+              key={tab}
+              onClick={() => handleMenuClick(tab)}
+            >
               <CategoryFilter
                 text={tab}
                 size="lg"
-                mode={tab === selectedMenuTab ? 'dark' : 'light'}
+                mode={tab === selectedMenuTab ? "dark" : "light"}
               />
             </button>
           ))}
         </div>
-        <div className="flex size-auto items-center gap-3">
+        <div className="flex h-auto w-fit items-center justify-between md:gap-3 lg:gap-3">
           {ACTIVITY_TABS.map((activity) => (
             <button
               key={activity}
-              className={`border-black-1 rounded-[12px] border py-2 pl-2.5 pr-[6px] text-black-6 ${selectedActivityTab === activity ? 'bg-black text-white' : ''}`}
+              className={`border-black-1 rounded-[12px] border py-2 pl-2.5 pr-[6px] text-black-6 ${selectedActivityTab === activity ? "bg-black text-white" : ""}`}
               onClick={() => handleActivityClick(activity)}
             >
               <div className="flex w-full items-center justify-between">
@@ -74,11 +78,11 @@ export default function MyPage() {
                         />
                       </svg>
                     ) : (
-                      ''
+                      ""
                     )}
                   </div>
                 </div>
-                <span># {activity}</span>
+                <span className="text-sm"># {activity}</span>
               </div>
             </button>
           ))}
@@ -87,18 +91,10 @@ export default function MyPage() {
 
       {/* 컨텐츠 영역 - ErrorBoundary와 Suspense 활용 */}
       <div className="grid grid-cols-1 gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
-        <ErrorBoundary
-          FallbackComponent={({ error }) => (
-            <div className="col-span-3">
-              <MeetingCardError />
-              <div className="mt-4 text-center text-red-500">{error.message}</div>
-            </div>
-          )}
-        >
-          <Suspense fallback={<GridSkeleton />}>
-            <MeetingTabs menuTab={selectedMenuTab} activityTab={selectedActivityTab} />
-          </Suspense>
-        </ErrorBoundary>
+        <MeetingTabs
+          menuTab={selectedMenuTab}
+          activityTab={selectedActivityTab}
+        />
       </div>
     </div>
   );
