@@ -183,10 +183,10 @@ function MeetingList({
                     />
                   ) : (
                     <Image
-                      src="/assets/card/example_image.png"
+                      src={`/fallback/fallback_${meeting.category}.png`}
                       fill
                       alt="thumbnail"
-                      className="w-96"
+                      className="object-cover"
                     />
                   )}
                 </div>
