@@ -191,7 +191,7 @@ function MeetingList({
               </div>
             </Link>
 
-            <div className="mt-aut flex h-auto w-full items-center gap-6 p-4">
+            <div className="mt-auto flex h-auto w-full items-center gap-6 p-4">
               <MeetingStatus
                 participantCount={meeting.participantCount}
                 capacity={meeting.capacity}
@@ -231,7 +231,7 @@ function MeetingList({
         </div>
       )}
       {!hasNextPage && meetings.length > 0 && (
-        <div className="col-span-3 flex h-20 items-center justify-center">
+        <div className="col-span-1 flex h-20 items-center justify-center md:col-span-2 lg:col-span-3">
           <p className="text-center text-base font-medium text-[#C0C1C2]">
             모든 목록을 불러왔습니다
           </p>
