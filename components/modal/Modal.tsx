@@ -6,32 +6,38 @@
  * 모달 외부 영역 클릭 시 자동으로 닫힙니다.
  */
 
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
-import modalStore from '@/store/modalStore';
+import modalStore from "@/store/modalStore";
 
-import CreateMeetingModal from './variants/CreateMeetingModal';
-import CreateReviewModal from './variants/CreateReviewModal';
-import DeleteMeetingModal from './variants/DeleteMeetingModal';
-import LoginCheckModal from './variants/LoginCheckModal';
-import ProfileModal from './variants/ProfileModal';
-import SignUpModal from './variants/SignUpModal';
+import CreateMeetingModal from "./variants/CreateMeetingModal";
+import CreateReviewModal from "./variants/CreateReviewModal";
+import DeleteMeetingModal from "./variants/DeleteMeetingModal";
+import LoginCheckModal from "./variants/LoginCheckModal";
+import ProfileModal from "./variants/ProfileModal";
+import SignUpModal from "./variants/SignUpModal";
 
-function ModalContent({ modalType, modalProps }: { modalType: string; modalProps?: any }) {
+function ModalContent({
+  modalType,
+  modalProps,
+}: {
+  modalType: string;
+  modalProps?: any;
+}) {
   switch (modalType) {
-    case 'create':
+    case "create":
       return <CreateMeetingModal />;
-    case 'editProfile':
+    case "editProfile":
       return <ProfileModal />;
-    case 'signUp':
+    case "signUp":
       return <SignUpModal />;
-    case 'loginCheck':
+    case "loginCheck":
       return <LoginCheckModal />;
-    case 'createReview':
-      return <CreateReviewModal meetingId={modalProps?.meetingId || ''} />;
-    case 'delete':
+    case "createReview":
+      return <CreateReviewModal />;
+    case "delete":
       return <DeleteMeetingModal />;
     default:
       return null;
@@ -43,13 +49,13 @@ export default function Modal() {
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -65,10 +71,10 @@ export default function Modal() {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackdropClick}
-      onKeyDown={(e) => e.key === 'Escape' && closeModal()}
+      onKeyDown={(e) => e.key === "Escape" && closeModal()}
       role="presentation"
     >
-      <ModalContent modalType={modalType || ''} modalProps={modalProps} />
+      <ModalContent modalType={modalType || ""} modalProps={modalProps} />
     </div>
   );
 }
