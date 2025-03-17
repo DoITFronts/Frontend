@@ -1,21 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
-import useUserStore from "@/store/user/userStore";
-import { signinUser } from "@/api/client/user/auth";
-import { setToken, decodeToken } from "@/utils/auth/tokenUtils";
-import { fetchProfile } from "@/api/client/myPage/myPage";
 import { useState } from "react";
+import { toast } from "react-toastify";
+
+import { fetchProfile } from "@/api/client/myPage/myPage";
+import { signinUser } from "@/api/client/user/auth";
 import {
   SIGNIN_SUCCESS,
   SIGNIN_ERROR,
   INVALID_CREDENTIALS_ERROR,
 } from "@/lib/constants/toast";
+import useUserStore from "@/store/user/userStore";
+import { setToken, decodeToken } from "@/utils/auth/tokenUtils";
 
 export const useSignin = () => {
   const router = useRouter();
   const { setUser } = useUserStore();
-  const [showConfetti, setShowConfetti] = useState(false); //컨패티 상태관리
+  const [showConfetti, setShowConfetti] = useState(false); // 컨패티 상태관리
 
   const mutation = useMutation({
     mutationFn: signinUser,

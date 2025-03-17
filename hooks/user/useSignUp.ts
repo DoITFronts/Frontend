@@ -1,13 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-toastify";
+
 import { signupUser } from "@/api/client/user/auth";
 import { SIGNUP_SUCCESS, SIGNUP_ERROR } from "@/lib/constants/toast";
-import { useState } from "react";
 
 export const useSignup = () => {
   const router = useRouter();
-  const [showConfetti, setShowConfetti] = useState(false); //컨패티 상태관리
+  const [showConfetti, setShowConfetti] = useState(false); // 컨패티 상태관리
 
   const mutation = useMutation({
     mutationFn: signupUser,

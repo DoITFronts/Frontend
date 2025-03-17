@@ -8,6 +8,7 @@ import Form from "@/app/user/component/Form";
 import Button from "@/components/ui/button/Button";
 import { useSignin } from "@/hooks/user/useSignin";
 import Logo from "@/public/assets/logo/logo.svg";
+
 import ConfettiEffect from "../component/ConfettiEffect";
 
 export default function Signin() {
@@ -28,7 +29,7 @@ export default function Signin() {
     handleSignin({ username: "asdf@gmail.com", password: "asdf1234!!" });
   };
 
-  //에러 메세지
+  // 에러 메세지
   const errorMessage =
     error?.response?.status === 401
       ? "이메일 또는 비밀번호가 올바르지 않습니다."
@@ -72,11 +73,11 @@ export default function Signin() {
                 </Form.ErrorMessage>
               )}
             </Form.Label>
-            <Form.Submit className="h-[2.5rem] w-full text-sm sm:h-[2.75rem] sm:text-base">
+            <Form.Submit className="h-10 w-full text-sm sm:h-11 sm:text-base">
               로그인
             </Form.Submit>
             <Button
-              className="mt-[1.125rem] h-[2.5rem] w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-[0.625rem] text-center text-sm font-bold text-white sm:h-[2.75rem] sm:text-base"
+              className="mt-[1.125rem] h-10 w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-2.5 text-center text-sm font-bold text-white sm:h-11 sm:text-base"
               onClick={handleTestAccountClick}
             >
               ⚡️ 게스트 로그인 ⚡️

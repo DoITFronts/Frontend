@@ -6,6 +6,7 @@ import Link from "next/link";
 import Form from "@/app/user/component/Form";
 import { useSignup } from "@/hooks/user/useSignUp";
 import Logo from "@/public/assets/logo/logo.svg";
+
 import ConfettiEffect from "../component/ConfettiEffect";
 
 export default function Signup() {
@@ -15,7 +16,7 @@ export default function Signup() {
     mutate(data);
   };
 
-  //에러 메세지
+  // 에러 메세지
   const errorMessage =
     error?.response?.status === 400
       ? "이미 가입되어있는 이메일입니다.."
@@ -97,7 +98,7 @@ export default function Signup() {
                 type="date"
               />
             </Form.Label>
-            <Form.Submit className="h-[2.5rem] w-full text-sm sm:h-[2.75rem] sm:text-base">
+            <Form.Submit className="h-10 w-full text-sm sm:h-11 sm:text-base">
               회원가입
             </Form.Submit>
           </Form>
