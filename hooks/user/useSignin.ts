@@ -38,7 +38,7 @@ export const useSignin = () => {
           setShowConfetti(true);
           setTimeout(() => {
             router.push("/meeting/list");
-          }, 2500);
+          }, 2000);
 
           fetchProfile();
         }
