@@ -26,7 +26,7 @@ export default function Signin() {
     setValue("password", "asdf1234!!");
 
     // 자동 로그인
-    handleSignin({ username: "asdf@gmail.com", password: "asdf1234!!" });
+    handleSignin({ username: "guest@gmail.com", password: "asdf1234!!" });
   };
 
   // 에러 메세지
