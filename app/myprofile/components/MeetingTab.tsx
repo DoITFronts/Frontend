@@ -14,6 +14,7 @@ import useMeetingToggle from "@/hooks/meeting/useMeetingToggle";
 import { Meeting } from "@/types/meeting/meeting";
 import { useToggleJoinMutation } from "@/hooks/useOptimisticQuery";
 import {
+  deleteLightning,
   joinLightning,
   leaveLightning,
 } from "@/api/client/meeting/joinMeeting";
@@ -22,6 +23,7 @@ import { MeetingCardLoading } from "./MeetingCardSkeleton";
 import profileStore from "@/store/profileStore";
 import modalStore from "@/store/modalStore";
 import { GridSkeleton } from "./GridSkeleton";
+import useDeleteLightning from "@/hooks/meeting/useDeleteLightning";
 
 interface MeetingTabsProps {
   menuTab: string;
@@ -51,10 +53,10 @@ function MeetingList({
 
   // 토글 관련 훅 사용
   const [meetings, setMeetings] = useState<Meeting[]>([]);
-  const { ref: animationRef, inView: animationInView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
+  // const { ref: animationRef, inView: animationInView } = useInView({
+  //   threshold: 0.1,
+  //   triggerOnce: true,
+  // });
   const { ref: infiniteScrollRef, inView: infiniteScrollInView } = useInView({
     threshold: 0.1,
   });
@@ -81,9 +83,17 @@ function MeetingList({
 
   const joinMutation = useToggleJoinMutation(joinLightning);
   const leaveMutation = useToggleJoinMutation(leaveLightning);
-
+  const deleteMutation = useDeleteLightning();
   const handleJoin = (meetingId: string) => {
     joinMutation.mutate(meetingId);
+  };
+
+  const handleDelete = (meetingId: string) => {
+    openModal("delete", {
+      onConfirm: () => {
+        deleteMutation.mutate(meetingId);
+      },
+    });
   };
 
   const handleCancel = (meetingId: string) => {
@@ -136,90 +146,94 @@ function MeetingList({
   // 데이터가 있는 경우 렌더링
   return (
     <>
-      {meetings.map((meeting) => (
-        // <motion.div
-        //   ref={animationRef}
-        //   key={meeting.id}
-        //   initial={{ opacity: 0, y: 30 }}
-        //   animate={animationInView ? { opacity: 1, y: 0 } : {}}
-        //   transition={{ duration: 0.4, ease: "easeOut" }}
-        //   className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
-        // >
-        <Card mode="list">
-          <div className="flex h-[430px] flex-col justify-between overflow-hidden">
-            <Link
-              href={`/meeting/detail/${meeting.id}`}
-              className="block"
-              prefetch={false}
-            >
-              <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
-                <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
-                <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-                {meeting.imageUrl ? (
-                  <Image
-                    src={meeting.imageUrl}
-                    fill
-                    alt="thumbnail"
-                    className="object-cover"
-                  />
-                ) : (
-                  <Image
-                    src="/assets/card/example_image.png"
-                    fill
-                    alt="thumbnail"
-                    className="w-96"
-                  />
-                )}
-              </div>
+      {meetings.map((meeting, index) => (
+        <motion.div
+          key={meeting.id}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.4,
+            ease: "easeOut",
+            delay: index * 0.1, // 각 카드마다 살짝 딜레이를 주어 순차적으로 나타나게 함
+          }}
+          className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
+        >
+          <Card mode="list">
+            <div className="flex h-[430px] flex-col justify-between overflow-hidden">
+              <Link
+                href={`/meeting/detail/${meeting.id}`}
+                className="block"
+                prefetch={false}
+              >
+                <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
+                  <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
+                  <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
+                  {meeting.imageUrl ? (
+                    <Image
+                      src={meeting.imageUrl}
+                      fill
+                      alt="thumbnail"
+                      className="object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src="/assets/card/example_image.png"
+                      fill
+                      alt="thumbnail"
+                      className="w-96"
+                    />
+                  )}
+                </div>
 
-              <div className="flex flex-col gap-[10px] p-4">
-                <div className="flex flex-col gap-2">
-                  <Card.Title
-                    name={meeting.title}
-                    location={`${meeting.city} ${meeting.town}`}
-                  />
-                  <div className="flex h-[22px] flex-row items-center gap-1">
-                    <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
-                      <ChipDate datetime={meeting.targetAt} />
+                <div className="flex flex-col gap-[10px] p-4">
+                  <div className="flex flex-col gap-2">
+                    <Card.Title
+                      name={meeting.title}
+                      location={`${meeting.city} ${meeting.town}`}
+                    />
+                    <div className="flex h-[22px] flex-row items-center gap-1">
+                      <div className="font-['Pretendard'] text-base font-semibold text-[#bfbfbf]">
+                        <ChipDate datetime={meeting.targetAt} />
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
-                  {meeting.summary}
+                  <div className="line-clamp-2 overflow-hidden text-ellipsis font-['Pretendard'] text-base font-medium text-[#8c8c8c]">
+                    {meeting.summary}
+                  </div>
                 </div>
+              </Link>
+
+              <div className="mt-auto flex h-auto w-full items-center gap-6 p-4">
+                <MeetingStatus
+                  participantCount={meeting.participantCount}
+                  capacity={meeting.capacity}
+                  isConfirmed={meeting.isConfirmed}
+                  isCompleted={meeting.isCompleted}
+                />
+                <ButtonBox
+                  isJoined={meeting.isJoined}
+                  isCompleted={meeting.isCompleted}
+                  isConfirmed={meeting.isConfirmed}
+                  targetAt={meeting.targetAt}
+                  roomId={meeting.chatRoomId}
+                  isHost={
+                    meeting.participants?.some(
+                      (participant) =>
+                        participant.isHost &&
+                        participant.userId === currentUserId,
+                    ) || false
+                  }
+                  onDelete={() => handleDelete(meeting.id)}
+                  onJoin={() => handleJoin(meeting.id)}
+                  onCancel={() => handleCancel(meeting.id)}
+                  onReview={() => openModal("createReview")}
+                  chatIconDisabled={false}
+                />
               </div>
-            </Link>
-
-            <div className="mt-auto flex h-auto w-full items-center gap-6 p-4">
-              <MeetingStatus
-                participantCount={meeting.participantCount}
-                capacity={meeting.capacity}
-                isConfirmed={meeting.isConfirmed}
-                isCompleted={meeting.isCompleted}
-              />
-              <ButtonBox
-                isJoined={meeting.isJoined}
-                isCompleted={meeting.isCompleted}
-                isConfirmed={meeting.isConfirmed}
-                targetAt={meeting.targetAt}
-                roomId={meeting.chatRoomId}
-                isHost={
-                  meeting.participants?.some(
-                    (participant) =>
-                      participant.isHost &&
-                      participant.userId === currentUserId,
-                  ) || false
-                }
-                onJoin={() => handleJoin(meeting.id)}
-                onCancel={() => handleCancel(meeting.id)}
-                onReview={() => openModal("createReview")}
-                chatIconDisabled={false}
-              />
             </div>
-          </div>
-        </Card>
-        // </motion.div>
+          </Card>
+        </motion.div>
       ))}
       {hasNextPage && (
         <div ref={infiniteScrollRef} className="my-4 flex justify-center">
