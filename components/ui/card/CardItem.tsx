@@ -163,17 +163,23 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
                 </div>
                 <div className="absolute left-0 top-0 z-10 size-[10px] bg-white" />
                 <div className="absolute bottom-0 right-0 z-10 size-[10px] bg-white" />
-                <Image
-                  src={
-                    meeting.imageUrl ||
-                    `/fallback/fallback_default.png` ||
-                    `/fallback/fallback_${meeting?.category?.toLowerCase()}.png`
-                  }
-                  alt="thumbnail"
-                  fill
-                  className="z-0 object-cover"
-                  priority={priority}
-                />
+                {meeting.imageUrl ? (
+                  <Image
+                    src={meeting.imageUrl}
+                    fill
+                    alt="thumbnail"
+                    className="z-0 object-cover"
+                    priority
+                  />
+                ) : (
+                  <Image
+                    src={`/fallback/fallback_${meeting.category}.png`}
+                    fill
+                    alt="thumbnail"
+                    className="z-0 object-cover"
+                    priority
+                  />
+                )}
                 <div className="absolute right-[14px] top-[17.5px]">
                   <Category type={reverseCategoryMap[meeting.category]} />
                 </div>
@@ -220,7 +226,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
               isCompleted={isCompleted}
             />
             <Button
-              color={isJoined ? 'white' : 'filled'}
+              color={isJoined ? "white" : "filled"}
               type="button"
               onClick={buttonClickHandler}
               disabled={isCompleted && !isJoined}
