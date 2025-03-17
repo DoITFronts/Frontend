@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 
 import axiosInstance from "@/api/middleware/api";
+import { connectWebSocket } from "@/api/socket/websocket";
 import { CHAT_FETCH_ERROR, CHAT_JOIN_ERROR } from "@/lib/constants/toast";
 import chatStore from "@/store/chat/chatStore";
-import { connectWebSocket } from "@/api/socket/websocket";
 
 export const fetchChatMessages = async (roomId: number) => {
   try {

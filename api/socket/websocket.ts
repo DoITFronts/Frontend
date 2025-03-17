@@ -4,6 +4,7 @@ import SockJS from "sockjs-client";
 
 import withWebSocketAuth from "@/api/middleware/websocketMiddleware";
 import chatStore from "@/store/chat/chatStore";
+import profileStore from "@/store/profileStore";
 
 let stompClient: Client | null = null;
 let subscribedRoomId: number | null = null;
@@ -72,7 +73,7 @@ export const connectWebSocket = withWebSocketAuth((token) => {
 
   stompClient.onDisconnect = () => {
     console.warn("🔌 WebSocket 연결 종료됨! 다시 연결을 시도합니다...");
-    setTimeout(() => connectWebSocket(token), 5000);
+    setTimeout(() => connectWebSocket(), 5000);
   };
 
   stompClient.activate();
@@ -88,7 +89,7 @@ export const disconnectWebSocket = () => {
 };
 
 export const sendMessage = (message: string) => {
-  const { currentRoomId } = chatStore.getState();
+  const { currentRoomId, addMessage } = chatStore.getState();
 
   if (!stompClient || !stompClient.connected) {
     console.error("❌ 메시지 전송 실패: WebSocket이 연결되지 않음");
@@ -100,9 +101,25 @@ export const sendMessage = (message: string) => {
     console.error("❌ 메시지 전송 실패: 메시지 또는 채팅방 ID 없음");
     return;
   }
+  const {
+    id: userId,
+    nickname: userNickname,
+    imageUrl: userImage,
+  } = profileStore.getState();
 
-  console.log("📤 메시지 전송:", message);
+  const newMessage = {
+    id: Date.now(),
+    roomId: currentRoomId,
+    userId,
+    userNickname,
+    content: message,
+    createdAt: new Date().toISOString(),
+    userImage,
+  };
 
+  addMessage(newMessage);
+
+  console.log("📤 낙관적 메시지 추가:", newMessage);
   stompClient.publish({
     destination: `/app/room/${currentRoomId}/sendMessage`,
     body: JSON.stringify({ content: message }),
