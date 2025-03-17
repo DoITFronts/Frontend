@@ -77,7 +77,7 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
   // 에러가 발생한 경우
   if (error) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+      <div className="col-span-1 flex h-[435px] items-center justify-center whitespace-pre-line bg-white md:col-span-2 lg:col-span-3">
         <p className="text-center text-base font-medium text-[#C0C1C2]">
           데이터를 불러오는데 문제가 발생했습니다.
         </p>
@@ -88,7 +88,7 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
   // 리뷰 데이터가 비어있는 경우
   if (!reviews || reviews.length === 0) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+      <div className="col-span-1 flex h-[435px] items-center justify-center whitespace-pre-line bg-white md:col-span-2 lg:col-span-3">
         <p className="text-center text-base font-medium text-[#C0C1C2]">
           {`아직 작성한 리뷰가 없어요.\n미팅이 끝난 후 리뷰를 작성해보세요!`}
         </p>
@@ -191,7 +191,7 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
       ))}
 
       {isFetchingNextPage && (
-        <div className="col-span-3 flex h-20 items-center justify-center">
+        <div className="col-span-1 flex h-20 items-center justify-center md:col-span-2 lg:col-span-3">
           <p className="text-center text-base font-medium text-[#C0C1C2]">
             리뷰 더 불러오는 중...
           </p>
@@ -199,7 +199,7 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
       )}
 
       {!hasNextPage && reviews.length > 0 && (
-        <div className="col-span-3 flex h-20 items-center justify-center">
+        <div className="col-span-1 flex h-20 items-center justify-center md:col-span-2 lg:col-span-3">
           <p className="text-center text-base font-medium text-[#C0C1C2]">
             모든 리뷰를 불러왔습니다
           </p>
