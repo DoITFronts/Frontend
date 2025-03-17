@@ -100,6 +100,12 @@ function MeetingList({
     leaveMutation.mutate(meetingId);
   };
 
+  const handleReview = (meetingId: string) => {
+    openModal("createReview", {
+      meetingId: meetingId,
+    });
+  };
+
   const currentUserId = profileStore((state) => state.id);
   const isCurrentUserHost =
     meetings.some((meeting) =>
@@ -227,7 +233,7 @@ function MeetingList({
                   onDelete={() => handleDelete(meeting.id)}
                   onJoin={() => handleJoin(meeting.id)}
                   onCancel={() => handleCancel(meeting.id)}
-                  onReview={() => openModal("createReview")}
+                  onReview={() => handleReview(meeting.id)}
                   chatIconDisabled={false}
                 />
               </div>
