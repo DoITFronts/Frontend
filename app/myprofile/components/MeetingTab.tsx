@@ -5,24 +5,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
-
+import ReviewTab from "./ReviewTab";
+import Card from "@/components/ui/card/Card";
+import ButtonBox from "@/components/ui/button/ButtonBox";
+import MeetingStatus from "@/components/ui/card/component/MeetingStatus";
+import ChipDate from "@/components/ui/chip/ChipDate";
+import useMeetingToggle from "@/hooks/meeting/useMeetingToggle";
+import { Meeting } from "@/types/meeting/meeting";
+import { useToggleJoinMutation } from "@/hooks/useOptimisticQuery";
 import {
   joinLightning,
   leaveLightning,
 } from "@/api/client/meeting/joinMeeting";
-import ButtonBox from "@/components/ui/button/ButtonBox";
-import Card from "@/components/ui/card/Card";
-import MeetingStatus from "@/components/ui/card/component/MeetingStatus";
-import ChipDate from "@/components/ui/chip/ChipDate";
-import useMeetingToggle from "@/hooks/meeting/useMeetingToggle";
 import { useMyPageMeetings } from "@/hooks/useMyPage";
-import { useToggleJoinMutation } from "@/hooks/useOptimisticQuery";
-import modalStore from "@/store/modalStore";
-import profileStore from "@/store/profileStore";
-import { Meeting } from "@/types/meeting/meeting";
-
 import { MeetingCardLoading } from "./MeetingCardSkeleton";
-import ReviewTab from "./ReviewTab";
+import profileStore from "@/store/profileStore";
+import modalStore from "@/store/modalStore";
+import { GridSkeleton } from "./GridSkeleton";
 
 interface MeetingTabsProps {
   menuTab: string;
@@ -106,7 +105,7 @@ function MeetingList({
       // <div className="col-span-3 flex h-[435px] items-center justify-center">
       //   <p className="text-center text-base font-medium text-[#C0C1C2]">로딩 중...</p>
       // </div>
-      <MeetingCardLoading />
+      <GridSkeleton />
     );
   }
 

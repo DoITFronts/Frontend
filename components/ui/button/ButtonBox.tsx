@@ -3,6 +3,7 @@ import React from "react";
 import Icon from "@/components/shared/Icon";
 import chatStore from "@/store/chat/chatStore";
 import modalStore from "@/store/modalStore";
+import Button from "./Button";
 
 export default function ButtonBox({
   isJoined,
@@ -83,43 +84,32 @@ export default function ButtonBox({
       {showReviewButton ? (
         <button
           type="button"
-          className="w-[100px] whitespace-nowrap rounded-[12px] border border-yellow-600 bg-white px-5 py-2.5 text-base font-semibold text-yellow-600"
+          className="flex w-auto items-center gap-2.5 whitespace-nowrap rounded-[12px] bg-yellow-1 px-[14px] py-2.5 text-base font-semibold text-yellow-6"
           onClick={handleReview}
         >
-          리뷰쓰기
+          <span>리뷰쓰기</span>
+          <Icon path="review/reviewIcon" width="14px" height="16px" />
         </button>
       ) : isHost ? (
-        <button
-          type="button"
-          className="w-[100px] whitespace-nowrap rounded-[12px] border border-red-500 bg-white px-5 py-2.5 text-base font-semibold text-red-500"
+        <Button
+          color="white"
+          className="w-[100px] border-red-500 text-red-500"
           onClick={handleDelete}
         >
           번개 삭제
-        </button>
+        </Button>
       ) : isCompleted && !isJoined ? (
-        <button
-          type="button"
-          className="w-[100px] whitespace-nowrap rounded-[12px] border border-black bg-white px-5 py-2.5 text-base font-semibold text-black"
-          disabled
-        >
+        <Button color="white" className="w-[100px]" disabled>
           마감
-        </button>
+        </Button>
       ) : isJoined ? (
-        <button
-          type="button"
-          className="w-[100px] whitespace-nowrap rounded-[12px] border border-black bg-white px-5 py-2.5 text-base font-semibold text-black"
-          onClick={handleCancel}
-        >
+        <Button color="white" className="w-[100px]" onClick={handleCancel}>
           번개 취소
-        </button>
+        </Button>
       ) : (
-        <button
-          type="button"
-          className="flex w-[100px] rounded-[12px] bg-black px-5 py-2.5 text-base text-white"
-          onClick={handleJoin}
-        >
+        <Button color="filled" className="w-[100px]" onClick={handleJoin}>
           번개 참여
-        </button>
+        </Button>
       )}
 
       {!chatIconDisabled && roomId && (
