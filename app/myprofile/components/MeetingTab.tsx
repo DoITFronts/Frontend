@@ -24,6 +24,11 @@ import profileStore from "@/store/profileStore";
 import modalStore from "@/store/modalStore";
 import { GridSkeleton } from "./GridSkeleton";
 import useDeleteLightning from "@/hooks/meeting/useDeleteLightning";
+import { toast } from "react-toastify";
+import {
+  LIGHTNING_CANCEL_ERROR,
+  MEETING_CANCEL_SUCCESS,
+} from "@/lib/constants/toast";
 
 interface MeetingTabsProps {
   menuTab: string;
@@ -97,7 +102,14 @@ function MeetingList({
   };
 
   const handleCancel = (meetingId: string) => {
-    leaveMutation.mutate(meetingId);
+    leaveMutation.mutate(meetingId, {
+      onSuccess: () => {
+        toast.success(MEETING_CANCEL_SUCCESS, { autoClose: 900 });
+      },
+      onError: () => {
+        toast.error(LIGHTNING_CANCEL_ERROR, { autoClose: 900 });
+      },
+    });
   };
 
   const handleReview = (meetingId: string) => {

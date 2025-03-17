@@ -21,3 +21,4 @@ export const INVALID_CREDENTIALS_ERROR =
 export const SIGNIN_ERROR = "로그인에 실패했습니다. 다시 시도해주세요!";
 export const SIGNUP_ERROR = "회원가입에 실패했습니다. 다시 시도해주세요!";
 export const SIGNOUT_ERROR = "로그아웃에 실패했습니다. 다시 시도해주세요!";
+export const LIGHTNING_CANCEL_ERROR = "참여 취소에 실패했습니다.";
