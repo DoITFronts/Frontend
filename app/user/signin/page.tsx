@@ -21,7 +21,7 @@ export default function Signin() {
   // 테스트 계정 버튼 handler
   const handleTestAccountClick = () => {
     // 테스트 계정 자동 입력 처리
-    setValue('username', 'asdf@gmail.com');
+    setValue('username', 'guest@gmail.com');
     setValue('password', 'asdf1234!!');
 
     // 자동 로그인
