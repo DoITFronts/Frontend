@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://doitz.netlify.app
+
+# Sitemaps
+Sitemap: https://doitz.netlify.app/sitemap.xml
