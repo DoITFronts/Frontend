@@ -16,13 +16,13 @@
 > 깔쌈한 프론트엔드 개발자 단체 DOIT 입니다.
 <table align="center">
  <tr>
-    <td align="center"><a href="https://github.com/xeunnie"><img src="https://avatars.githubusercontent.com/u/138289674?v=4" width="150px;" alt="">
-    <td align="center"><a href="https://github.com/Ocean423"><img src="https://avatars.githubusercontent.com/u/111185468?v=4" width="150px;" alt="">
-    <td align="center"><a href="https://github.com/Oh-hong"><img src="https://avatars.githubusercontent.com/u/163826719?v=4" width="150px;" alt="">
+    <td align="center"><a href="https://github.com/xeunnie"><img src="https://github.com/user-attachments/assets/2d6bc2bc-e314-427c-bf3c-d4ed98a1686c" width="150px;" height="170px" alt="">
+    <td align="center"><a href="https://github.com/Ocean423"><img src="https://github.com/user-attachments/assets/d8252221-2c95-4e41-a23f-63f0c329588c" width="150px;" height="153px" alt="">
+    <td align="center"><a href="https://github.com/Oh-hong"><img src="https://github.com/user-attachments/assets/31cc6fbe-bee0-479a-98c3-257b3b22277a" width="150px;" alt="">
     <td align="center"><a href="https://github.com/siggu"><img src="https://avatars.githubusercontent.com/u/106001755?v=4" width="150px;" alt="">
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/xeunnie"><b>최승은</b></td>
+    <td align="center"><a href="https://github.com/xeunnie"><b>👑최승은👑</b></td>
     <td align="center"><a href="https://github.com/Ocean423"><b>오소영</b></td>
     <td align="center"><a href="https://github.com/Oh-hong"><b>홍준기</b></td>
     <td align="center"><a href="https://github.com/siggu"><b>김정목</b></td>
