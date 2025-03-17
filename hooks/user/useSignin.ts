@@ -1,17 +1,23 @@
-import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import useUserStore from '@/store/user/userStore';
-import { signinUser } from '@/api/client/user/auth';
-import { setToken, decodeToken } from '@/utils/auth/tokenUtils';
-import { fetchProfile } from '@/api/client/myPage/myPage';
-import { SIGNIN_SUCCESS, SIGNIN_ERROR, INVALID_CREDENTIALS_ERROR } from '@/lib/constants/toast';
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import useUserStore from "@/store/user/userStore";
+import { signinUser } from "@/api/client/user/auth";
+import { setToken, decodeToken } from "@/utils/auth/tokenUtils";
+import { fetchProfile } from "@/api/client/myPage/myPage";
+import {
+  SIGNIN_SUCCESS,
+  SIGNIN_ERROR,
+  INVALID_CREDENTIALS_ERROR,
+} from "@/lib/constants/toast";
+import { useState } from "react";
 
 export const useSignin = () => {
   const router = useRouter();
   const { setUser } = useUserStore();
+  const [showConfetti, setShowConfetti] = useState(false); //컨패티 상태관리
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: signinUser,
     onSuccess: (response) => {
       const { accessToken } = response;
@@ -21,18 +27,24 @@ export const useSignin = () => {
         if (decodedToken) {
           setUser({
             sub: decodedToken.sub,
-            email: decodedToken.email || '',
-            nickname: decodedToken.nickname || '',
+            email: decodedToken.email || "",
+            nickname: decodedToken.nickname || "",
           });
 
           toast.success(SIGNIN_SUCCESS);
-          router.push('/meeting/list');
+
+          // 컨페티 실행 (3초)
+          setShowConfetti(true);
+          setTimeout(() => {
+            router.push("/meeting/list");
+          }, 3000);
+
           fetchProfile();
         }
       }
     },
     onError: (error: any) => {
-      console.error('로그인 실패:', error.response?.data || error.message);
+      console.error("로그인 실패:", error.response?.data || error.message);
       if (error.response?.status === 401) {
         toast.error(INVALID_CREDENTIALS_ERROR);
       } else {
@@ -40,4 +52,6 @@ export const useSignin = () => {
       }
     },
   });
+
+  return { ...mutation, showConfetti };
 };
