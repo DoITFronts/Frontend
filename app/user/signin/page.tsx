@@ -21,7 +21,7 @@ export default function Signin() {
   // 테스트 계정 버튼 handler
   const handleTestAccountClick = () => {
     // 테스트 계정 자동 입력 처리
-    setValue('username', 'asdf@gmail.com');
+    setValue('username', 'guest@gmail.com');
     setValue('password', 'asdf1234!!');
 
     // 자동 로그인
@@ -76,10 +76,10 @@ export default function Signin() {
             >
               ⚡️ 게스트 로그인 ⚡️
             </Button>
-            <Button className="mt-[1.125rem] w-full bg-[#fee500] px-3 py-[0.625rem] text-center text-sm sm:text-base font-bold text-black hover:bg-[#fee500] active:bg-[#fee500] sm:h-[2.75rem] h-[2.5rem]">
+            {/* <Button className="mt-[1.125rem] w-full bg-[#fee500] px-3 py-[0.625rem] text-center text-sm sm:text-base font-bold text-black hover:bg-[#fee500] active:bg-[#fee500] sm:h-[2.75rem] h-[2.5rem]">
               <Icon path="user/kakaoLogo" width="22px" height="22px" />
               카카오로 로그인하기
-            </Button>
+            </Button> */}
           </Form>
           <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-xs sm:text-base font-bold text-neutral-800">
             처음이신가요?

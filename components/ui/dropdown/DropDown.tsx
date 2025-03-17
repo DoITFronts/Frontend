@@ -1,6 +1,9 @@
-"use client";
-import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+
+'use client'
+
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
+
 
 import Icon from "../../utils/Icon";
 
