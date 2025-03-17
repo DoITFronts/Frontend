@@ -1,65 +1,113 @@
-import { toast } from 'react-toastify';
+import { Client } from "@stomp/stompjs";
+import { toast } from "react-toastify";
+import SockJS from "sockjs-client";
 
-import withWebSocketAuth from '@/api/middleware/websocketMiddleware';
-import chatStore from '@/store/chatStore';
+import withWebSocketAuth from "@/api/middleware/websocketMiddleware";
+import {
+  CHAT_ENTER_SUCCESS,
+  CHAT_SEND_ERROR,
+  CHAT_SOCKET_ERROR,
+} from "@/lib/constants/toast";
+import chatStore from "@/store/chat/chatStore";
+// import userStore from "@/store/user/userStore";
 
-const WS_BASE_URL = `${process.env.NEXT_PUBLIC_API_BASE_URL?.replace(/^https?/, 'wss')}/api/v1/ws`;
-
-let socket: WebSocket | null = null;
+let stompClient: Client | null = null;
+let subscribedRoomId: number | null = null;
 
 export const connectWebSocket = withWebSocketAuth((token) => {
-  const { currentRoomId } = chatStore.getState();
+  const { currentRoomId, addMessage } = chatStore.getState();
   if (!currentRoomId) {
-    console.error('WebSocket 연결 실패: 채팅방 ID 없음');
+    console.error("WebSocket 연결 실패: 채팅방 ID 없음");
     return;
   }
 
-  const wsUrl = `${WS_BASE_URL}?token=${token}`;
-  socket = new WebSocket(wsUrl);
+  if (stompClient && stompClient.connected) {
+    console.log("이미 연결된 WebSocket, 기존 연결 유지");
+    if (subscribedRoomId !== currentRoomId) {
+      console.log(`🔄 채팅방 변경됨 → 새 구독: ${currentRoomId}`);
+      subscribedRoomId = currentRoomId;
+      stompClient.unsubscribe(`/topic/room/${subscribedRoomId}`);
+      stompClient.subscribe(`/topic/room/${currentRoomId}`, (response) => {
+        console.log("📩 메시지 수신:", response.body);
+        const message = JSON.parse(response.body);
+        const { messages } = chatStore.getState();
+        const isDuplicate = messages.some((msg) => msg.id === message.id);
 
-  socket.onopen = () => {
-    console.log('✅ WebSocket 연결됨');
-    toast.success('채팅방에 입장했습니다.');
+        if (!isDuplicate) {
+          addMessage(message);
+        } else {
+          console.warn("⚠ 중복 메시지 방지:", message);
+        }
+      });
+    }
+    return;
+  }
 
-    const subscribeMessage = JSON.stringify({
-      type: 'SUBSCRIBE',
-      destination: `/topic/room/${currentRoomId}`,
-    });
-    socket?.send(subscribeMessage);
+  console.log(`🟢 WebSocket 연결 시도: Room ID - ${currentRoomId}`);
+
+  const socket = new SockJS(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/ws?token=${token}`,
+  );
+
+  stompClient = new Client({
+    webSocketFactory: () => socket,
+    reconnectDelay: 5000,
+  });
+
+  stompClient.onConnect = () => {
+    console.log("WebSocket 연결 성공!");
+    toast.success(CHAT_ENTER_SUCCESS, { autoClose: 900 });
+
+    if (stompClient) {
+      console.log(`STOMP 구독 요청: /topic/room/${currentRoomId}`);
+      stompClient.subscribe(`/topic/room/${currentRoomId}`, (response) => {
+        console.log("메시지 수신:", response.body);
+        const message = JSON.parse(response.body);
+        addMessage(message);
+      });
+
+      stompClient.onStompError = (frame) => {
+        console.error("STOMP 오류 발생:", frame);
+        toast.error(CHAT_SOCKET_ERROR);
+      };
+    }
   };
 
-  socket.onmessage = (event) => {
-    console.log('📩 메시지 수신:', event.data);
-    chatStore.getState().addMessage(event.data);
+  stompClient.onWebSocketError = (error) => {
+    console.error("WebSocket 연결 오류:", error);
+    toast.error(CHAT_SOCKET_ERROR);
   };
 
-  socket.onerror = (error) => {
-    console.error('WebSocket 오류 발생', error);
-    toast.error('웹소켓 연결 오류가 발생했습니다.');
-  };
-
-  socket.onclose = () => {
-    console.log('🔌 WebSocket 연결 종료');
-    toast.info('채팅방에서 나갔습니다.');
-    chatStore.getState().clearMessages();
-  };
+  stompClient.activate();
 });
 
 export const disconnectWebSocket = () => {
-  if (socket) {
-    socket.close();
-    socket = null;
+  if (stompClient) {
+    console.log("🔌 WebSocket 연결 종료");
+    stompClient.deactivate();
+    stompClient = null;
+    subscribedRoomId = null;
   }
 };
 
 export const sendMessage = (message: string) => {
   const { currentRoomId } = chatStore.getState();
-  if (socket && message.trim() && currentRoomId) {
-    const chatMessage = JSON.stringify({
-      type: 'MESSAGE',
-      content: message,
-      roomId: currentRoomId,
-    });
-    socket.send(chatMessage);
+
+  if (
+    !stompClient ||
+    !stompClient.connected ||
+    !message.trim() ||
+    !currentRoomId
+  ) {
+    console.error("❌ 메시지 전송 실패: WebSocket이 연결되지 않음");
+    toast.error(CHAT_SEND_ERROR);
+    return;
   }
+
+  console.log("📤 메시지 전송:", message);
+
+  stompClient.publish({
+    destination: `/app/room/${currentRoomId}/sendMessage`,
+    body: JSON.stringify({ content: message }),
+  });
 };

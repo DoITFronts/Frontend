@@ -7,8 +7,7 @@ export default function Header() {
   const { openModal } = modalStore();
 
   return (
-    <div className="flex flex-col items-start justify-between sm:flex-row">
-      <div className="flex flex-col items-start gap-3">
+    <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">      <div className="flex flex-col items-start gap-3">
         <div className="text-start align-middle font-dunggeunmo text-2xl font-normal leading-[100%] tracking-[-0.06em] text-black sm:whitespace-pre-line md:whitespace-normal md:text-3xl">
           맛집 탐방 같이 갈 사람,
           <span className="block sm:inline"> 누구 없나요?</span>

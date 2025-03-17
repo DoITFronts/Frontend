@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { joinLightning, leaveLightning } from '@/api/client/meeting/joinMeeting';
 import { connectWebSocket, disconnectWebSocket } from '@/api/socket/websocket';
-import chatStore from '@/store/chatStore';
+import chatStore from '@/store/chat/chatStore';
 
 const useJoinLightning = (meetingId: string) => {
   const queryClient = useQueryClient();

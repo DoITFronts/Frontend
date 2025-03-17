@@ -9,7 +9,7 @@ import createMeeting from "@/api/client/meeting/createMeeting";
 import Button from "@/components/ui/button/Button";
 import PlaceSearch from "@/components/modal/SearchPlace";
 import Icon from "@/components/utils/Icon";
-import chatStore from "@/store/chatStore";
+import chatStore from "@/store/chat/chatStore";
 import modalStore from "@/store/modalStore";
 import { CreateMeetingParams, MeetingCategory } from "@/types/meeting/meeting";
 
@@ -23,6 +23,7 @@ import {
   IMAGE_SIZE_ERROR,
   SELECT_PLACE_ERROR,
   SELECT_MEETING_TYPE_ERROR,
+  PAST_TIME_ERROR,
 } from "@/lib/constants/toast";
 
 const meetingCategories = Object.values(MeetingCategory);
@@ -64,6 +65,29 @@ export default function CreateMeetingModal() {
 
   const { mutate } = useCreateMeeting();
 
+  const isSameDay = (date1: Date, date2: Date) => {
+    return (
+      date1.getDate() === date2.getDate() &&
+      date1.getMonth() === date2.getMonth() &&
+      date1.getFullYear() === date2.getFullYear()
+    );
+  };
+
+  const isPastTime = (date: Date) => {
+    const now = new Date();
+
+    // 오늘 날짜이고 현재 시간보다 이전인 경우
+    if (isSameDay(date, now)) {
+      return (
+        date.getHours() < now.getHours() ||
+        (date.getHours() === now.getHours() &&
+          date.getMinutes() < now.getMinutes())
+      );
+    }
+
+    return false;
+  };
+
   const handleMeetingName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     if (/^[가-힣a-zA-Z0-9\s]*$/.test(value)) {
@@ -101,11 +125,43 @@ export default function CreateMeetingModal() {
 
   const handleMeetingDateChange = (date: Date | null) => {
     if (date) {
+      // 과거 시간인지 확인
+      if (isPastTime(date)) {
+        // 현재 시간으로 자동 조정
+        const now = new Date();
+        date.setHours(now.getHours());
+        date.setMinutes(now.getMinutes());
+
+        // 에러 메시지 표시
+        toast.error(PAST_TIME_ERROR);
+      }
+
       setMeetingDate(date);
     }
   };
+
   const handleDeadlineDateChange = (date: Date | null) => {
     if (date) {
+      // 과거 시간인지 확인
+      if (isPastTime(date)) {
+        // 현재 시간으로 자동 조정
+        const now = new Date();
+        date.setHours(now.getHours());
+        date.setMinutes(now.getMinutes());
+
+        // 에러 메시지 표시
+        toast.error(PAST_TIME_ERROR);
+      }
+
+      // 모임 날짜보다 이후인지 확인
+      if (date > meetingDate) {
+        // 모임 날짜로 자동 조정
+        date = new Date(meetingDate);
+
+        // 에러 메시지 표시
+        toast.error("마감 날짜는 모임 날짜보다 이후일 수 없습니다.");
+      }
+
       setDeadlineDate(date);
     }
   };
@@ -342,6 +398,7 @@ export default function CreateMeetingModal() {
                 label="모임 날짜"
                 selected={meetingDate}
                 onChange={handleMeetingDateChange}
+                minDate={new Date()}
               />
             </div>
             <div className="flex h-[72px] w-[217px] flex-col gap-2">
@@ -349,6 +406,8 @@ export default function CreateMeetingModal() {
                 label="마감 날짜"
                 selected={deadlineDate}
                 onChange={handleDeadlineDateChange}
+                minDate={new Date()}
+                maxDate={meetingDate}
               />
             </div>
           </div>
