@@ -7,13 +7,14 @@ export interface FetchMyPageMeetingsParams {
   type: string; // '나의 번개' | '내가 만든 번개'
   category?: string; // '술' | '카페' | '보드 게임' | '맛집'
   size?: number;
-  page: number;
+  page?: number;
 }
 
 export interface FetchParams {
   category?: string;
   type?: string;
-  page: number;
+  page?: number;
+  size?: number;
 }
 
 export const fetchProfile = async () => {
@@ -57,10 +58,15 @@ export const updateProfile = async (
 export const fetchMyPageMeetings = async ({
   type,
   category,
-  size,
+  size = 10,
+  page = 1,
 }: FetchMyPageMeetingsParams) => {
   try {
-    const params: Record<string, string | number> = {};
+    const params: Record<string, string | number> = {
+      page,
+      size,
+    };
+
     if (category) {
       params.category = categoryMap[category] || "ALCOHOL";
     }
@@ -83,13 +89,22 @@ export const fetchMyPageMeetings = async ({
   }
 };
 
-export const fetchMyPageReviews = async (params: FetchParams = {}) => {
+export const fetchMyPageReviews = async (
+  { category, type, page = 1, size = 10 }: FetchParams & { size?: number } = {
+    page: 1,
+  },
+) => {
   try {
-    const apiParams: Record<string, string> = {};
-    if (params.category) {
-      const mappedCategory = categoryMap[params.category] || "ALCOHOL";
+    const apiParams: Record<string, string | number> = {
+      page,
+      size,
+    };
+
+    if (category) {
+      const mappedCategory = categoryMap[category] || "ALCOHOL";
       apiParams.category = mappedCategory;
     }
+
     const response = await axiosInstance.get(
       "/api/v1/my-page/reviews/created",
       {
