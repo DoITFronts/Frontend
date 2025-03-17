@@ -39,10 +39,11 @@ import HostInfo from "./component/HostInfo";
 
 interface Props {
   meeting: Meeting;
+  onClick: () => void;
   priority?: boolean;
 }
 
-export default function CardItem({ meeting, priority }: Props) {
+export default function CardItem({ meeting, onClick, priority }: Props) {
   const { openChat } = useStore(chatStore);
   const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
   const [isConfirmed, setIsConfirmed] = useState(meeting.isConfirmed);
