@@ -26,7 +26,7 @@ export default function ConfettiEffect({ isActive }: ConfettiEffectProps) {
     <Confetti
       width={windowSize.width}
       height={windowSize.height}
-      numberOfPieces={1000} // 컨페티 개수
+      numberOfPieces={1500} // 컨페티 개수
       gravity={0.1} // 컨패티가 떨어지는 속도
       recycle={false} // 한 번만 실행
     />
