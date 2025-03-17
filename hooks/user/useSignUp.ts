@@ -1,21 +1,29 @@
-import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { toast } from 'react-toastify';
-import { signupUser } from '@/api/client/user/auth';
-import { SIGNUP_SUCCESS, SIGNUP_ERROR } from '@/lib/constants/toast';
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { signupUser } from "@/api/client/user/auth";
+import { SIGNUP_SUCCESS, SIGNUP_ERROR } from "@/lib/constants/toast";
+import { useState } from "react";
 
 export const useSignup = () => {
   const router = useRouter();
+  const [showConfetti, setShowConfetti] = useState(false); //컨패티 상태관리
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: signupUser,
     onSuccess: () => {
       toast.success(SIGNUP_SUCCESS);
-      router.push('/user/signin');
+
+      setShowConfetti(true);
+      setTimeout(() => {
+        router.push("/user/signin");
+      }, 2500);
     },
     onError: (error: any) => {
-      console.error('회원가입 실패:', error);
+      console.error("회원가입 실패:", error);
       toast.error(SIGNUP_ERROR);
     },
   });
+
+  return { ...mutation, showConfetti };
 };
