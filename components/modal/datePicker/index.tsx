@@ -1,17 +1,25 @@
-import DatePicker from 'react-datepicker';
+import DatePicker from "react-datepicker";
 
-import CustomInput from './CustomInput';
-import CustomTimeInput from './CustomTimeInput';
+import CustomInput from "./CustomInput";
+import CustomTimeInput from "./CustomTimeInput";
 
-import 'react-datepicker/dist/react-datepicker.css';
+import "react-datepicker/dist/react-datepicker.css";
 
 interface DatePickerProps {
   label: string;
   selected: Date;
   onChange: (date: Date | null) => void;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
-export default function CustomDatePicker({ label, selected, onChange }: DatePickerProps) {
+export default function CustomDatePicker({
+  label,
+  selected,
+  onChange,
+  minDate,
+  maxDate,
+}: DatePickerProps) {
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const newDate = new Date(date);
@@ -34,6 +42,8 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
         showPopperArrow={false}
         selected={selected}
         onChange={handleDateChange}
+        minDate={minDate}
+        maxDate={maxDate}
         showTimeInput
         shouldCloseOnSelect={false}
         timeInputLabel=""
@@ -61,10 +71,10 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
               }}
               className="size-6 overflow-hidden text-black"
             >
-              {'<'}
+              {"<"}
             </button>
             <div className="font-['Pretendard'] text-sm font-medium text-gray-800">
-              {date.toLocaleString('ko', { year: 'numeric', month: 'long' })}
+              {date.toLocaleString("ko", { year: "numeric", month: "long" })}
             </div>
             <button
               type="button"
@@ -74,7 +84,7 @@ export default function CustomDatePicker({ label, selected, onChange }: DatePick
               }}
               className="size-6 overflow-hidden text-black"
             >
-              {'>'}
+              {">"}
             </button>
           </div>
         )}
