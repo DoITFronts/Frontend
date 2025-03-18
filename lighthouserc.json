@@ -1,7 +1,7 @@
 {
   "ci": {
     "collect": {
-      "url": ["https://your-netlify-app.netlify.app"],
+      "url": ["https://doitz.netlify.app"],
       "numberOfRuns": 3,
       "settings": { "chromeFlags": "--no-sandbox" }
     },

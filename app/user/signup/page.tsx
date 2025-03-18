@@ -1,35 +1,38 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
+import Image from "next/image";
+import Link from "next/link";
 
-import Form from '@/app/user/component/Form';
-import { useSignup } from '@/hooks/user/useSignUp';
-import Logo from '@/public/assets/logo/logo.svg';
+import Form from "@/app/user/component/Form";
+import { useSignup } from "@/hooks/user/useSignUp";
+import Logo from "@/public/assets/logo/logo.svg";
+
+import ConfettiEffect from "../component/ConfettiEffect";
 
 export default function Signup() {
-  const { mutate, error } = useSignup();
+  const { mutate, error, showConfetti } = useSignup();
 
   const handleSignup = (data: SignUpRequestData) => {
     mutate(data);
   };
 
-  //에러 메세지
+  // 에러 메세지
   const errorMessage =
     error?.response?.status === 400
-      ? '이미 가입되어있는 이메일입니다..'
-      : '회원가입에 실패했습니다. 다시 시도해주세요!';
+      ? "이미 가입되어있는 이메일입니다.."
+      : "회원가입에 실패했습니다. 다시 시도해주세요!";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white ">
-      <div className="w-[20.625rem] sm:w-[25.125rem] flex flex-col items-center">
+    <div className="flex min-h-screen items-center justify-center bg-white">
+      <ConfettiEffect isActive={showConfetti} />
+      <div className="flex w-[20.625rem] flex-col items-center sm:w-[25.125rem]">
         <div className="w-[95%]">
-          <div className="mb-[1.875rem] sm:mb-[3.125rem] flex items-center justify-center">
+          <div className="mb-[1.875rem] flex items-center justify-center sm:mb-[3.125rem]">
             <Link href="/">
               <Image
                 src={Logo}
                 alt="번개팅 로고"
-                className="w-[6.25rem] sm:w-[9.1875rem] h-[1.375rem] sm:h-[2.025rem]"
+                className="h-[1.375rem] w-[6.25rem] sm:h-[2.025rem] sm:w-[9.1875rem]"
               />
             </Link>
           </div>
@@ -52,7 +55,9 @@ export default function Signup() {
                 required
               />
               {error && (
-                <Form.ErrorMessage className="mt-1 pl-2">{errorMessage}</Form.ErrorMessage>
+                <Form.ErrorMessage className="mt-1 pl-2">
+                  {errorMessage}
+                </Form.ErrorMessage>
               )}
             </Form.Label>
             <Form.Label className="pb-6">
@@ -74,7 +79,9 @@ export default function Signup() {
               />
             </Form.Label>
             <Form.Label className="pb-6">
-              <Form.LabelHeader className="pb-2">비밀번호 확인</Form.LabelHeader>
+              <Form.LabelHeader className="pb-2">
+                비밀번호 확인
+              </Form.LabelHeader>
               <Form.PasswordInput
                 name="passwordConfirmation"
                 placeholder="비밀번호를 다시 한번 입력해 주세요"
@@ -91,12 +98,12 @@ export default function Signup() {
                 type="date"
               />
             </Form.Label>
-            <Form.Submit className="w-full text-sm sm:text-base sm:h-[2.75rem] h-[2.5rem]">
+            <Form.Submit className="h-10 w-full text-sm sm:h-11 sm:text-base">
               회원가입
             </Form.Submit>
           </Form>
-          <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-xs sm:text-base font-bold text-neutral-800">
-            이미 회원이신가요?{' '}
+          <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-xs font-bold text-neutral-800 sm:text-base">
+            이미 회원이신가요?{" "}
             <Link className="text-gray-300 underline" href="/user/signin">
               로그인하기
             </Link>

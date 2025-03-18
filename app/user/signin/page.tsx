@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import Image from "next/image";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
 
-import Form from '@/app/user/component/Form';
-import Button from '@/components/ui/button/Button';
-import Icon from '@/components/utils/Icon';
-import { useSignin } from '@/hooks/user/useSignin';
-import Logo from '@/public/assets/logo/logo.svg';
+import Form from "@/app/user/component/Form";
+import Button from "@/components/ui/button/Button";
+import { useSignin } from "@/hooks/user/useSignin";
+import Logo from "@/public/assets/logo/logo.svg";
+
+import ConfettiEffect from "../component/ConfettiEffect";
 
 export default function Signin() {
-  const { mutate, error } = useSignin();
+  const { mutate, error, showConfetti } = useSignin();
   const { setValue } = useForm();
 
   const handleSignin = (data: SignInRequestData) => {
@@ -21,29 +22,30 @@ export default function Signin() {
   // 테스트 계정 버튼 handler
   const handleTestAccountClick = () => {
     // 테스트 계정 자동 입력 처리
-    setValue('username', 'guest@gmail.com');
-    setValue('password', 'asdf1234!!');
+    setValue("username", "guest@gmail.com");
+    setValue("password", "asdf1234!!");
 
     // 자동 로그인
-    handleSignin({ username: 'asdf@gmail.com', password: 'asdf1234!!' });
+    handleSignin({ username: "guest@gmail.com", password: "asdf1234!!" });
   };
 
-  //에러 메세지
+  // 에러 메세지
   const errorMessage =
     error?.response?.status === 401
-      ? '이메일 또는 비밀번호가 올바르지 않습니다.'
-      : '로그인에 실패했습니다. 다시 시도해주세요!';
+      ? "이메일 또는 비밀번호가 올바르지 않습니다."
+      : "로그인에 실패했습니다. 다시 시도해주세요!";
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-white ">
-      <div className="w-[20.625rem] sm:w-[25.125rem] flex flex-col items-center">
+    <div className="flex min-h-screen items-center justify-center bg-white">
+      <ConfettiEffect isActive={showConfetti} />
+      <div className="flex w-[20.625rem] flex-col items-center sm:w-[25.125rem]">
         <div className="w-[95%]">
-          <div className="mb-[1.875rem] sm:mb-[3.125rem] flex items-center justify-center">
+          <div className="mb-[1.875rem] flex items-center justify-center sm:mb-[3.125rem]">
             <Link href="/">
               <Image
                 src={Logo}
                 alt="번개팅 로고"
-                className="w-[6.25rem] sm:w-[9.1875rem] h-[1.375rem] sm:h-[2.025rem]"
+                className="h-[1.375rem] w-[6.25rem] sm:h-[2.025rem] sm:w-[9.1875rem]"
               />
             </Link>
           </div>
@@ -65,13 +67,17 @@ export default function Signin() {
                 autoComplete="password"
                 required
               />
-              {error && <Form.ErrorMessage className="pl-2 pt-3">{errorMessage}</Form.ErrorMessage>}
+              {error && (
+                <Form.ErrorMessage className="pl-2 pt-3">
+                  {errorMessage}
+                </Form.ErrorMessage>
+              )}
             </Form.Label>
-            <Form.Submit className="w-full text-sm sm:text-base sm:h-[2.75rem] h-[2.5rem]">
+            <Form.Submit className="h-10 w-full text-sm sm:h-11 sm:text-base">
               로그인
             </Form.Submit>
             <Button
-              className="mt-[1.125rem] w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-[0.625rem] text-center text-sm sm:text-base font-bold text-white sm:h-[2.75rem] h-[2.5rem]"
+              className="mt-[1.125rem] h-10 w-full bg-gradient-to-r from-black to-cyan-800 px-3 py-2.5 text-center text-sm font-bold text-white sm:h-11 sm:text-base"
               onClick={handleTestAccountClick}
             >
               ⚡️ 게스트 로그인 ⚡️
@@ -81,7 +87,7 @@ export default function Signin() {
               카카오로 로그인하기
             </Button> */}
           </Form>
-          <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-xs sm:text-base font-bold text-neutral-800">
+          <div className="mt-3 flex items-center justify-center gap-2 font-['Pretendard'] text-xs font-bold text-neutral-800 sm:text-base">
             처음이신가요?
             <Link className="text-gray-300 underline" href="/user/signup">
               회원가입 하기

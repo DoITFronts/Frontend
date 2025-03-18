@@ -10,6 +10,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "sitemap": "next-sitemap",
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "test:coverage": "jest --coverage",
@@ -37,8 +38,10 @@
     "lottie-react": "^2.4.1",
     "next": "15.1.6",
     "next-pwa": "^5.6.0",
+    "next-sitemap": "^4.2.3",
     "prettier": "^3.4.2",
     "react": "^19.0.0",
+    "react-confetti": "^6.4.0",
     "react-datepicker": "^8.0.0",
     "react-dom": "^19.0.0",
     "react-error-boundary": "^5.0.0",
@@ -51,6 +54,7 @@
     "sockjs-client": "^1.6.1",
     "stompjs": "^2.3.3",
     "tailwind-merge": "^3.0.1",
+    "webpack-bundle-analyzer": "^4.10.2",
     "ws": "^8.18.1",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
@@ -66,6 +70,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/sockjs-client": "^1.5.4",
+    "@types/webpack-bundle-analyzer": "^4.7.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "codecov": "^3.8.2",
@@ -89,6 +94,8 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "terser-webpack-plugin": "^5.3.14",
+    "typescript": "^5",
+    "webpack-cli": "^6.0.1"
   }
 }

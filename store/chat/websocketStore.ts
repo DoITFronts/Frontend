@@ -37,7 +37,6 @@ const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
       onConnect: () => {
         console.log("WebSocket 연결 성공!");
-        toast.success(CHAT_ENTER_SUCCESS);
         set({ isConnected: true });
       },
 

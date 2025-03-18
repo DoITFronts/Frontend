@@ -3,42 +3,33 @@ import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 
 import withWebSocketAuth from "@/api/middleware/websocketMiddleware";
-import {
-  CHAT_ENTER_SUCCESS,
-  CHAT_SEND_ERROR,
-  CHAT_SOCKET_ERROR,
-} from "@/lib/constants/toast";
 import chatStore from "@/store/chat/chatStore";
-// import userStore from "@/store/user/userStore";
+import profileStore from "@/store/profileStore";
 
 let stompClient: Client | null = null;
 let subscribedRoomId: number | null = null;
 
 export const connectWebSocket = withWebSocketAuth((token) => {
   const { currentRoomId, addMessage } = chatStore.getState();
+
   if (!currentRoomId) {
-    console.error("WebSocket 연결 실패: 채팅방 ID 없음");
+    console.error("❌ WebSocket 연결 실패: 채팅방 ID 없음");
     return;
   }
-
   if (stompClient && stompClient.connected) {
-    console.log("이미 연결된 WebSocket, 기존 연결 유지");
+    console.log("🔄 기존 WebSocket 유지");
     if (subscribedRoomId !== currentRoomId) {
-      console.log(`🔄 채팅방 변경됨 → 새 구독: ${currentRoomId}`);
-      subscribedRoomId = currentRoomId;
+      console.log(`📌 새로운 채팅방(${currentRoomId}) 구독`);
       stompClient.unsubscribe(`/topic/room/${subscribedRoomId}`);
-      stompClient.subscribe(`/topic/room/${currentRoomId}`, (response) => {
-        console.log("📩 메시지 수신:", response.body);
-        const message = JSON.parse(response.body);
-        const { messages } = chatStore.getState();
-        const isDuplicate = messages.some((msg) => msg.id === message.id);
 
-        if (!isDuplicate) {
+      setTimeout(() => {
+        subscribedRoomId = currentRoomId;
+        stompClient?.subscribe(`/topic/room/${currentRoomId}`, (response) => {
+          console.log("📩 메시지 수신:", response.body);
+          const message = JSON.parse(response.body);
           addMessage(message);
-        } else {
-          console.warn("⚠ 중복 메시지 방지:", message);
-        }
-      });
+        });
+      }, 300);
     }
     return;
   }
@@ -52,30 +43,37 @@ export const connectWebSocket = withWebSocketAuth((token) => {
   stompClient = new Client({
     webSocketFactory: () => socket,
     reconnectDelay: 5000,
+    heartbeatIncoming: 4000,
+    heartbeatOutgoing: 4000,
   });
 
   stompClient.onConnect = () => {
-    console.log("WebSocket 연결 성공!");
-    toast.success(CHAT_ENTER_SUCCESS, { autoClose: 900 });
+    console.log("✅ WebSocket 연결 성공!");
+    subscribedRoomId = currentRoomId;
 
     if (stompClient) {
-      console.log(`STOMP 구독 요청: /topic/room/${currentRoomId}`);
+      console.log(`🔔 STOMP 구독 요청: /topic/room/${currentRoomId}`);
       stompClient.subscribe(`/topic/room/${currentRoomId}`, (response) => {
-        console.log("메시지 수신:", response.body);
+        console.log("📩 메시지 수신:", response.body);
         const message = JSON.parse(response.body);
         addMessage(message);
       });
 
       stompClient.onStompError = (frame) => {
-        console.error("STOMP 오류 발생:", frame);
-        toast.error(CHAT_SOCKET_ERROR);
+        console.error("❌ STOMP 오류 발생:", frame);
+        toast.error("채팅 서버 오류가 발생했습니다.");
       };
     }
   };
 
   stompClient.onWebSocketError = (error) => {
-    console.error("WebSocket 연결 오류:", error);
-    toast.error(CHAT_SOCKET_ERROR);
+    console.error("❌ WebSocket 연결 오류:", error);
+    toast.error("채팅 서버와 연결이 끊어졌습니다. 다시 연결 시도 중...");
+  };
+
+  stompClient.onDisconnect = () => {
+    console.warn("🔌 WebSocket 연결 종료됨! 다시 연결을 시도합니다...");
+    setTimeout(() => connectWebSocket(), 5000);
   };
 
   stompClient.activate();
@@ -91,21 +89,37 @@ export const disconnectWebSocket = () => {
 };
 
 export const sendMessage = (message: string) => {
-  const { currentRoomId } = chatStore.getState();
+  const { currentRoomId, addMessage } = chatStore.getState();
 
-  if (
-    !stompClient ||
-    !stompClient.connected ||
-    !message.trim() ||
-    !currentRoomId
-  ) {
+  if (!stompClient || !stompClient.connected) {
     console.error("❌ 메시지 전송 실패: WebSocket이 연결되지 않음");
-    toast.error(CHAT_SEND_ERROR);
+    toast.error("채팅 서버와 연결되지 않았습니다. 다시 시도해주세요.");
     return;
   }
 
-  console.log("📤 메시지 전송:", message);
+  if (!message.trim() || !currentRoomId) {
+    console.error("❌ 메시지 전송 실패: 메시지 또는 채팅방 ID 없음");
+    return;
+  }
+  const {
+    id: userId,
+    nickname: userNickname,
+    imageUrl: userImage,
+  } = profileStore.getState();
 
+  const newMessage = {
+    id: Date.now(),
+    roomId: currentRoomId,
+    userId,
+    userNickname,
+    content: message,
+    createdAt: new Date().toISOString(),
+    userImage,
+  };
+
+  addMessage(newMessage);
+
+  console.log("📤 낙관적 메시지 추가:", newMessage);
   stompClient.publish({
     destination: `/app/room/${currentRoomId}/sendMessage`,
     body: JSON.stringify({ content: message }),
