@@ -142,7 +142,8 @@
 
 <details>
  <summary>폴더 구조</summary>
- ```aiignore
+  
+ ```
 📦 프로젝트 루트
 ├── 📂 api                # API 관리 (클라이언트 & 서버)
 │   ├── 📂 client
