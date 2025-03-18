@@ -140,7 +140,7 @@ function MeetingList({
   // 에러가 발생한 경우
   if (error) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center">
+      <div className="col-span-1 flex h-[435px] items-center justify-center md:col-span-2 lg:col-span-3">
         <p className="text-center text-base font-medium text-[#C0C1C2]">
           데이터를 불러오는데 문제가 발생했습니다.
         </p>
@@ -151,7 +151,7 @@ function MeetingList({
   // 데이터가 없는 경우 처리
   if (!meetings || meetings.length === 0) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+      <div className="col-span-1 flex h-[435px] items-center justify-center whitespace-pre-line bg-white md:col-span-2 lg:col-span-3">
         <p className="text-center text-base font-medium text-[#C0C1C2]">
           {menuTab === "나의 번개"
             ? `아직 참여한 번개가 없어요.\n지금 번개에 참여해 보세요!`
