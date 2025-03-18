@@ -48,13 +48,8 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
 
   const reviews = data?.pages.flatMap((page) => page.reviews) || [];
 
-  const { ref: animationRef, inView: animationInView } = useInView({
-    threshold: 0.1,
-    triggerOnce: true,
-  });
-
   const { ref: loadMoreRef, inView: loadMoreInView } = useInView({
-    threshold: 0.5,
+    threshold: 0.1,
   });
 
   useEffect(() => {
@@ -77,7 +72,7 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
   // 에러가 발생한 경우
   if (error) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+      <div className="col-span-1 flex h-[435px] items-center justify-center whitespace-pre-line bg-white md:col-span-2 lg:col-span-3">
         <p className="text-center text-base font-medium text-[#C0C1C2]">
           데이터를 불러오는데 문제가 발생했습니다.
         </p>
@@ -88,7 +83,7 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
   // 리뷰 데이터가 비어있는 경우
   if (!reviews || reviews.length === 0) {
     return (
-      <div className="col-span-3 flex h-[435px] items-center justify-center whitespace-pre-line bg-white">
+      <div className="col-span-1 flex h-[435px] items-center justify-center whitespace-pre-line bg-white md:col-span-2 lg:col-span-3">
         <p className="text-center text-base font-medium text-[#C0C1C2]">
           {`아직 작성한 리뷰가 없어요.\n미팅이 끝난 후 리뷰를 작성해보세요!`}
         </p>
@@ -101,11 +96,14 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
     <>
       {reviews.map((review, index) => (
         <motion.div
-          ref={animationRef}
           key={review.reviewId}
           initial={{ opacity: 0, y: 30 }}
-          animate={animationInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.4,
+            ease: "easeOut",
+            delay: index * 0.1, // 각 카드마다 살짝 딜레이를 주어 순차적으로 나타나게 함
+          }}
           className="overflow-hidden rounded-b-2xl hover:shadow-[0px_10px_10px_1px_rgba(0,0,0,0.1)]"
         >
           <Card mode="list">
@@ -115,24 +113,22 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
                 className="block"
                 prefetch={false}
               >
-                <div className="relative flex h-[200px] w-96 items-center justify-center overflow-hidden">
+                <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
                   <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
                   <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
                   {review.lighteningImageUrl ? (
                     <Image
                       src={review.lighteningImageUrl}
-                      width={384}
-                      height={200}
+                      fill
                       alt="thumbnail"
-                      className="w-96"
+                      className="object-cover"
                     />
                   ) : (
                     <Image
-                      src="/assets/card/example_image.png"
-                      width={384}
-                      height={200}
+                      src={`/fallback/fallback_${review.category}.png`}
+                      fill
                       alt="thumbnail"
-                      className="w-96"
+                      className="object-cover"
                     />
                   )}
                 </div>
@@ -179,27 +175,24 @@ export default function ReviewTab({ activityTab }: ReviewTabProps = {}) {
                   </div>
                 </div>
               </Link>
-
-              <div className="mt-aut flex h-auto w-full items-center justify-end p-4">
-                <div className="rounded-lg bg-black px-4 py-2 text-sm text-white">
-                  리뷰 상세보기
-                </div>
-              </div>
             </div>
           </Card>
         </motion.div>
       ))}
 
-      {isFetchingNextPage && (
-        <div className="col-span-3 flex h-20 items-center justify-center">
-          <p className="text-center text-base font-medium text-[#C0C1C2]">
-            리뷰 더 불러오는 중...
-          </p>
-        </div>
-      )}
+      <div
+        ref={loadMoreRef}
+        className="col-span-1 flex h-20 items-center justify-center md:col-span-2 lg:col-span-3"
+      >
+        {isFetchingNextPage ? (
+          <p>리뷰 더 불러오는 중...</p>
+        ) : hasNextPage ? (
+          <p>더 불러오려면 스크롤하세요</p>
+        ) : null}
+      </div>
 
       {!hasNextPage && reviews.length > 0 && (
-        <div className="col-span-3 flex h-20 items-center justify-center">
+        <div className="col-span-1 flex h-20 items-center justify-center md:col-span-2 lg:col-span-3">
           <p className="text-center text-base font-medium text-[#C0C1C2]">
             모든 리뷰를 불러왔습니다
           </p>
