@@ -39,7 +39,7 @@ export default function MeetingDescription() {
   } = useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
   const host = data?.participants?.find((participant) => participant.isHost);
-  const isHost = Number(userId) === host?.userId;
+  const isHost = userId === host?.userId;
 
   const handleSave = async () => {
     if (!meetingId) return;
