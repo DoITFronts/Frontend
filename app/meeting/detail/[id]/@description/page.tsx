@@ -1,27 +1,42 @@
-'use client';
+"use client";
 
-import dynamic from 'next/dynamic';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-import remarkGfm from 'remark-gfm';
+import dynamic from "next/dynamic";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 
-import EditingIcon from '@/app/meeting/detail/components/EditingIcon';
+import EditingIcon from "@/app/meeting/detail/components/EditingIcon";
 import {
   DescriptionSkeleton,
   DescriptionError,
-} from '@/app/meeting/detail/components/skeleton/DescriptionSkeleton';
-import { useMeetingDetail, useMeetingEditor, useUpdateMeeting } from '@/hooks/meeting/useMeetingDetail';
+} from "@/app/meeting/detail/components/skeleton/DescriptionSkeleton";
+import {
+  useMeetingDetail,
+  useMeetingEditor,
+  useUpdateMeeting,
+} from "@/hooks/meeting/useMeetingDetail";
+import useUserStore from "@/store/user/userStore";
 
-const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
+const MarkdownEditor = dynamic(() => import("@uiw/react-md-editor"), {
+  ssr: false,
+});
 function CustomParagraph(props: React.HTMLAttributes<HTMLParagraphElement>) {
   return <p {...props} className="whitespace-pre-wrap" />;
 }
 
 export default function MeetingDescription() {
   const { meetingId, data, isLoading, error, refetch } = useMeetingDetail();
-  const userId = typeof window !== 'undefined' ? localStorage.getItem('sub') : null;
-  const { isEditing, setIsEditing, status, setStatus, description, setDescription, tab, setTab } =
-    useMeetingEditor(data?.description);
+  const userId = useUserStore((state) => state.userId);
+  const {
+    isEditing,
+    setIsEditing,
+    status,
+    setStatus,
+    description,
+    setDescription,
+    tab,
+    setTab,
+  } = useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
   const host = data?.participants?.find((participant) => participant.isHost);
   const isHost = Number(userId) === host?.userId;
@@ -30,7 +45,7 @@ export default function MeetingDescription() {
     if (!meetingId) return;
     await updateMutation.mutateAsync({ meetingId, description });
     setIsEditing(false);
-    setStatus('default');
+    setStatus("default");
   };
 
   const handleEditToggle = () => {
@@ -40,7 +55,7 @@ export default function MeetingDescription() {
 
   const renderContent = () => {
     if (isEditing) {
-      return tab === 'edit' ? (
+      return tab === "edit" ? (
         <MarkdownEditor
           value={description}
           // TODO 새로고침 했을 떄 값왜 날라가는지
@@ -54,7 +69,7 @@ export default function MeetingDescription() {
             components={{ p: CustomParagraph }}
             className="flex flex-col gap-1"
           >
-            {description || '설명을 추가해주세요!.'}
+            {description || "설명을 추가해주세요!."}
           </ReactMarkdown>
         </div>
       );
@@ -67,7 +82,7 @@ export default function MeetingDescription() {
         components={{ p: CustomParagraph }}
         className="flex flex-col gap-1"
       >
-        {data?.description ?? '설명을 추가해주세요!.'}
+        {data?.description ?? "설명을 추가해주세요!."}
       </ReactMarkdown>
     );
   };
@@ -87,31 +102,31 @@ export default function MeetingDescription() {
             <div
               role="button"
               tabIndex={0}
-              onMouseEnter={() => setStatus('hover')}
-              onMouseLeave={() => setStatus(isEditing ? 'editing' : 'default')}
+              onMouseEnter={() => setStatus("hover")}
+              onMouseLeave={() => setStatus(isEditing ? "editing" : "default")}
               onClick={handleEditToggle}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   handleEditToggle();
                 }
               }}
               className="cursor-pointer"
             >
-              <EditingIcon status={isEditing ? 'editing' : status} />
+              <EditingIcon status={isEditing ? "editing" : status} />
             </div>
           )}
         </div>
 
         {isEditing && (
           <div className="flex border-b border-gray-300">
-            {['edit', 'preview'].map((mode) => (
+            {["edit", "preview"].map((mode) => (
               <button
                 key={mode}
                 type="button"
-                className={`px-4 py-2 ${tab === mode ? 'border-b-2 border-black' : 'text-gray-600'}`}
-                onClick={() => setTab(mode as 'edit' | 'preview')}
+                className={`px-4 py-2 ${tab === mode ? "border-b-2 border-black" : "text-gray-600"}`}
+                onClick={() => setTab(mode as "edit" | "preview")}
               >
-                {mode === 'edit' ? '편집' : '미리보기'}
+                {mode === "edit" ? "편집" : "미리보기"}
               </button>
             ))}
           </div>
