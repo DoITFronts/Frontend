@@ -15,7 +15,7 @@ import {
   useMeetingEditor,
   useUpdateMeeting,
 } from "@/hooks/meeting/useMeetingDetail";
-import useUserStore from "@/store/user/userStore";
+import profileStore from "@/store/profileStore";
 
 const MarkdownEditor = dynamic(() => import("@uiw/react-md-editor"), {
   ssr: false,
@@ -26,7 +26,7 @@ function CustomParagraph(props: React.HTMLAttributes<HTMLParagraphElement>) {
 
 export default function MeetingDescription() {
   const { meetingId, data, isLoading, error, refetch } = useMeetingDetail();
-  const userId = useUserStore((state) => state.userId);
+  const userId = profileStore((state) => state.id);
   const {
     isEditing,
     setIsEditing,
@@ -39,7 +39,7 @@ export default function MeetingDescription() {
   } = useMeetingEditor(data?.description);
   const updateMutation = useUpdateMeeting(refetch);
   const host = data?.participants?.find((participant) => participant.isHost);
-  const isHost = Number(userId) === host?.userId;
+  const isHost = userId === host?.userId;
 
   const handleSave = async () => {
     if (!meetingId) return;

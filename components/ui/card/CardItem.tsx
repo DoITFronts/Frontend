@@ -8,7 +8,7 @@ import { useInView } from "react-intersection-observer";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 
-import { joinChatRoom } from "@/api/client/chat/chatApi";
+// import { joinChatRoom } from "@/api/client/chat/chatApi";
 import {
   joinLightning,
   leaveLightning,
@@ -83,7 +83,7 @@ export default function CardItem({ meeting, onClick, priority }: Props) {
         setIsCompleted(participantCount + 1 >= meeting.capacity);
         setIsConfirmed(participantCount + 1 >= meeting.minCapacity);
         await joinLightning(meeting.id);
-        await joinChatRoom(Number(meeting.id));
+        // await joinChatRoom(Number(meeting.id));
         openChat(Number(meeting.id));
         toast.success(MEETING_JOIN_SUCCESS);
       }

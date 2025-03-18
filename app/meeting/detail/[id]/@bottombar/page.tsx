@@ -4,7 +4,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useStore } from "zustand";
 
-import { joinChatRoom } from "@/api/client/chat/chatApi";
+// import { joinChatRoom } from "@/api/client/chat/chatApi";
 import {
   BottomFloatingBarError,
   BottomFloatingBarSkeleton,
@@ -61,7 +61,7 @@ export default function BottomFloatingBar() {
       toast.success(MEETING_CANCEL_SUCCESS);
     } else {
       await joinMutation.mutate();
-      await joinChatRoom(Number(meeting?.id));
+      // await joinChatRoom(Number(meeting?.id));
       openChat(Number(meeting?.id));
       toast.success(MEETING_JOIN_SUCCESS);
     }
