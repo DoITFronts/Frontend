@@ -5,10 +5,18 @@ import { connectWebSocket } from "@/api/socket/websocket";
 import { CHAT_FETCH_ERROR, CHAT_JOIN_ERROR } from "@/lib/constants/toast";
 import chatStore from "@/store/chat/chatStore";
 
-export const fetchChatMessages = async (roomId: number) => {
+export const fetchChatMessages = async (
+  roomId: number,
+  size: number = 20,
+) => {
   try {
     const response = await axiosInstance.get(
       `/api/v1/chat/rooms/${roomId}/messages`,
+      {
+        params: {
+          size,
+        },
+      },
     );
     return response.data;
   } catch (error) {
