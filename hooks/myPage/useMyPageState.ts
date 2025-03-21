@@ -12,7 +12,7 @@ export default function useMyPageState() {
     }
   };
 
-  const handleActiviryClick = (tab: string) => {
+  const handleActivityClick = (tab: string) => {
     if (tab === selectedActivityTab) {
       setSelectedActivityTab("");
     } else {
@@ -24,6 +24,6 @@ export default function useMyPageState() {
     selectedMenuTab,
     selectedActivityTab,
     handleMenuClick,
-    handleActiviryClick,
+    handleActivityClick,
   };
 }
