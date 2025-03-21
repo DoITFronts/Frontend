@@ -21,7 +21,6 @@ export default function ActivityFilter({
         >
           <div className="flex w-full items-center justify-between">
             <div className="flex size-[24px] items-center justify-center">
-              ß
               <div className="flex size-4 items-center justify-center rounded-[5px] border border-black-6 bg-white">
                 {selectedActivityTab === activity ? (
                   <svg

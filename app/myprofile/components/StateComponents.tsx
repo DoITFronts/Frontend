@@ -1,3 +1,5 @@
+"use client";
+
 interface StateComponentProps {
   message: string;
   className?: string;

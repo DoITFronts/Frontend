@@ -1,3 +1,5 @@
+"use client";
+
 import useMyPageState from "@/hooks/myPage/useMyPageState";
 import MeetingTabHeader from "../components/MeetingTabHeader";
 import ActivityFilter from "../components/ActivityFilter";
@@ -39,10 +41,6 @@ export default function MyPage() {
         <ErrorBoundary FallbackComponent={MeetingCardError}>
           {selectedMenuTab === "리뷰" ? (
             <ReviewContainer activityTab={selectedActivityTab} />
-          ) : selectedMenuTab === "채팅" ? (
-            <div className="col-span-3 flex h-40 items-center justify-center">
-              <p className="text-lg">채팅 기능 준비 중</p>
-            </div>
           ) : (
             <MeetingContainer
               menuTab={selectedMenuTab}

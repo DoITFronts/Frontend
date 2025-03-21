@@ -1,3 +1,5 @@
+"use client";
+
 import CategoryFilter from "@/components/ui/chip/CategoryFilter";
 
 interface MeetingTabHeaderProps {

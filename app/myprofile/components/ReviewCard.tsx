@@ -1,3 +1,4 @@
+"use client";
 import Card from "@/components/ui/card/Card";
 import ReviewHeart from "@/components/ui/review/ReviewHeart";
 import { Review } from "@/types/myPage/myPage";

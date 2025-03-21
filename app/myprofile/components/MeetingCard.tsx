@@ -1,3 +1,5 @@
+"use client";
+
 import ButtonBox from "@/components/ui/button/ButtonBox";
 import Card from "@/components/ui/card/Card";
 import MeetingStatus from "@/components/ui/card/component/MeetingStatus";

@@ -14,7 +14,10 @@ export default function InfiniteScrollLoader({
   }
 
   return (
-    <div ref={loadMoreRef} className="my-4 flex justify-center">
+    <div
+      ref={loadMoreRef}
+      className="col-span-1 my-4 flex justify-center md:col-span-2 lg:col-span-3"
+    >
       {isFetchingNextPage ? <p>더 불러오는 중...</p> : ""}
     </div>
   );
