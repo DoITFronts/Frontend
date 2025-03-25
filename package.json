@@ -18,7 +18,7 @@
   "dependencies": {
     "@jest/globals": "^29.7.0",
     "@next/bundle-analyzer": "^15.2.1",
-    "@sentry/nextjs": "^9.5.0",
+    "@sentry/nextjs": "^9.9.0",
     "@stomp/stompjs": "^7.0.1",
     "@tanstack/react-query": "^5.66.5",
     "@testing-library/jest-dom": "^6.6.3",
