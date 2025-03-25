@@ -1,18 +1,21 @@
-'use client';
+"use client";
 
-import cn from 'clsx';
+import cn from "clsx";
 import {
   FormHTMLAttributes,
   InputHTMLAttributes,
   LabelHTMLAttributes,
   ReactNode,
   useState,
-} from 'react';
-import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+} from "react";
+import { FormProvider, useForm, useFormContext } from "react-hook-form";
 
-import Button from '@/components/ui/button/Button';
-import Icon from '@/components/utils/Icon';
-import VALIDATION_RULES, { type Field, PASSWORD_CONFIRM_RULES } from '@/lib/formValidation';
+import Button from "@/components/ui/button/Button";
+import Icon from "@/components/utils/Icon";
+import VALIDATION_RULES, {
+  type Field,
+  PASSWORD_CONFIRM_RULES,
+} from "@/lib/formValidation";
 
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   onSubmit: (data: any) => void;
@@ -35,7 +38,11 @@ export default function Form({ onSubmit, id, className, children }: FormProps) {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(handleFormSubmit)} id={id} className={className}>
+      <form
+        onSubmit={methods.handleSubmit(handleFormSubmit)}
+        id={id}
+        className={className}
+      >
         {children}
       </form>
     </FormProvider>
@@ -43,167 +50,158 @@ export default function Form({ onSubmit, id, className, children }: FormProps) {
 }
 
 function Label({ children, className }: LabelProps) {
-  const labelClass = cn('block', className);
-
-  return <label className={labelClass}> {children} </label>;
+  return <label className={cn("block", className)}>{children}</label>;
 }
 
-// 인풋 라벨 헤더
 function LabelHeader({ children, className }: BaseProps) {
-  const headerClass = cn(
-    "font-['Pretendard'] text-black-8 text-sm font-bold leading-tight",
-    className,
+  return (
+    <h2
+      className={cn(
+        "font-['Pretendard'] text-sm font-bold leading-tight text-black-8",
+        className,
+      )}
+    >
+      {children}
+    </h2>
   );
-
-  return <h2 className={headerClass}>{children}</h2>;
 }
-
-// 인풋 기본 스타일
-const baseInputStyle =
-  "focus:outline-black-7 h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl justify-start items-center gap-2.5 inline-flex overflow-hidden text-base font-medium font-['Pretendard'] leading-normal";
-
-const baseInputErrorStyle = 'outline outline-2 outline-red-500 focus:outline-gray-500';
 
 function ErrorMessage({ className, children }: BaseProps) {
-  const errorClass = cn(
-    "inline-block mt-2 text-red-6 text-sm font-semibold font-['Pretendard'] leading-tight",
-    className,
+  return (
+    <span
+      className={cn(
+        "mt-2 inline-block font-['Pretendard'] text-sm font-semibold leading-tight text-red-6",
+        className,
+      )}
+    >
+      {children}
+    </span>
   );
-
-  return <span className={errorClass}>{children}</span>;
 }
-// 기본 인풋
-function Input({ className, name, ...rest }: InputProps) {
+
+const baseInputStyle =
+  "focus:outline-black-7 h-11 w-full px-4 py-2.5 bg-black-2 rounded-xl text-base font-medium font-['Pretendard']";
+const baseInputErrorStyle =
+  "outline outline-2 outline-red-500 focus:outline-gray-500";
+
+function handleKeyUp(
+  e: React.KeyboardEvent<HTMLInputElement>,
+  trigger: any,
+  name: Field,
+) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    trigger(name).then(() => {
+      const formElements = Array.from(
+        (e.target as HTMLInputElement).form?.elements || [],
+      ) as HTMLInputElement[];
+      const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
+      const nextElement = formElements[currentIndex + 1];
+      if (nextElement) nextElement.focus();
+    });
+  }
+}
+
+function InputBase({
+  className,
+  name,
+  type = "text",
+  placeholder,
+  registerOptions,
+  showPasswordToggle,
+  togglePasswordVisibility,
+  ...rest
+}: InputProps & {
+  registerOptions?: any;
+  showPasswordToggle?: boolean;
+  togglePasswordVisibility?: () => void;
+}) {
   const {
     register,
     formState: { errors },
     trigger,
   } = useFormContext();
 
-  const inputClass = cn(
-    baseInputStyle,
-    {
-      [baseInputErrorStyle]: !!errors[name],
-    },
-    className,
-  );
-  const placeholder = rest.placeholder ? rest.placeholder : name;
-
   return (
-    <>
+    <div className="relative">
       <input
-        {...register(name, VALIDATION_RULES[name])}
-        className={inputClass}
+        {...register(name, registerOptions)}
+        className={cn(
+          baseInputStyle,
+          { [baseInputErrorStyle]: !!errors[name] },
+          className,
+        )}
         {...rest}
-        placeholder={placeholder}
+        type={type}
+        placeholder={placeholder || name}
         onBlur={() => trigger(name)}
-        // 엔터 입력했을때 유효성 검사 실행되도록
-        onKeyUp={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            // 유효성 검사 통과되면, 다음 인풋으로 포커스 이동
-            trigger(name).then(() => {
-              const formElements = Array.from(
-                (e.target as HTMLInputElement).form?.elements || [],
-              ) as HTMLInputElement[];
-
-              const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
-              const nextElement = formElements[currentIndex + 1];
-
-              if (nextElement) {
-                nextElement.focus();
-              }
-            });
-          }
-        }}
+        onKeyUp={(e) => handleKeyUp(e, trigger, name)}
       />
-      {errors[name]?.message && <ErrorMessage>{String(errors[name]?.message)}</ErrorMessage>}
-    </>
-  );
-}
-
-// 비밀번호 입력 인풋
-function PasswordInput({ className, name, ...rest }: InputProps) {
-  const {
-    register,
-    formState: { errors },
-    getValues,
-    trigger,
-  } = useFormContext();
-
-  // 비밀번호 표시 눈모양 토글 처리
-  const [showPassword, setShowPassword] = useState(false);
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => !prev);
-  };
-
-  const inputClass = cn(
-    baseInputStyle,
-    {
-      [baseInputErrorStyle]: !!errors[name],
-    },
-    className,
-  );
-  const EyeIcon = showPassword ? (
-    <Icon path="user/visibility" />
-  ) : (
-    <Icon path="user/unVisibility" />
-  );
-  const inputType = showPassword ? 'text' : 'password';
-  const placeholder = rest.placeholder ? rest.placeholder : name;
-
-  const registerOptions =
-    name === 'passwordConfirmation'
-      ? PASSWORD_CONFIRM_RULES(getValues('password'))
-      : VALIDATION_RULES[name];
-
-  return (
-    <>
-      <div className="relative">
-        <input
-          {...register(name, registerOptions)}
-          className={inputClass}
-          {...rest}
-          type={inputType}
-          placeholder={placeholder}
-          onBlur={() => trigger(name)}
-          onKeyUp={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              trigger(name).then(() => {
-                const formElements = Array.from(
-                  (e.target as HTMLInputElement).form?.elements || [],
-                ) as HTMLInputElement[];
-
-                const currentIndex = formElements.indexOf(e.target as HTMLInputElement);
-                const nextElement = formElements[currentIndex + 1];
-
-                if (nextElement) {
-                  nextElement.focus();
-                }
-              });
-            }
-          }}
-        />
+      {showPasswordToggle && (
         <button
           type="button"
           className="absolute bottom-2 right-4"
           onClick={togglePasswordVisibility}
         >
-          {EyeIcon}
+          <Icon
+            path={type === "password" ? "user/unVisibility" : "user/visibility"}
+          />
         </button>
-      </div>
-      {errors[name]?.message && <ErrorMessage>{String(errors[name]?.message)}</ErrorMessage>}
-    </>
+      )}
+      {errors[name]?.message && (
+        <ErrorMessage>{String(errors[name]?.message)}</ErrorMessage>
+      )}
+    </div>
   );
 }
 
-// 제출 버튼
-function Submit({ className, children }: BaseProps) {
-  const { formState } = useFormContext();
+function Input({ className, name, ...rest }: InputProps) {
+  return (
+    <InputBase
+      className={className}
+      name={name}
+      registerOptions={VALIDATION_RULES[name]}
+      {...rest}
+    />
+  );
+}
+
+function PasswordInput({ className, name, ...rest }: InputProps) {
+  const {
+    formState: { errors },
+    getValues,
+  } = useFormContext();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
+
+  const registerOptions =
+    name === "passwordConfirmation"
+      ? PASSWORD_CONFIRM_RULES(getValues("password"))
+      : VALIDATION_RULES[name];
 
   return (
-    <Button type="submit" className={className} color="filled" disabled={!formState.isValid}>
+    <InputBase
+      className={className}
+      name={name}
+      type={showPassword ? "text" : "password"}
+      registerOptions={registerOptions}
+      showPasswordToggle={true}
+      togglePasswordVisibility={togglePasswordVisibility}
+      {...rest}
+    />
+  );
+}
+
+function Submit({ className, children }: BaseProps) {
+  const { formState } = useFormContext();
+  return (
+    <Button
+      type="submit"
+      className={className}
+      color="filled"
+      disabled={!formState.isValid}
+    >
       {children}
     </Button>
   );
