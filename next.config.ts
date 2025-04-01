@@ -1,5 +1,5 @@
-import { withSentryConfig } from "@sentry/nextjs";
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 
@@ -80,7 +80,7 @@ export default withSentryConfig(
     // For all available options, see:
     // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-    org: "soyoungs",
+    org: "jeongmok",
     project: "thunderting",
 
     // Only print logs for uploading source maps in CI

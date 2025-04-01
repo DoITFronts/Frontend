@@ -39,14 +39,24 @@ export default function ReviewItem({
         <div className="relative flex h-[200px] w-full items-center justify-center overflow-hidden">
           <div className="absolute left-0 top-0 z-0 size-[10px] bg-white" />
           <div className="absolute bottom-0 right-0 z-0 size-[10px] bg-white" />
-          <Image
-            src={review?.lighteningImageUrl}
-            width={384}
-            height={200}
-            alt="썸네일"
-            className="w-full object-cover"
-            priority={priority}
-          />
+          {review.lighteningImageUrl ? (
+            <Image
+              src={review?.lighteningImageUrl}
+              width={384}
+              height={200}
+              alt="thumbnail"
+              className="w-full object-cover"
+              priority={priority}
+            />
+          ) : (
+            <Image
+              src={`/fallback/fallback_${review.category}.png`}
+              fill
+              alt="thumbnail"
+              className="z-0 object-cover"
+              priority
+            />
+          )}
           <div className="absolute right-[14px] top-[17.5px]">
             <Category type={reverseCategoryMap[review.category]} />
           </div>
