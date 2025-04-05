@@ -1,23 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "zustand";
-import { toast } from "react-toastify";
 
-import {
-  connectWebSocket,
-  sendMessage,
-  disconnectWebSocket,
-} from "@/api/socket/websocket";
+import { sendMessage, subscribeToRoom } from "@/api/socket/websocket";
 import Icon from "@/components/shared/Icon";
 import chatStore from "@/store/chat/chatStore";
-import { getToken } from "@/utils/auth/tokenUtils";
 
 import ChatMessageList from "./ChatMessageList";
 
 export default function ChatModal() {
   const [isClient, setIsClient] = useState(false);
   const [message, setMessage] = useState("");
-  const [isConnecting, setIsConnecting] = useState(false);
-  const connectionAttempts = useRef(0);
+  const [isComposing, setIsComposing] = useState(false); // 한글 조합 상태 추적
 
   const isOpen = useStore(chatStore, (state) => state.isOpen);
   const currentRoomId = useStore(chatStore, (state) => state.currentRoomId);
@@ -28,68 +21,43 @@ export default function ChatModal() {
     setIsClient(true);
   }, []);
 
-  // 채팅방 열림/닫힘에 따른 웹소켓 연결 관리
+  // 채팅방 입장 시 구독 처리
   useEffect(() => {
-    if (isClient) {
-      if (isOpen && currentRoomId) {
-        console.log("🔄 채팅방 열림, WebSocket 연결 시도", currentRoomId);
-        const token = getToken();
-
-        if (token) {
-          setIsConnecting(true);
-          connectionAttempts.current += 1;
-
-          // 연결 시도
-          connectWebSocket(token);
-
-          // 연결 타임아웃 처리
-          const timeout = setTimeout(() => {
-            setIsConnecting(false);
-
-            // 연결 재시도 (최대 3회)
-            if (connectionAttempts.current < 3) {
-              console.log(
-                `🔄 연결 재시도 (${connectionAttempts.current}/3)...`,
-              );
-              connectWebSocket(token);
-            } else {
-              toast.error(
-                "채팅 연결에 실패했습니다. 페이지를 새로고침해 주세요.",
-              );
-            }
-          }, 5000);
-
-          return () => {
-            clearTimeout(timeout);
-          };
-        } else {
-          toast.error("로그인이 필요합니다.");
-        }
-      } else if (!isOpen) {
-        // 채팅방 닫힐 때 연결 종료
-        disconnectWebSocket();
-        connectionAttempts.current = 0;
-      }
+    if (isClient && isOpen && currentRoomId) {
+      console.log("🔄 채팅방 열림, 채팅방 구독 시도");
+      // 채팅방 구독 요청
+      subscribeToRoom(currentRoomId);
     }
   }, [isClient, isOpen, currentRoomId]);
 
-  // 채팅창이 보이지 않을 경우 렌더링하지 않음
   if (!isClient || !isOpen || !currentRoomId) return null;
 
   // 메시지 전송 처리
   const handleSendMessage = () => {
     if (message.trim()) {
-      // 입력값 트림하여 맥북에서 마지막 글자 반복 문제 방지
-      const trimmedMessage = message.trim();
-      sendMessage(trimmedMessage);
+      sendMessage(message.trim());
       setMessage("");
     }
   };
 
-  // 입력 중 엔터키 처리
+  // 입력 값 변경 처리 (한글 입력 이슈 대응)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  };
+
+  // 한글 조합 시작/종료 이벤트 처리
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+
+  // 키 입력 처리
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault(); // 폼 제출 방지
+    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
@@ -113,7 +81,9 @@ export default function ChatModal() {
         <input
           type="text"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleInputChange}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
           onKeyDown={handleKeyDown}
           className="flex-1 rounded-md border bg-gray-100 p-2 focus:outline-none dark:bg-gray-800 dark:text-white"
           placeholder="메시지를 입력하세요"
@@ -121,8 +91,7 @@ export default function ChatModal() {
         <button
           type="button"
           onClick={handleSendMessage}
-          disabled={isConnecting}
-          className="rounded-md p-2 text-white hover:opacity-80 disabled:opacity-50 dark:bg-white dark:text-black"
+          className="rounded-md p-2 text-white hover:opacity-80 dark:bg-white dark:text-black"
         >
           <Icon path="/chat/send" />
         </button>

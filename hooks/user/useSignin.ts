@@ -12,6 +12,10 @@ import {
 } from "@/lib/constants/toast";
 import useUserStore from "@/store/user/userStore";
 import { setToken, decodeToken } from "@/utils/auth/tokenUtils";
+import {
+  connectGlobalWebSocket,
+  connectWebSocket,
+} from "@/api/socket/websocket";
 
 export const useSignin = () => {
   const router = useRouter();
@@ -33,6 +37,8 @@ export const useSignin = () => {
           });
 
           toast.success(SIGNIN_SUCCESS);
+
+          connectGlobalWebSocket(accessToken);
 
           // 컨페티 실행
           setShowConfetti(true);

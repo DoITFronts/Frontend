@@ -1,10 +1,11 @@
-import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
-import { removeToken } from '@/utils/auth/tokenUtils';
-import { toast } from 'react-toastify';
-import useUserStore from '@/store/user/userStore';
-import { signoutUser } from '@/api/client/user/auth';
-import { SIGNOUT_SUCCESS, SIGNOUT_ERROR } from '@/lib/constants/toast';
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { removeToken } from "@/utils/auth/tokenUtils";
+import { toast } from "react-toastify";
+import useUserStore from "@/store/user/userStore";
+import { signoutUser } from "@/api/client/user/auth";
+import { SIGNOUT_SUCCESS, SIGNOUT_ERROR } from "@/lib/constants/toast";
+import { disconnectWebSocket } from "@/api/socket/websocket";
 
 // 로그아웃
 export const useSignout = () => {
@@ -22,8 +23,9 @@ export const useSignout = () => {
     onSuccess: () => {
       removeToken();
       logout();
+      disconnectWebSocket();
       toast.success(SIGNOUT_SUCCESS);
-      router.push('/');
+      router.push("/");
     },
     onError: () => {
       toast.error(SIGNOUT_ERROR);

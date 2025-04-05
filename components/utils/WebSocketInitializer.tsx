@@ -1,38 +1,31 @@
 import { useEffect } from "react";
-import { useStore } from "zustand";
 
-import { connectWebSocket, disconnectWebSocket } from "@/api/socket/websocket";
-import chatStore from "@/store/chat/chatStore";
+import { connectGlobalWebSocket } from "@/api/socket/websocket";
 import { getToken } from "@/utils/auth/tokenUtils";
 
 /**
  * 웹소켓 연결을 전역적으로 관리하는 컴포넌트
- * 이 컴포넌트는 레이아웃에 포함되어 채팅방 상태 변화를 감지합니다.
+ * 앱 시작 시 자동으로 웹소켓 연결을 초기화합니다.
  */
 export default function WebSocketInitializer() {
-  const isOpen = useStore(chatStore, (state) => state.isOpen);
-  const currentRoomId = useStore(chatStore, (state) => state.currentRoomId);
-
-  // 채팅방 상태 변화 감지 및 웹소켓 관리
   useEffect(() => {
-    // 토큰 체크
+    // 앱 시작 시 토큰이 있으면 (로그인 되어 있으면) 웹소켓 연결
     const token = getToken();
-    if (!token) return;
-
-    if (isOpen && currentRoomId) {
-      // 채팅방이 열리면 웹소켓 연결
-      console.log("WebSocketInitializer: 채팅방 열림, 연결 시도");
-      connectWebSocket(token);
-
-      // 컴포넌트 언마운트 시 연결 정리
-      return () => {
-        if (!chatStore.getState().isOpen) {
-          console.log("WebSocketInitializer: 채팅방 닫힘, 연결 종료");
-          disconnectWebSocket();
-        }
-      };
+    if (token) {
+      connectGlobalWebSocket(token);
     }
-  }, [isOpen, currentRoomId]);
+
+    // 브라우저 창이 닫힐 때 이벤트 리스너 (필요시 사용)
+    const handleBeforeUnload = () => {
+      // 필요한 정리 작업 수행
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   // 이 컴포넌트는 UI를 렌더링하지 않습니다
   return null;

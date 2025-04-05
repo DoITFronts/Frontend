@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-import { connectWebSocket } from "@/api/socket/websocket";
+import { connectWebSocket, subscribeToRoom } from "@/api/socket/websocket";
 import createMeeting from "@/api/client/meeting/createMeeting";
 import Button from "@/components/ui/button/Button";
 import PlaceSearch from "@/components/modal/SearchPlace";
@@ -238,7 +238,7 @@ export default function CreateMeetingModal() {
         if (response.id) {
           // router.push(`/meeting/detail/${response.id}`);
           chatStore.getState().openChat(response.chatRoomId);
-          connectWebSocket();
+          subscribeToRoom(response.chatRoomId);
           toast.success(MEETING_CREATE_SUCCESS, { autoClose: 900 });
           closeModal();
           router.push(`/meeting/detail/${response.id}`);

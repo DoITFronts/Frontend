@@ -2,21 +2,21 @@ import { Client } from "@stomp/stompjs";
 import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 
+import { getToken } from "@/utils/auth/tokenUtils";
 import chatStore from "@/store/chat/chatStore";
+import profileStore from "@/store/profileStore";
 import { CHAT_SOCKET_ERROR, CHAT_ENTER_SUCCESS } from "@/lib/constants/toast";
 
-// 전역 STOMP 클라이언트 인스턴스 유지
+// 전역 변수
 let stompClient: Client | null = null;
 let subscribedRoomId: number | null = null;
-let isConnecting = false; // 연결 시도 중인지 추적
+let isConnecting = false;
 
-// 웹소켓 연결 함수
-export const connectWebSocket = async (token: string) => {
-  const { currentRoomId } = chatStore.getState();
-
-  // 채팅방 ID가 없으면 연결 시도하지 않음
-  if (!currentRoomId) {
-    console.error("❌ WebSocket 연결 실패: 채팅방 ID 없음");
+// 전역 웹소켓 연결 함수 - 로그인 시 호출
+export const connectGlobalWebSocket = (token: string) => {
+  // 이미 연결되어 있으면 무시
+  if (stompClient && stompClient.connected) {
+    console.log("🌐 웹소켓 이미 연결됨");
     return;
   }
 
@@ -26,54 +26,8 @@ export const connectWebSocket = async (token: string) => {
     return;
   }
 
-  // 이미 연결되어 있고 같은 채팅방이면 재연결하지 않음
-  if (
-    stompClient &&
-    stompClient.connected &&
-    subscribedRoomId === currentRoomId
-  ) {
-    console.log("🔄 기존 WebSocket 유지: 같은 채팅방");
-    return;
-  }
-
-  // 다른 채팅방으로 이동하는 경우 기존 구독 해제
-  if (
-    stompClient &&
-    stompClient.connected &&
-    subscribedRoomId !== currentRoomId
-  ) {
-    console.log(`📌 채팅방 변경: ${subscribedRoomId} → ${currentRoomId}`);
-
-    try {
-      if (subscribedRoomId) {
-        stompClient.unsubscribe(`/topic/room/${subscribedRoomId}`);
-      }
-
-      // 메시지 핸들러 함수 정의
-      const handleMessage = (response: { body: string }) => {
-        console.log("📩 메시지 수신:", response.body);
-        try {
-          const message = JSON.parse(response.body);
-          chatStore.getState().addMessage(message);
-        } catch (error) {
-          console.error("❌ 메시지 파싱 오류:", error);
-        }
-      };
-
-      subscribedRoomId = currentRoomId;
-      stompClient.subscribe(`/topic/room/${currentRoomId}`, handleMessage);
-      console.log(`✅ 새 채팅방(${currentRoomId}) 구독 성공`);
-      return;
-    } catch (error) {
-      console.error("❌ 채팅방 변경 중 오류:", error);
-      // 오류 발생 시 연결 재설정
-      disconnectWebSocket();
-    }
-  }
-
-  // 새 연결 시도
   isConnecting = true;
-  console.log(`🟢 WebSocket 연결 시도: Room ID - ${currentRoomId}`);
+  console.log("🌐 웹소켓 연결 시작...");
 
   try {
     const socket = new SockJS(
@@ -90,86 +44,57 @@ export const connectWebSocket = async (token: string) => {
       },
     });
 
-    // 메시지 핸들러 설정
-    const handleIncomingMessage = (response: { body: string }) => {
-      console.log("📩 메시지 수신:", response.body);
-      try {
-        const message = JSON.parse(response.body);
-        chatStore.getState().addMessage(message);
-      } catch (error) {
-        console.error("❌ 메시지 파싱 오류:", error);
-      }
-    };
-
-    // 연결 이벤트 핸들러
     stompClient.onConnect = () => {
-      console.log("✅ WebSocket 연결 성공!");
+      console.log("✅ 웹소켓 연결 성공!");
       isConnecting = false;
-      subscribedRoomId = currentRoomId;
 
-      try {
-        // 메시지 핸들러 함수 정의
-        const handleMessage = (response: { body: string }) => {
-          console.log("📩 메시지 수신:", response.body);
-          try {
-            const message = JSON.parse(response.body);
-            chatStore.getState().addMessage(message);
-          } catch (error) {
-            console.error("❌ 메시지 파싱 오류:", error);
-          }
-        };
-
-        stompClient?.subscribe(`/topic/room/${currentRoomId}`, handleMessage);
-        console.log(`✅ 채팅방(${currentRoomId}) 구독 성공`);
-        toast.success(CHAT_ENTER_SUCCESS);
-      } catch (subscribeError) {
-        console.error("❌ 채팅방 구독 실패:", subscribeError);
-        toast.error("채팅방 연결에 문제가 있습니다. 다시 시도해주세요.");
+      // 현재 열려있는 채팅방이 있으면 자동 구독
+      const currentRoomId = chatStore.getState().currentRoomId;
+      if (currentRoomId) {
+        subscribeToRoom(currentRoomId);
       }
     };
 
-    // 오류 핸들러
     stompClient.onStompError = (frame) => {
-      console.error("❌ STOMP 오류 발생:", frame);
+      console.error("❌ STOMP 오류:", frame);
       isConnecting = false;
       toast.error(CHAT_SOCKET_ERROR);
     };
 
     stompClient.onWebSocketError = (error) => {
-      console.error("❌ WebSocket 오류 발생:", error);
+      console.error("❌ WebSocket 오류:", error);
       isConnecting = false;
-      toast.error("채팅 서버 연결 오류. 잠시 후 다시 시도해주세요.");
+      toast.error("채팅 서버 연결 오류가 발생했습니다.");
     };
 
     stompClient.onDisconnect = () => {
       console.warn("🔌 WebSocket 연결 종료! 재연결 시도...");
       isConnecting = false;
+
+      // 자동 재연결 (로그인 상태일 때만)
       setTimeout(() => {
-        if (chatStore.getState().isOpen) {
-          // 채팅방이 여전히 열려있을 때만 재연결
-          connectWebSocket(token);
+        const token = getToken();
+        if (token) {
+          connectGlobalWebSocket(token);
         }
       }, 5000);
     };
 
-    // 연결 활성화
     stompClient.activate();
   } catch (error) {
     console.error("❌ WebSocket 설정 중 오류:", error);
     isConnecting = false;
-    toast.error(CHAT_SOCKET_ERROR);
   }
 };
 
-// 웹소켓 연결 종료
+// 웹소켓 연결 종료 - 로그아웃 시 호출
 export const disconnectWebSocket = () => {
   if (stompClient) {
-    console.log("🔌 WebSocket 연결 종료 중...");
+    console.log("🔌 WebSocket 연결 종료");
     try {
       stompClient.deactivate();
-      toast.info("채팅방에서 나갔습니다.");
     } catch (error) {
-      console.error("❌ WebSocket 연결 종료 중 오류:", error);
+      console.error("WebSocket 연결 종료 중 오류:", error);
     } finally {
       stompClient = null;
       subscribedRoomId = null;
@@ -178,29 +103,78 @@ export const disconnectWebSocket = () => {
   }
 };
 
-// 메시지 전송
+// 채팅방 구독 함수 - 채팅방 입장 시 호출
+export const subscribeToRoom = (roomId: number) => {
+  if (!stompClient || !stompClient.connected) {
+    console.error("❌ 채팅방 구독 실패: 웹소켓 연결이 없음");
+    // 연결이 없으면 토큰으로 새로 연결 시도
+    const token = getToken();
+    if (token) {
+      connectGlobalWebSocket(token);
+      // 연결 후 구독 시도를 위한 타임아웃 설정
+      setTimeout(() => {
+        if (stompClient && stompClient.connected) {
+          subscribeToRoom(roomId);
+        } else {
+          toast.error(
+            "채팅 서버에 연결할 수 없습니다. 새로고침 후 다시 시도해주세요.",
+          );
+        }
+      }, 1000);
+    } else {
+      toast.error("로그인이 필요합니다.");
+    }
+    return;
+  }
+
+  // 이미 같은 방에 구독 중이면 무시
+  if (subscribedRoomId === roomId) {
+    console.log(`📌 이미 채팅방(${roomId})에 구독 중`);
+    return;
+  }
+
+  // 기존 구독이 있으면 해제
+  if (subscribedRoomId !== null) {
+    try {
+      stompClient.unsubscribe(`/topic/room/${subscribedRoomId}`);
+      console.log(`📌 이전 채팅방(${subscribedRoomId}) 구독 해제`);
+    } catch (error) {
+      console.error("구독 해제 중 오류:", error);
+    }
+  }
+
+  // 새 채팅방 구독
+  try {
+    subscribedRoomId = roomId;
+    stompClient.subscribe(`/topic/room/${roomId}`, (response) => {
+      console.log("📩 메시지 수신:", response.body);
+      try {
+        const message = JSON.parse(response.body);
+        chatStore.getState().addMessage(message);
+      } catch (error) {
+        console.error("❌ 메시지 파싱 오류:", error);
+      }
+    });
+    console.log(`✅ 채팅방(${roomId}) 구독 성공`);
+    toast.success(CHAT_ENTER_SUCCESS);
+  } catch (error) {
+    console.error("❌ 채팅방 구독 중 오류:", error);
+    subscribedRoomId = null;
+  }
+};
+
+// 메시지 전송 함수
 export const sendMessage = (message: string) => {
-  const { currentRoomId, addMessage } = chatStore.getState();
+  const { currentRoomId } = chatStore.getState();
 
   if (!stompClient || !stompClient.connected) {
     console.error("❌ 메시지 전송 실패: WebSocket이 연결되지 않음");
+    toast.error("채팅 서버와 연결되지 않았습니다. 다시 시도해주세요.");
 
-    // 연결이 되어 있지 않으면 자동으로 재연결 시도
-    const token = localStorage.getItem("accessToken");
+    // 자동 재연결 시도
+    const token = getToken();
     if (token) {
-      toast.info("채팅 서버에 다시 연결 중...");
-      connectWebSocket(token);
-
-      // 메시지 임시 저장 (재시도 로직 구현 가능)
-      setTimeout(() => {
-        if (stompClient && stompClient.connected) {
-          sendMessage(message);
-        } else {
-          toast.error("메시지 전송 실패. 다시 시도해주세요.");
-        }
-      }, 2000);
-    } else {
-      toast.error("로그인이 필요합니다.");
+      connectGlobalWebSocket(token);
     }
     return;
   }
@@ -210,16 +184,53 @@ export const sendMessage = (message: string) => {
     return;
   }
 
+  const {
+    id: userId,
+    nickname: userNickname,
+    imageUrl: userImage,
+  } = profileStore.getState();
+
+  // 낙관적 업데이트용 임시 메시지 객체
+  const newMessage = {
+    id: Date.now(),
+    roomId: currentRoomId,
+    userId,
+    userNickname,
+    content: message.trim(), // 맥북 이슈 방지를 위해 trim 사용
+    createdAt: new Date().toISOString(),
+    userImage,
+  };
+
+  // 메시지 미리 보여주기 (낙관적 업데이트)
+  chatStore.getState().addMessage(newMessage);
+
   try {
-    // 실제 전송
+    // 실제 서버로 메시지 전송
     stompClient.publish({
       destination: `/app/room/${currentRoomId}/sendMessage`,
-      body: JSON.stringify({ content: message.trim() }), // 맥북 이슈 방지를 위해 trim() 추가
+      body: JSON.stringify({ content: message.trim() }),
     });
-
     console.log("📤 메시지 전송 성공");
   } catch (error) {
     console.error("❌ 메시지 전송 중 오류:", error);
     toast.error("메시지 전송에 실패했습니다.");
+  }
+};
+
+// 기존 connectWebSocket 함수는 일단 그대로 두고,
+// 내부적으로 전역 연결 함수를 호출하도록 변경 (호환성 유지)
+export const connectWebSocket = () => {
+  const token = getToken();
+  if (!token) {
+    console.error("❌ WebSocket 인증 실패: 토큰 없음");
+    return;
+  }
+
+  connectGlobalWebSocket(token);
+
+  // 채팅방 ID가 있으면 구독
+  const { currentRoomId } = chatStore.getState();
+  if (currentRoomId && stompClient && stompClient.connected) {
+    subscribeToRoom(currentRoomId);
   }
 };
