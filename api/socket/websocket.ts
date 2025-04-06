@@ -201,8 +201,8 @@ export const sendMessage = (message: string) => {
     userImage,
   };
 
-  // 메시지 미리 보여주기 (낙관적 업데이트)
-  chatStore.getState().addMessage(newMessage);
+  // // 메시지 미리 보여주기 (낙관적 업데이트)
+  // chatStore.getState().addMessage(newMessage);
 
   try {
     // 실제 서버로 메시지 전송
