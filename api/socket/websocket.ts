@@ -1,4 +1,4 @@
-import { Client } from "@stomp/stompjs";
+import { Client, StompSubscription } from "@stomp/stompjs";
 import { toast } from "react-toastify";
 import SockJS from "sockjs-client";
 
@@ -11,6 +11,7 @@ import { CHAT_SOCKET_ERROR, CHAT_ENTER_SUCCESS } from "@/lib/constants/toast";
 let stompClient: Client | null = null;
 let subscribedRoomId: number | null = null;
 let isConnecting = false;
+let currentSubscription: StompSubscription | null = null;
 
 // 전역 웹소켓 연결 함수 - 로그인 시 호출
 export const connectGlobalWebSocket = (token: string) => {
@@ -89,6 +90,15 @@ export const connectGlobalWebSocket = (token: string) => {
 
 // 웹소켓 연결 종료 - 로그아웃 시 호출
 export const disconnectWebSocket = () => {
+  if (currentSubscription) {
+    try {
+      currentSubscription.unsubscribe();
+      currentSubscription = null;
+    } catch (error) {
+      console.error("구독 해제 중 오류:", error);
+    }
+  }
+
   if (stompClient) {
     console.log("🔌 WebSocket 연결 종료");
     try {
@@ -134,32 +144,41 @@ export const subscribeToRoom = (roomId: number) => {
   }
 
   // 기존 구독이 있으면 해제
-  if (subscribedRoomId !== null) {
+  if (currentSubscription) {
     try {
-      stompClient.unsubscribe(`/topic/room/${subscribedRoomId}`);
-      console.log(`📌 이전 채팅방(${subscribedRoomId}) 구독 해제`);
+      currentSubscription.unsubscribe(); // 구독 ID를 직접 사용
+      console.log(`📌 이전 채팅방(${subscribedRoomId}) 구독 해제됨`);
     } catch (error) {
       console.error("구독 해제 중 오류:", error);
     }
+    currentSubscription = null; // 구독 객체 초기화
   }
 
   // 새 채팅방 구독
   try {
     subscribedRoomId = roomId;
-    stompClient.subscribe(`/topic/room/${roomId}`, (response) => {
-      console.log("📩 메시지 수신:", response.body);
-      try {
-        const message = JSON.parse(response.body);
-        chatStore.getState().addMessage(message);
-      } catch (error) {
-        console.error("❌ 메시지 파싱 오류:", error);
-      }
-    });
-    console.log(`✅ 채팅방(${roomId}) 구독 성공`);
-    toast.success(CHAT_ENTER_SUCCESS);
+    if (stompClient && stompClient.connected) {
+      currentSubscription = stompClient.subscribe(
+        `/topic/room/${roomId}`,
+        (response) => {
+          console.log("📩 메시지 수신:", response.body);
+          try {
+            const message = JSON.parse(response.body);
+            chatStore.getState().addMessage(message);
+          } catch (error) {
+            console.error("❌ 메시지 파싱 오류:", error);
+          }
+        },
+      );
+      console.log(
+        `✅ 채팅방(${roomId}) 구독 성공, 구독 ID: ${currentSubscription.id}`,
+      );
+      toast.success(CHAT_ENTER_SUCCESS);
+    }
   } catch (error) {
     console.error("❌ 채팅방 구독 중 오류:", error);
     subscribedRoomId = null;
+    currentSubscription = null;
   }
 };
 
