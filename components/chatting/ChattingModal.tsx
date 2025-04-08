@@ -1,44 +1,64 @@
 import { useState, useEffect } from "react";
 import { useStore } from "zustand";
 
-import { sendMessage } from "@/api/socket/websocket";
+import { sendMessage, subscribeToRoom } from "@/api/socket/websocket";
 import Icon from "@/components/shared/Icon";
 import chatStore from "@/store/chat/chatStore";
-import useWebSocketStore from "@/store/chat/websocketStore";
-import { getToken } from "@/utils/auth/tokenUtils";
 
 import ChatMessageList from "./ChatMessageList";
 
 export default function ChatModal() {
   const [isClient, setIsClient] = useState(false);
   const [message, setMessage] = useState("");
+  const [isComposing, setIsComposing] = useState(false); // 한글 조합 상태 추적
 
   const isOpen = useStore(chatStore, (state) => state.isOpen);
   const currentRoomId = useStore(chatStore, (state) => state.currentRoomId);
   const closeChat = useStore(chatStore, (state) => state.closeChat);
-  const { connectWebSocket, isConnected } = useWebSocketStore();
 
+  // 클라이언트 사이드 렌더링 확인
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // 채팅방 입장 시 구독 처리
   useEffect(() => {
-    if (isOpen && currentRoomId) {
-      console.log("🔄 채팅방 열림, WebSocket 상태 확인!");
-      if (!isConnected) {
-        const token = getToken();
-        if (token) {
-          connectWebSocket(token);
-        }
-      }
+    if (isClient && isOpen && currentRoomId) {
+      console.log("🔄 채팅방 열림, 채팅방 구독 시도");
+      // 채팅방 구독 요청
+      subscribeToRoom(currentRoomId);
     }
-  }, [isOpen, currentRoomId, isConnected]);
+  }, [isClient, isOpen, currentRoomId]);
 
   if (!isClient || !isOpen || !currentRoomId) return null;
+
+  // 메시지 전송 처리
   const handleSendMessage = () => {
     if (message.trim()) {
       sendMessage(message.trim());
       setMessage("");
+    }
+  };
+
+  // 입력 값 변경 처리 (한글 입력 이슈 대응)
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  };
+
+  // 한글 조합 시작/종료 이벤트 처리
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = () => {
+    setIsComposing(false);
+  };
+
+  // 키 입력 처리
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey && !isComposing) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
@@ -61,10 +81,12 @@ export default function ChatModal() {
         <input
           type="text"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={handleInputChange}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={handleCompositionEnd}
+          onKeyDown={handleKeyDown}
           className="flex-1 rounded-md border bg-gray-100 p-2 focus:outline-none dark:bg-gray-800 dark:text-white"
           placeholder="메시지를 입력하세요"
-          onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
         />
         <button
           type="button"

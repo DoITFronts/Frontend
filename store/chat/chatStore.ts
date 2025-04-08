@@ -43,7 +43,7 @@ const chatStore = create<ChatState>((set) => ({
         if (!Array.isArray(state.messages)) {
           state.messages = [];
         }
-        state.messages.push(message);
+        state.messages.unshift(message);
       }),
     ),
 
