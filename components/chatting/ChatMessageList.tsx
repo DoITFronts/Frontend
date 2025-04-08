@@ -56,7 +56,9 @@ export default function ChatMessageList({ roomId }: ChatMessageListProps) {
               userNickname={msg.userNickname}
               content={msg.content}
               userId={msg.userId}
-              createdAt={formatRelativeTime(msg.createdAt)}
+              createdAt={
+                msg.createdAt ? formatRelativeTime(msg.createdAt) : "방금 전"
+              }
             />
           ))
       )}
